@@ -5,12 +5,9 @@
 #include "mesh.h"
 
 
-Mesh::Mesh(std::string path_to_mesh) {
-	mesh_path = path_to_mesh;
-};
-
-void Mesh::import_gmsh() {
-	//
+void Mesh::import_gmsh()
+{
+    //
 	// import all nodes
 	//
 	mshio::MshSpec spec = mshio::load_msh(mesh_path);
@@ -31,6 +28,15 @@ void Mesh::import_gmsh() {
 			vec_Nodes.push_back(node);
 		}
 	}
+	Mesh::nodes_table = NodesTable(vec_Nodes.size());
+	for (size_t k = 0; k < vec_Nodes.size(); k++)
+	{
+		Mesh::nodes_table.table(k, 0) = vec_Nodes[k].coords[0];
+		Mesh::nodes_table.table(k, 1) = vec_Nodes[k].coords[1];
+		Mesh::nodes_table.table(k, 2) = vec_Nodes[k].coords[2];
+		Mesh::nodes_table.table(k, 3) = vec_Nodes[k].tag;
+	}
+	
 
 	//
 	// import all elements
@@ -41,20 +47,51 @@ void Mesh::import_gmsh() {
 	{
 		int table_tag = elements.entity_blocks[i].entity_tag;
 		int table_dim = elements.entity_blocks[i].entity_dim;
+		if (table_dim == 3)
+		{
+			Mesh::num_3D_elements_table = int(i);
+		}
+		
+
+		int n_elements = elements.entity_blocks[i].data.size();
+		std::vector<Element> vec_elements;
+		for (size_t j = 0; j < n_elements; j++)
+		{
+			int element_tag = elements.entity_blocks[i].data[(table_dim + 2) * i];
+			std::vector<int> nodes_tags;
+			for (size_t k = 1; k < table_dim + 2; k++)
+			{
+				nodes_tags.push_back(elements.entity_blocks[i].data[(table_dim + 2) * i + k]);
+			}
+			Element element(element_tag, nodes_tags);	
+			vec_elements.push_back(element);		
+		}
+		ElementsTable tmp_elements_table(table_tag, table_dim, vec_elements);
+
+		for (size_t m = 0; m < vec_elements.size(); m++)
+		{
+			Element element = vec_elements[m];
+			for (size_t n = 0; n < element.nodes_tags.size(); n++)
+			{
+				int node_tag = element.nodes_tags[n];
+				bool found = false;
+				int count = 0;
+				while (!found)
+				{
+					int nodes_node_tag = Mesh::nodes_table.table(count, 3);
+					if (node_tag == nodes_node_tag)
+					{
+						found = true;
+					}
+					else
+					{
+						count++;
+					}
+				}
+				tmp_elements_table.table(m, n) = count;
+			}
+			
+		}
+		Mesh::elements_tables.push_back(tmp_elements_table);
 	}
-	
-
-    std::cout << "Number of element blocks:\n" << elements.entity_blocks.size() << "\n";
-
-    std::cout << "Tag and dimension of each element block:\n";
-    for (int i = 0; i < elements.entity_blocks.size(); i++)
-    {
-        std::cout << "Tag " << elements.entity_blocks[i].entity_tag << " , dimension " << elements.entity_blocks[i].entity_dim << "\n";
-    }
-
-    std::cout << "Size of element data of each element block:\n";
-    for (int i = 0; i < elements.entity_blocks.size(); i++)
-    {
-        std::cout << "Tag " << elements.entity_blocks[i].entity_tag << " , size of element data: " << elements.entity_blocks[i].data.size() << "\n";
-    }
 }

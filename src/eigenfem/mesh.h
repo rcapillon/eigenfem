@@ -18,6 +18,16 @@ struct Node {
     Node(int t, std::vector<float> c) : tag(t), coords(c) {}
 };
 
+struct NodesTable {
+    int n_nodes;
+    Eigen::MatrixXf table;
+
+    NodesTable() {};
+    NodesTable(int n) : n_nodes(n) {
+        table = Eigen::MatrixXf(n_nodes, 4);
+    }
+};
+
 struct Element {
     int tag;
     std::vector<int> nodes_tags;
@@ -26,26 +36,29 @@ struct Element {
 };
 
 struct ElementsTable {
-    public:
-        int tag;
-        int dim;
-        std::vector<Element> elements;
-        int n_elements = elements.size();
-        Eigen::MatrixXf table;
+    int tag;
+    int dim;
+    std::vector<Element> elements;
+    int n_elements = elements.size();
+    Eigen::MatrixXf table;
 
+    ElementsTable() {};
     ElementsTable(int t, int d, std::vector<Element> e) : tag(t), dim(d), elements(e) {
-        table = Eigen::MatrixXf(n_elements, dim);
+        table = Eigen::MatrixXf(n_elements, dim + 1);
     }
 };
 
 class Mesh {
     public:
-        Mesh(std::string path_to_mesh);
-        ~Mesh();
+        Mesh(std::string path_to_mesh) {
+            Mesh::mesh_path = path_to_mesh;
+        };
+        ~Mesh() {};
 
         std::string mesh_path;
         std::vector<Node> vec_Nodes;
-        std::vector<ElementsTable> tables_Elements;
+        NodesTable nodes_table;
+        std::vector<ElementsTable> elements_tables;
         int num_3D_elements_table;
 
         void import_gmsh();
