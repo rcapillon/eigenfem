@@ -1,4 +1,4 @@
-# EIGENFEA
+# EIGENFEM
 Finite Element solver written in C++ using Eigen, Spectra and MshIO.
 
 ## Dependencies
