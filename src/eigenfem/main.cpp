@@ -11,6 +11,8 @@
 
 #include "mesh.h"
 
+// TODO: finish mesh reading (tets)
+
 
 int main()
 {

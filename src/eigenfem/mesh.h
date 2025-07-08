@@ -24,8 +24,9 @@ class Mesh {
         Eigen::MatrixXf table_tets;
         std::vector<Eigen::MatrixXf> tables_tris;
 
-        // Imports mesh data (node coordinates and connectivity tables) from a GMSH tetrahedral mesh file saved in Matlab format 
-        // (uncheck the "Save all elements" box in order to preserve physical group tags).
+        // Imports mesh data (node coordinates and connectivity tables) from a GMSH tetrahedral (1st order) mesh file 
+        // saved in Matlab format.
+        // Uncheck the "Save all elements" checkbox in order to preserve physical group tags.
         // Only elements affected to a physical group of dimension 2 (triangles) and 3 (tetrahedra) will be read.
         void import_gmsh_matlab();
 };
