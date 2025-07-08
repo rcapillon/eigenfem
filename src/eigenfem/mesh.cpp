@@ -9,6 +9,8 @@
 #include "mesh.h"
 
 
+// Reads lines in Matlab-format GMSH mesh files for node numbers in connectivity.
+// Ignores physical group tag and adapts the numbering to start at 0.
 std::vector<int> read_node_nums_from_line(std::string line)
 {
 	std::vector<int> nums;
@@ -33,6 +35,7 @@ std::vector<int> read_node_nums_from_line(std::string line)
 	return nums;
 }
 
+// Reads lines in Matlab-format GMSH mesh files for node coordinates in 3D space.
 std::vector<float> read_node_coords_from_line(std::string line)
 {
 	std::vector<float> coords;
@@ -51,6 +54,10 @@ std::vector<float> read_node_coords_from_line(std::string line)
 	return coords;
 }
 
+// Imports mesh data (node coordinates and connectivity tables) from a GMSH tetrahedral (1st order) mesh file 
+// saved in Matlab format.
+// Uncheck the "Save all elements" checkbox in order to preserve physical group tags.
+// Only elements affected to a physical group of dimension 2 (triangles) and 3 (tetrahedra) will be read.
 void Mesh::import_gmsh_matlab()
 {
 	// open file
