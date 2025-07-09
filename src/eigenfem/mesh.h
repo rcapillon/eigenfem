@@ -8,6 +8,9 @@
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 
 
+std::vector<int> read_node_nums_from_line(std::string line);
+std::vector<float> read_node_coords_from_line(std::string line);
+
 class Mesh {
     public:
         Mesh(std::string path_to_mesh) {
