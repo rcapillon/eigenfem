@@ -10,5 +10,8 @@
 
 Eigen::MatrixXf compute_mat_G();
 Eigen::MatrixXf compute_mat_P();
+Eigen::MatrixXf get_reference_coords();
+Eigen::MatrixXf get_gauss_points();
+Eigen::MatrixXf get_gauss_weights();
 
 #endif
