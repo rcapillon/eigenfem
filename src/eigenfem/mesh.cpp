@@ -2,9 +2,9 @@
 // mesh.cpp
 //
 
+#include <iostream>
 #include <fstream>
 #include <string>
-#include <iostream>
 
 #include "mesh.h"
 
@@ -136,5 +136,27 @@ void Mesh::import_gmsh_matlab()
 		previous_tag = current_tag;
 	}
 
+	// initialize tetrahedra reading
+	std::getline(file, current_line);
+	std::getline(file, current_line);
+
+	// fill table of tetrahedra connectivity
+	std::vector<std::vector<int>> nums_tetra;
+	while (current_line.compare("];") != 0)
+	{
+		std::vector<int> nums = read_node_nums_from_line(current_line);
+		nums_tetra.push_back(nums);
+		std::getline(file, current_line);
+	}
+	Mesh::n_elements = nums_tetra.size();
+	Mesh::table_tets = Eigen::MatrixXf(Mesh::n_elements, 4);
+	for (size_t i = 0; i < Mesh::n_elements; i++)
+	{
+		Mesh::table_tets(i, 0) = nums_tetra[i][0];
+		Mesh::table_tets(i, 1) = nums_tetra[i][1];
+		Mesh::table_tets(i, 2) = nums_tetra[i][2];
+		Mesh::table_tets(i, 3) = nums_tetra[i][3];
+	}
+	
 	file.close();
 }

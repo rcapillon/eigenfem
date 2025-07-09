@@ -11,8 +11,6 @@
 
 #include "mesh.h"
 
-// TODO: finish mesh reading (tets)
-
 
 int main()
 {
@@ -20,9 +18,8 @@ int main()
     Mesh mesh(mesh_path);
     mesh.import_gmsh_matlab();
 
-    // std::cout << mesh.n_nodes << std::endl << std::endl;
-    std::cout << mesh.tables_tris[0] << std::endl << std::endl;
-    std::cout << mesh.tables_tris[1] << std::endl;
+    std::cout << mesh.n_elements << std::endl << std::endl;
+    std::cout << mesh.table_tets << std::endl;
 
     return 0;
 }

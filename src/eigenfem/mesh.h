@@ -5,8 +5,6 @@
 #ifndef mesh_h
 #define mesh_h
 
-#include <vector>
-
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 
 
