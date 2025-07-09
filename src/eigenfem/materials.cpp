@@ -31,3 +31,6 @@
 
     return mat_C;
 }
+
+Material steel(7800., 2.1e11, 0.3);
+Material aluminium(2700., 7e10, 0.33);
