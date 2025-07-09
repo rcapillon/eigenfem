@@ -86,3 +86,44 @@ Eigen::MatrixXf get_gauss_weights()
 
     return gauss_weights;
 }
+
+Eigen::MatrixXf get_shapefun_coeffs()
+{
+    Eigen::MatrixXf nodes_reference_coords = get_reference_coords();
+    float x0 = nodes_reference_coords(0, 0);
+    float y0 = nodes_reference_coords(0, 1);
+    float z0 = nodes_reference_coords(0, 2);
+    float x1 = nodes_reference_coords(1, 0);
+    float y1 = nodes_reference_coords(1, 1);
+    float z1 = nodes_reference_coords(1, 2);
+    float x2 = nodes_reference_coords(2, 0);
+    float y2 = nodes_reference_coords(2, 1);
+    float z2 = nodes_reference_coords(2, 2);
+    float x3 = nodes_reference_coords(3, 0);
+    float y3 = nodes_reference_coords(3, 1);
+    float z3 = nodes_reference_coords(3, 2);
+
+    Eigen::MatrixXf mat_A(4, 4);
+    mat_A(0, 0) = 1.;
+    mat_A(0, 1) = x0;
+    mat_A(0, 2) = y0;
+    mat_A(0, 3) = z0;
+    mat_A(1, 0) = 1.;
+    mat_A(1, 1) = x1;
+    mat_A(1, 2) = y1;
+    mat_A(1, 3) = z1;
+    mat_A(2, 0) = 1.;
+    mat_A(2, 1) = x2;
+    mat_A(2, 2) = y2;
+    mat_A(2, 3) = z2;
+    mat_A(3, 0) = 1.;
+    mat_A(3, 1) = x3;
+    mat_A(3, 2) = y3;
+    mat_A(3, 3) = z3;
+
+    Eigen::MatrixXf mat_I = Eigen::MatrixXf::Identity(4, 4);
+
+    Eigen::MatrixXf shapefun_coeffs = mat_A.ldlt().solve(mat_I);
+
+    return shapefun_coeffs;
+}
