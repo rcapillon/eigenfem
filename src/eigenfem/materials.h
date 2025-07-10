@@ -8,7 +8,8 @@
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 
 
-class Material {
+class Material
+{
     public:
         Material(float rho, float Y, float nu) {
             Material::rho = rho;
