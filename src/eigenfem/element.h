@@ -19,4 +19,6 @@ Eigen::MatrixXf gauss_weights;
 Eigen::MatrixXf nodes_reference_coords;
 Eigen::MatrixXf shapefun_coeffs;
 
+MatsGauss mats_gauss;
+
 #endif

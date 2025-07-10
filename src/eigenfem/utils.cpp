@@ -4,7 +4,6 @@
 
 #include "utils.h"
 
-
 Eigen::MatrixXf compute_mat_G()
 {
     float s = sqrt(2.) / 2.;
@@ -138,6 +137,7 @@ float shapefun_value(int node_idx, Eigen::Vector3f X, Eigen::MatrixXf shapefun_c
     return value;
 }
 
+// derivative_coord_idx can have value 1, 2 or 3, referring to either the x-, y- or z-derivative.
 float derivative_shapefun_value(int node_idx, int derivative_coord_idx, Eigen::MatrixXf shapefun_coeffs)
 {
     float value = shapefun_coeffs(derivative_coord_idx, node_idx);
@@ -165,4 +165,81 @@ Eigen::MatrixXf compute_mat_Ee(Eigen::Vector3f X)
     mat_Ee(inds0, inds3) = mat_E3;
 
     return mat_Ee;
+}
+
+Eigen::MatrixXf compute_mat_De()
+{
+    Eigen::MatrixXf shapefun_coeffs = get_shapefun_coeffs();
+    Eigen::Matrix3f mat_I = Eigen::Matrix3f::Identity();
+
+    std::vector<int> inds0 = {0, 1, 2};
+    std::vector<int> inds1 = {3, 4, 5};
+    std::vector<int> inds2 = {6, 7, 8};
+    std::vector<int> inds3 = {9, 10, 11};
+
+    Eigen::Matrix3f mat_D0dx = derivative_shapefun_value(0, 1, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D1dx = derivative_shapefun_value(1, 1, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D2dx = derivative_shapefun_value(2, 1, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D3dx = derivative_shapefun_value(3, 1, shapefun_coeffs) * mat_I;
+
+    Eigen::MatrixXf mat_Ddx(3, 12);
+    mat_Ddx(inds0, inds0) = mat_D0dx;
+    mat_Ddx(inds0, inds1) = mat_D1dx;
+    mat_Ddx(inds0, inds2) = mat_D2dx;
+    mat_Ddx(inds0, inds3) = mat_D3dx;
+
+    Eigen::Matrix3f mat_D0dy = derivative_shapefun_value(0, 2, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D1dy = derivative_shapefun_value(1, 2, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D2dy = derivative_shapefun_value(2, 2, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D3dy = derivative_shapefun_value(3, 2, shapefun_coeffs) * mat_I;
+
+    Eigen::MatrixXf mat_Ddy(3, 12);
+    mat_Ddy(inds0, inds0) = mat_D0dy;
+    mat_Ddy(inds0, inds1) = mat_D1dy;
+    mat_Ddy(inds0, inds2) = mat_D2dy;
+    mat_Ddy(inds0, inds3) = mat_D3dy;
+
+    Eigen::Matrix3f mat_D0dz = derivative_shapefun_value(0, 3, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D1dz = derivative_shapefun_value(1, 3, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D2dz = derivative_shapefun_value(2, 3, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_D3dz = derivative_shapefun_value(3, 3, shapefun_coeffs) * mat_I;
+
+    Eigen::MatrixXf mat_Ddz(3, 12);
+    mat_Ddz(inds0, inds0) = mat_D0dz;
+    mat_Ddz(inds0, inds1) = mat_D1dz;
+    mat_Ddz(inds0, inds2) = mat_D2dz;
+    mat_Ddz(inds0, inds3) = mat_D3dz;
+
+    std::vector<int> inds4 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    Eigen::MatrixXf mat_D(9, 12);
+    mat_D(inds0, inds4) = mat_Ddx;
+    mat_D(inds1, inds4) = mat_Ddy;
+    mat_D(inds2, inds4) = mat_Ddz;
+
+    return mat_D;
+}
+
+MatsGauss compute_mats_gauss()
+{
+    Eigen::MatrixXf gauss_points = get_gauss_points();
+    std::vector<Eigen::MatrixXf> vec_mat_Ee_gauss;
+    std::vector<Eigen::MatrixXf> vec_mat_EeTEe_gauss;
+    std::vector<Eigen::MatrixXf> vec_mat_De_gauss;
+    std::vector<int> inds = {0, 1 ,2};
+
+    for (size_t i = 0; i < gauss_points.rows(); i++)
+    {
+        Eigen::Vector3f gauss_point = gauss_points(i, inds);
+
+        Eigen::MatrixXf mat_Ee = compute_mat_Ee(gauss_point);
+        vec_mat_Ee_gauss.push_back(mat_Ee);
+        Eigen::MatrixXf mat_EeTEe = mat_Ee.transpose() * mat_Ee;
+        vec_mat_EeTEe_gauss.push_back(mat_EeTEe);
+        Eigen::MatrixXf mat_De = compute_mat_De();
+        vec_mat_De_gauss.push_back(mat_De);
+    }
+
+    MatsGauss mats_gauss = MatsGauss(vec_mat_Ee_gauss, vec_mat_EeTEe_gauss, vec_mat_De_gauss);
+    
+    return mats_gauss;
 }
