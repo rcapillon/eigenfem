@@ -127,3 +127,42 @@ Eigen::MatrixXf get_shapefun_coeffs()
 
     return shapefun_coeffs;
 }
+
+float shapefun_value(int node_idx, Eigen::Vector3f X, Eigen::MatrixXf shapefun_coeffs)
+{
+    float value = shapefun_coeffs(0, node_idx) 
+        + shapefun_coeffs(1, node_idx) * X(0) 
+        + shapefun_coeffs(2, node_idx) * X(1) 
+        + shapefun_coeffs(3, node_idx) * X(2);
+    
+    return value;
+}
+
+float derivative_shapefun_value(int node_idx, int derivative_coord_idx, Eigen::MatrixXf shapefun_coeffs)
+{
+    float value = shapefun_coeffs(derivative_coord_idx, node_idx);
+
+    return value;
+}
+
+Eigen::MatrixXf compute_mat_Ee(Eigen::Vector3f X)
+{
+    Eigen::MatrixXf shapefun_coeffs = get_shapefun_coeffs();
+    Eigen::Matrix3f mat_I = Eigen::Matrix3f::Identity();
+    Eigen::Matrix3f mat_E0 = shapefun_value(0, X, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_E1 = shapefun_value(1, X, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_E2 = shapefun_value(2, X, shapefun_coeffs) * mat_I;
+    Eigen::Matrix3f mat_E3 = shapefun_value(3, X, shapefun_coeffs) * mat_I;
+
+    Eigen::MatrixXf mat_Ee(3, 12);
+    std::vector<int> inds0 = {0, 1, 2};
+    std::vector<int> inds1 = {3, 4, 5};
+    std::vector<int> inds2 = {6, 7, 8};
+    std::vector<int> inds3 = {9, 10, 11};
+    mat_Ee(inds0, inds0) = mat_E0;
+    mat_Ee(inds0, inds1) = mat_E1;
+    mat_Ee(inds0, inds2) = mat_E2;
+    mat_Ee(inds0, inds3) = mat_E3;
+
+    return mat_Ee;
+}

@@ -12,8 +12,11 @@
 #include "utils.h"
 
 
-Eigen::MatrixXf mat_G = compute_mat_G();
-Eigen::MatrixXf mat_P = compute_mat_P();
-
+Eigen::MatrixXf mat_G;
+Eigen::MatrixXf mat_P;
+Eigen::MatrixXf gauss_points;
+Eigen::MatrixXf gauss_weights;
+Eigen::MatrixXf nodes_reference_coords;
+Eigen::MatrixXf shapefun_coeffs;
 
 #endif
