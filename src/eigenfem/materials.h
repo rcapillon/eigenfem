@@ -11,7 +11,8 @@
 class Material
 {
     public:
-        Material(float rho, float Y, float nu) {
+        Material(float rho, float Y, float nu) 
+        {
             Material::rho = rho;
             Material::young = Y;
             Material::poisson = nu;
