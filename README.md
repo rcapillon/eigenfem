@@ -20,3 +20,6 @@ Eigen is used for sparse linear algebra and Spectra is used to solve sparse gene
 - Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Surface and volume forces must be constant vectors for each 2D or 3D physical groups
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
+
+## Documentation and usage
+Documentation and user guide will be put in the wiki of the github repository.
