@@ -72,5 +72,26 @@ MatsJ Element::compute_jacobian_at_gauss_points(int gauss_idx)
     MatsJ mats_J(det_J, mat_invJJJ);
 };
 
-Eigen::MatrixXf Element::compute_mat_Me() {};
-Eigen::MatrixXf Element::compute_mat_Ke() {};
+Eigen::MatrixXf Element::compute_mat_Me()
+{
+    Eigen::MatrixXf mat_Me(n_dofs, n_dofs);
+    for (size_t i = 0; i < gauss_points.rows(); i++)
+    {
+        MatsJ mats_J = compute_jacobian_at_gauss_points(i);
+        mat_Me += gauss_weights(i) * material.rho * mats_J.det_J * mats_gauss.vec_mat_EeTEe_gauss[i];
+    }
+
+    return mat_Me;
+};
+
+Eigen::MatrixXf Element::compute_mat_Ke()
+{
+    Eigen::MatrixXf mat_Ke(n_dofs, n_dofs);
+    for (size_t i = 0; i < gauss_points.rows(); i++)
+    {
+        MatsJ mats_J = compute_jacobian_at_gauss_points(i);
+        Eigen::MatrixXf mat_B = mat_G * mats_J.mat_invJJJ * mat_P * mats_gauss.vec_mat_De_gauss[i];
+        mat_Ke += gauss_weights(i) * mats_J.det_J * mat_B.transpose() * material.mat_C * mat_B;
+    }
+    
+};
