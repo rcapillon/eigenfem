@@ -1,5 +1,3 @@
 # ignore some folders
 .vscode/
 build/
-# ignore specific files
-.DS_Store
