@@ -16,7 +16,7 @@ Eigen::MatrixXf compute_mat_P();
 
 Eigen::MatrixXf get_reference_coords();
 Eigen::MatrixXf get_gauss_points();
-Eigen::MatrixXf get_gauss_weights();
+Eigen::VectorXf get_gauss_weights();
 Eigen::MatrixXf get_shapefun_coeffs();
 
 float shapefun_value(int node_idx, Eigen::Vector3f X, Eigen::MatrixXf shapefun_coeffs);

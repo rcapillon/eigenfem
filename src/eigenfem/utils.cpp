@@ -75,7 +75,7 @@ Eigen::MatrixXf get_gauss_points()
     return gauss_points;
 }
 
-Eigen::MatrixXf get_gauss_weights()
+Eigen::VectorXf get_gauss_weights()
 {
     Eigen::VectorXf gauss_weights(4);
     gauss_weights(0) = 0.0416666667;
