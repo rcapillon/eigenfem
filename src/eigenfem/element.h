@@ -13,6 +13,19 @@
 #include "materials.h"
 
 
+struct MatsJ
+{
+    float det_J;
+    Eigen::MatrixXf mat_invJJJ;
+
+    MatsJ() {};
+    MatsJ(float determinant_J, Eigen::MatrixXf matrix_invJJJ)
+    {
+        det_J = determinant_J;
+        mat_invJJJ = matrix_invJJJ;
+    };
+};
+
 class Element
 {
     public:
@@ -32,10 +45,8 @@ class Element
         std::vector<int> dofs_num;
         Eigen::VectorXf vec_nodes_coords;
         MatsGauss mats_gauss;
-        float det_J;
-        Eigen::MatrixXf mat_invJJJ;
 
-        void compute_jacobian_at_gauss_points() {};
+        MatsJ compute_jacobian_at_gauss_points(int gauss_idx) {};
         Eigen::MatrixXf compute_mat_Me() {};
         Eigen::MatrixXf compute_mat_Ke() {};
 };

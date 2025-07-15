@@ -41,7 +41,36 @@ Element::Element(int num, Material mat, std::vector<int> nodes_numbers, Eigen::M
     mats_gauss = precalc_mats_gauss;
 };
 
-void Element::compute_jacobian_at_gauss_points() {};
+MatsJ Element::compute_jacobian_at_gauss_points(int gauss_idx)
+{
+    std::vector<int> inds0 = {0, 1, 2};
+    std::vector<int> inds1 = {3, 4, 5};
+    std::vector<int> inds2 = {6, 7, 8};
+
+    Eigen::MatrixXf mat_Ddx = mats_gauss.vec_mat_De_gauss[gauss_idx](inds0, Eigen::placeholders::all);
+    Eigen::MatrixXf mat_Ddy = mats_gauss.vec_mat_De_gauss[gauss_idx](inds1, Eigen::placeholders::all);
+    Eigen::MatrixXf mat_Ddz = mats_gauss.vec_mat_De_gauss[gauss_idx](inds2, Eigen::placeholders::all);
+
+    Eigen::MatrixXf vec_J1 = mat_Ddx * vec_nodes_coords;
+    Eigen::MatrixXf vec_J2 = mat_Ddy * vec_nodes_coords;
+    Eigen::MatrixXf vec_J3 = mat_Ddz * vec_nodes_coords;
+
+    Eigen::MatrixXf mat_J(3, 3);
+    mat_J(0, inds0) = vec_J1.transpose();
+    mat_J(1, inds0) = vec_J2.transpose();
+    mat_J(2, inds0) = vec_J3.transpose();
+
+    float det_J = mat_J.determinant();
+
+    Eigen::MatrixXf mat_I = Eigen::MatrixXf::Identity(3, 3);
+    Eigen::MatrixXf mat_invJ = mat_J.ldlt().solve(mat_I);
+    Eigen::MatrixXf mat_invJJJ(9, 9);
+    mat_invJJJ(inds0, inds0) = mat_invJ;
+    mat_invJJJ(inds1, inds1) = mat_invJ;
+    mat_invJJJ(inds2, inds2) = mat_invJ;
+
+    MatsJ mats_J(det_J, mat_invJJJ);
+};
 
 Eigen::MatrixXf Element::compute_mat_Me() {};
 Eigen::MatrixXf Element::compute_mat_Ke() {};
