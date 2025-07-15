@@ -1,6 +1,6 @@
 # EIGENFEM
 Finite Element solver written in C++ using Eigen and Spectra.
-Eigen is used for sparse linear algebra and Spectra is used to solve sparse generalized eigenvalue problems.
+Eigen is used for linear algebra and Spectra is used to solve sparse generalized eigenvalue problems.
 
 **IMPORTANT NOTE**: The code is still in development and not usable at this time.
 
