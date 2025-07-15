@@ -30,6 +30,7 @@ struct MatsGauss{
     std::vector<Eigen::MatrixXf> vec_mat_EeTEe_gauss;
     std::vector<Eigen::MatrixXf> vec_mat_De_gauss;
 
+    MatsGauss() {};
     MatsGauss(std::vector<Eigen::MatrixXf> vec_Ee, std::vector<Eigen::MatrixXf> vec_EeTEe, std::vector<Eigen::MatrixXf> vec_De)
     {
         vec_mat_Ee_gauss = vec_Ee;

@@ -16,11 +16,28 @@
 class Element
 {
     public:
-        Element(int number, Material material, std::vector<int> nodes_num, Eigen::Vector3f nodes_coords)
-        {
-        };
+        Element() {};
+        Element(int num, Material mat, std::vector<int> nodes_numbers, Eigen::MatrixXf nodes_coordinates) {};
         ~Element() {};
 
+        int number;
+        Material material;
+        std::vector<int> nodes_num;
+        Eigen::MatrixXf nodes_coords;
+        int n_nodes;
+        int n_dofs;
+        Eigen::MatrixXf nodes_reference_coords;
+        Eigen::MatrixXf gauss_points;
+        Eigen::MatrixXf gauss_weights;
+        std::vector<int> dofs_num;
+        Eigen::VectorXf vec_nodes_coords;
+        MatsGauss mats_gauss;
+        float det_J;
+        Eigen::MatrixXf mat_invJJJ;
+
+        void compute_jacobian_at_gauss_points() {};
+        Eigen::MatrixXf compute_mat_Me() {};
+        Eigen::MatrixXf compute_mat_Ke() {};
 };
 
 #endif
