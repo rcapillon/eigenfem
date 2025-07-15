@@ -5,7 +5,7 @@ Eigen is used for sparse linear algebra and Spectra is used to solve sparse gene
 **IMPORTANT NOTE**: The code is still in development and not usable at this time.
 
 ## Dependencies
-- Eigen: https://eigen.tuxfamily.org/index.php?title=Main_Page
+- Eigen: https://eigen.tuxfamily.org/
 - Spectra: https://spectralib.org/
 
 ## Intended features
