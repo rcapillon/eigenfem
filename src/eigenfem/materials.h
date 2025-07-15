@@ -11,6 +11,7 @@
 class Material
 {
     public:
+        Material() {};
         Material(float rho, float Y, float nu) 
         {
             Material::rho = rho;
