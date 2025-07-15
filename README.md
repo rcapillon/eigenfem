@@ -10,6 +10,7 @@ Eigen is used for sparse linear algebra and Spectra is used to solve sparse gene
 
 ## Intended features
 - Supported mesh types: 3D tetrahedral mesh generated using gmsh and saved in Matlab format
+- Surface and volume forces applicable to tagged surfaces and volumes (physical groups)
 - Linear statics problems
 - Computation of linear elastic modes and corresponding eigenfrequencies
-- Frequency-domain dynamic analysis
+- Frequency-domain dynamic analysis with a reduced-order model using elastic modes
