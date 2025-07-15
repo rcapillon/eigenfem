@@ -14,3 +14,9 @@ Eigen is used for sparse linear algebra and Spectra is used to solve sparse gene
 - Linear statics problems
 - Computation of linear elastic modes and corresponding eigenfrequencies
 - Frequency-domain dynamic analysis with a reduced-order model using elastic modes
+
+## Limitations
+- Only fully tetrahedral meshes are handled
+- Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
+- Surface and volume forces must be constant vectors for each 2D or 3D physical groups
+- Only one 3D physical group is handled, which forces to use a single material for the whole domain
