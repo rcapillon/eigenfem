@@ -162,6 +162,15 @@ void Mesh::import_gmsh_matlab()
 		Mesh::table_tets(i, 1) = nums_tetra[i][1];
 		Mesh::table_tets(i, 2) = nums_tetra[i][2];
 		Mesh::table_tets(i, 3) = nums_tetra[i][3];
+
+		Eigen::MatrixXf nodes_coords(4, 3);
+		std::vector<int> inds = {0, 1, 2};
+		nodes_coords(0, inds) = table_nodes(nums_tetra[i][0], inds);
+		nodes_coords(1, inds) = table_nodes(nums_tetra[i][1], inds);
+		nodes_coords(2, inds) = table_nodes(nums_tetra[i][2], inds);
+		nodes_coords(3, inds) = table_nodes(nums_tetra[i][3], inds);
+		Element element = Element(int(i), material, nums_tetra[i], nodes_coords);
+		elements.push_back(element);
 	}
 	
 	file.close();
