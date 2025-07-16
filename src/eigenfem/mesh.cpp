@@ -53,6 +53,13 @@ std::vector<float> read_node_coords_from_line(std::string line)
 	return coords;
 }
 
+// Mesh class constructor
+Mesh::Mesh(std::string path_to_mesh, Material mat) 
+{
+	mesh_path = path_to_mesh;
+	material = mat;
+};
+
 // Imports mesh data (node coordinates and connectivity tables) from a GMSH tetrahedral (1st order) mesh file 
 // saved in Matlab format.
 // Uncheck the "Save all elements" checkbox in order to preserve physical group tags.

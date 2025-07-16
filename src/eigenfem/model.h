@@ -30,6 +30,17 @@ class Model
         std::vector<std::tuple<int, Eigen::VectorXf>> volume_forces;
         float alpha_M;
         float alpha_K;
+
+        Eigen::MatrixXf mat_M;
+        Eigen::MatrixXf mat_K;
+
+        std::vector<int> free_dofs;
+        std::vector<int> dirichlet_dofs;
+
+        Eigen::MatrixXf mat_Mff;
+        Eigen::MatrixXf mat_Kff;
+
+        void apply_dirichlet();
 };
 
 #endif

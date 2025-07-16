@@ -18,3 +18,8 @@ Model::Model(Mesh msh,
     alpha_M = a_M;
     alpha_K = a_K;
 };
+
+void Model::apply_dirichlet()
+{
+    
+}
