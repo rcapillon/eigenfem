@@ -14,6 +14,7 @@ std::vector<float> read_node_coords_from_line(std::string line);
 class Mesh 
 {
     public:
+        Mesh() {};
         Mesh(std::string path_to_mesh) 
         {
             Mesh::mesh_path = path_to_mesh;
