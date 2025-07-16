@@ -13,6 +13,9 @@
 #include "mesh.h"
 
 
+typedef Eigen::SparseMatrix<float> SpMat;
+typedef Eigen::Triplet<float> triplet;
+
 class Model
 {
     public:
@@ -43,6 +46,9 @@ class Model
         Eigen::MatrixXf mat_Kff;
 
         void create_dof_lists();
+        void assemble_M();
+        void assemble_K();
+        void assemble_M_K();
         void apply_dirichlet();
 };
 

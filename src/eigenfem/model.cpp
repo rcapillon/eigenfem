@@ -75,4 +75,93 @@ void Model::create_dof_lists()
     }
 };
 
+void Model::assemble_M()
+{
+    SpMat mat_M(mesh.n_dofs, mesh.n_dofs);
+    std::vector<triplet> triplets;
+
+    for (size_t i = 0; i < mesh.n_elements; i++)
+    {
+        std::vector<int> ind_I;
+        std::vector<int> ind_J;
+        for (size_t j = 0; j < mesh.elements[i].n_dofs; j++)
+        {
+            for (size_t k = 0; k < mesh.elements[i].n_dofs; k++)
+            {
+                ind_I.push_back(k);
+                ind_J.push_back(j);
+            }
+            
+        }
+        Eigen::VectorXf flattened_mat_Me = mesh.elements[i].compute_mat_Me().reshaped();
+
+        for (size_t m = 0; m < ind_I.size(); m++)
+        {
+            triplets.push_back(triplet(ind_I[m], ind_J[m], flattened_mat_Me(m)));
+        }
+    }
+    mat_M.setFromTriplets(triplets.begin(), triplets.end());
+};
+
+void Model::assemble_K()
+{
+    SpMat mat_K(mesh.n_dofs, mesh.n_dofs);
+    std::vector<triplet> triplets;
+
+    for (size_t i = 0; i < mesh.n_elements; i++)
+    {
+        std::vector<int> ind_I;
+        std::vector<int> ind_J;
+        for (size_t j = 0; j < mesh.elements[i].n_dofs; j++)
+        {
+            for (size_t k = 0; k < mesh.elements[i].n_dofs; k++)
+            {
+                ind_I.push_back(k);
+                ind_J.push_back(j);
+            }
+            
+        }
+        Eigen::VectorXf flattened_mat_Ke = mesh.elements[i].compute_mat_Ke().reshaped();
+
+        for (size_t m = 0; m < ind_I.size(); m++)
+        {
+            triplets.push_back(triplet(ind_I[m], ind_J[m], flattened_mat_Ke(m)));
+        }
+    }
+    mat_K.setFromTriplets(triplets.begin(), triplets.end());
+};
+
+void Model::assemble_M_K()
+{
+    SpMat mat_M(mesh.n_dofs, mesh.n_dofs);
+    SpMat mat_K(mesh.n_dofs, mesh.n_dofs);
+    std::vector<triplet> triplets_M;
+    std::vector<triplet> triplets_K;
+
+    for (size_t i = 0; i < mesh.n_elements; i++)
+    {
+        std::vector<int> ind_I;
+        std::vector<int> ind_J;
+        for (size_t j = 0; j < mesh.elements[i].n_dofs; j++)
+        {
+            for (size_t k = 0; k < mesh.elements[i].n_dofs; k++)
+            {
+                ind_I.push_back(k);
+                ind_J.push_back(j);
+            }
+            
+        }
+        Eigen::VectorXf flattened_mat_Me = mesh.elements[i].compute_mat_Me().reshaped();
+        Eigen::VectorXf flattened_mat_Ke = mesh.elements[i].compute_mat_Ke().reshaped();
+
+        for (size_t m = 0; m < ind_I.size(); m++)
+        {
+            triplets_M.push_back(triplet(ind_I[m], ind_J[m], flattened_mat_Me(m)));
+            triplets_K.push_back(triplet(ind_I[m], ind_J[m], flattened_mat_Ke(m)));
+        }
+    }
+    mat_M.setFromTriplets(triplets_M.begin(), triplets_M.end());
+    mat_K.setFromTriplets(triplets_K.begin(), triplets_K.end());
+};
+
 void Model::apply_dirichlet() {};
