@@ -41,6 +41,6 @@ struct MatsGauss{
 };
 MatsGauss compute_mats_gauss();
 
-SpMat double_slice_spmat(std::vector<int> row_indices, std::vector<int> col_indices);
+SpMat double_slice_spmat(SpMat mat, std::vector<int> row_indices, std::vector<int> col_indices);
 
 #endif
