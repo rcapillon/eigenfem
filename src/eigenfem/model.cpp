@@ -46,7 +46,7 @@ void Model::create_dof_lists()
 
         for (size_t j = 0; j < mesh.tables_tris[idx_tables_tris].rows(); j++)
         {
-            for (size_t k = 0; k < 3; k++)
+            for (size_t k = 0; k < mesh.tables_tris[idx_tables_tris].cols(); k++)
             {
                 int dof1_num = mesh.tables_tris[idx_tables_tris](j, k) * 3;
                 if (std::find(dirichlet_dofs.begin(), dirichlet_dofs.end(), dof1_num) == dirichlet_dofs.end())
@@ -57,7 +57,22 @@ void Model::create_dof_lists()
                 }
             }
         }
-    }  
+    }
+
+    for (size_t i = 0; i < mesh.table_tets.rows(); i++)
+    {
+        for (size_t j = 0; j < mesh.table_tets.cols(); j++)
+        {
+            int dof1_num = mesh.table_tets(i, j) * 3;
+            if (std::find(free_dofs.begin(), free_dofs.end(), dof1_num) == free_dofs.end() 
+            && std::find(dirichlet_dofs.begin(), dirichlet_dofs.end(), dof1_num) == dirichlet_dofs.end())
+            {
+                free_dofs.push_back(mesh.table_tets(i, j) * 3);
+                free_dofs.push_back(mesh.table_tets(i, j) * 3 + 1);
+                free_dofs.push_back(mesh.table_tets(i, j) * 3 + 2);
+            }
+        }
+    }
 };
 
 void Model::apply_dirichlet() {};
