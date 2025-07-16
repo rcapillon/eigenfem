@@ -36,19 +36,22 @@ class Model
         float alpha_M;
         float alpha_K;
 
-        Eigen::MatrixXf mat_M;
-        Eigen::MatrixXf mat_K;
+        SpMat mat_M;
+        SpMat mat_K;
+        SpMat mat_D;
 
         std::vector<int> free_dofs;
         std::vector<int> dirichlet_dofs;
 
-        Eigen::MatrixXf mat_Mff;
-        Eigen::MatrixXf mat_Kff;
+        SpMat mat_Mff;
+        SpMat mat_Kff;
+        SpMat mat_Dff;
 
         void create_dof_lists();
         void assemble_M();
         void assemble_K();
         void assemble_M_K();
+        void compute_D_Rayleigh();
         void apply_dirichlet();
 };
 

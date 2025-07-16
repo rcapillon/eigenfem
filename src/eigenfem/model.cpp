@@ -164,4 +164,12 @@ void Model::assemble_M_K()
     mat_K.setFromTriplets(triplets_K.begin(), triplets_K.end());
 };
 
-void Model::apply_dirichlet() {};
+void Model::compute_D_Rayleigh()
+{
+    mat_D = alpha_M * mat_M + alpha_K * mat_K;
+};
+
+void Model::apply_dirichlet()
+{
+    
+};
