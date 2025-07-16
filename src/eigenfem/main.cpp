@@ -32,6 +32,7 @@ int main()
     Model model(mesh, dirichlet_tags);
     model.create_dof_lists();
     std::cout << "Number of dirichlet dofs: " << model.dirichlet_dofs.size() << std::endl;
+    std::cout << "Number of free dofs: " << model.free_dofs.size() << std::endl;
 
     return 0;
 }
