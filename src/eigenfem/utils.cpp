@@ -4,6 +4,7 @@
 
 #include "utils.h"
 
+
 Eigen::MatrixXf compute_mat_G()
 {
     float s = sqrt(2.) / 2.;
@@ -242,4 +243,20 @@ MatsGauss compute_mats_gauss()
     MatsGauss mats_gauss = MatsGauss(vec_mat_Ee_gauss, vec_mat_EeTEe_gauss, vec_mat_De_gauss);
     
     return mats_gauss;
+}
+
+SpMat double_slice_spmat(SpMat mat, std::vector<int> row_indices, std::vector<int> col_indices)
+{
+    SpMat row_slice(row_indices.size(), mat.cols());
+    for (size_t i = 0; i < row_indices.size(); i++)
+    {
+        row_slice.row(i) = mat.row(row_indices[i]);
+    }
+    SpMat col_slice(row_indices.size(), col_indices.size());
+    for (size_t j = 0; j < col_indices.size(); j++)
+    {
+        col_slice.col(j) = row_slice.col(col_indices[j]);
+    }
+    
+    return col_slice;
 }

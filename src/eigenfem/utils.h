@@ -6,8 +6,11 @@
 #define utils_h
 
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
+#include "../../third-party/eigen-3.4.0/Eigen/SparseCore"
 #include "../../third-party/eigen-3.4.0/Eigen/Dense"
 
+
+typedef Eigen::SparseMatrix<float> SpMat;
 
 Eigen::MatrixXf compute_mat_G();
 Eigen::MatrixXf compute_mat_P();
@@ -37,5 +40,7 @@ struct MatsGauss{
     };
 };
 MatsGauss compute_mats_gauss();
+
+SpMat double_slice_spmat(std::vector<int> row_indices, std::vector<int> col_indices);
 
 #endif
