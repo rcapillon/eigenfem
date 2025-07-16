@@ -16,7 +16,7 @@ Eigen is used for linear algebra and Spectra is used to solve sparse generalized
 - Frequency-domain dynamic analysis with a reduced-order model using elastic modes
 
 ## Limitations
-- Only fully tetrahedral meshes are handled
+- Only fully tetrahedral (first order) meshes are handled
 - Only zero Dirichlet boundary conditions are handled
 - Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Surface and volume forces must be constant vectors for each 2D or 3D physical groups
