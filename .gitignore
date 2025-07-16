@@ -1,3 +1,5 @@
 # ignore some folders
 .vscode/
 build/
+# ignore some files
+TODO.txt
