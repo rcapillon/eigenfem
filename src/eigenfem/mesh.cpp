@@ -73,7 +73,7 @@ Mesh::Mesh(std::string path_to_mesh, Material mat)
 void Mesh::import_gmsh_matlab()
 {
 	// open file
-	std::ifstream file(Mesh::mesh_path);
+	std::ifstream file(mesh_path);
     std::string current_line; 
 
 	// initialize file reading and get number of nodes in the mesh
@@ -81,19 +81,19 @@ void Mesh::import_gmsh_matlab()
 	{
 		std::getline(file, current_line);
 	}
-	Mesh::n_nodes = std::stoi(current_line.substr(12, std::string::npos));
+	n_nodes = std::stoi(current_line.substr(12, std::string::npos));
 	std::getline(file, current_line);
 	std::getline(file, current_line);
 
 	// fill table of node coordinates
-	Mesh::table_nodes = Eigen::MatrixXf(Mesh::n_nodes, 3);
+	table_nodes = Eigen::MatrixXf(n_nodes, 3);
 	int n_row = 0;
 	while (current_line.compare("];") != 0)
 	{
 		std::vector<float> coords = read_node_coords_from_line(current_line);
-		Mesh::table_nodes(n_row, 0) = coords[0];
-		Mesh::table_nodes(n_row, 1) = coords[1];
-		Mesh::table_nodes(n_row, 2) = coords[2];
+		table_nodes(n_row, 0) = coords[0];
+		table_nodes(n_row, 1) = coords[1];
+		table_nodes(n_row, 2) = coords[2];
 		n_row++;
 		std::getline(file, current_line);
 	}
@@ -117,6 +117,12 @@ void Mesh::import_gmsh_matlab()
 	{
 		std::vector<int> nums = read_node_nums_from_line(current_line);
 		current_tag = nums[nums.size() - 1];
+
+		if (std::find(tris_tags.begin(), tris_tags.end(), current_tag) == tris_tags.end())
+		{
+			tris_tags.push_back(current_tag);
+		}
+		
 		while (current_tag == previous_tag)
 		{
 			std::vector<int> current_nums = std::vector<int>(nums.begin(), nums.end() - 1);
@@ -143,8 +149,8 @@ void Mesh::import_gmsh_matlab()
 			current_table_tri(i, 1) = current_tri_group[i][1];
 			current_table_tri(i, 2) = current_tri_group[i][2];
 		}
-		Mesh::tables_tris.push_back(current_table_tri);
-		Mesh::tris_tags.push_back(current_tag);
+		tables_tris.push_back(current_table_tri);
+		current_tri_group.clear();
 
 		previous_tag = current_tag;
 	}
@@ -161,14 +167,14 @@ void Mesh::import_gmsh_matlab()
 		nums_tetra.push_back(nums);
 		std::getline(file, current_line);
 	}
-	Mesh::n_elements = nums_tetra.size();
-	Mesh::table_tets = Eigen::MatrixXf(Mesh::n_elements, 4);
-	for (size_t i = 0; i < Mesh::n_elements; i++)
+	n_elements = nums_tetra.size();
+	table_tets = Eigen::MatrixXf(n_elements, 4);
+	for (size_t i = 0; i < n_elements; i++)
 	{
-		Mesh::table_tets(i, 0) = nums_tetra[i][0];
-		Mesh::table_tets(i, 1) = nums_tetra[i][1];
-		Mesh::table_tets(i, 2) = nums_tetra[i][2];
-		Mesh::table_tets(i, 3) = nums_tetra[i][3];
+		table_tets(i, 0) = nums_tetra[i][0];
+		table_tets(i, 1) = nums_tetra[i][1];
+		table_tets(i, 2) = nums_tetra[i][2];
+		table_tets(i, 3) = nums_tetra[i][3];
 
 		Eigen::MatrixXf nodes_coords(4, 3);
 		std::vector<int> inds = {0, 1, 2};
