@@ -173,7 +173,14 @@ void Model::apply_dirichlet()
 {
     if (mat_M.rows() * mat_M.cols() != 0)
     {
-        /* code */
+        mat_Mff = double_slice_spmat(mat_M, free_dofs, free_dofs);
     }
-    
+    if (mat_K.rows() * mat_K.cols() != 0)
+    {
+        mat_Kff = double_slice_spmat(mat_K, free_dofs, free_dofs);
+    }
+    if (mat_D.rows() * mat_D.cols() != 0)
+    {
+        mat_Dff = double_slice_spmat(mat_D, free_dofs, free_dofs);
+    }
 };

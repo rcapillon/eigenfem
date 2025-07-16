@@ -11,6 +11,7 @@
 #include "../../third-party/eigen-3.4.0/Eigen/SparseCore"
 
 #include "mesh.h"
+#include "utils.h"
 
 
 typedef Eigen::SparseMatrix<float> SpMat;
