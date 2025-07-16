@@ -17,11 +17,13 @@ class Model
 {
     public:
         Model() {};
+        Model(Mesh msh, std::vector<int> dir_tags);
+        Model(Mesh msh, std::vector<int> dir_tags, float a_M, float a_K);
         Model(Mesh msh, 
             std::vector<int> dir_tags, 
             std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces,
             std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces,
-            float a_M, float a_K) {};
+            float a_M, float a_K);
         ~Model() {};
 
         Mesh mesh;
@@ -40,6 +42,7 @@ class Model
         Eigen::MatrixXf mat_Mff;
         Eigen::MatrixXf mat_Kff;
 
+        void create_dof_lists();
         void apply_dirichlet();
 };
 
