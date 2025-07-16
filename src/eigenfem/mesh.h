@@ -18,7 +18,8 @@ class Mesh
 {
     public:
         Mesh() {};
-        Mesh(std::string path_to_mesh, Material mat) {};
+        Mesh(std::string path_to_mesh);
+        Mesh(std::string path_to_mesh, Material mat);
         ~Mesh() {};
 
         std::string mesh_path;
@@ -28,6 +29,7 @@ class Mesh
         Eigen::MatrixXf table_nodes;
         Eigen::MatrixXf table_tets;
         std::vector<Eigen::MatrixXf> tables_tris;
+        std::vector<int> tris_tags;
         std::vector<Element> elements;
 
         void import_gmsh_matlab();

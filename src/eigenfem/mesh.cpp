@@ -53,7 +53,13 @@ std::vector<float> read_node_coords_from_line(std::string line)
 	return coords;
 }
 
-// Mesh class constructor
+// Mesh class constructors
+Mesh::Mesh(std::string path_to_mesh) 
+{
+	mesh_path = path_to_mesh;
+	material = Material(0., 0., 0.);
+};
+
 Mesh::Mesh(std::string path_to_mesh, Material mat) 
 {
 	mesh_path = path_to_mesh;
@@ -138,6 +144,7 @@ void Mesh::import_gmsh_matlab()
 			current_table_tri(i, 2) = current_tri_group[i][2];
 		}
 		Mesh::tables_tris.push_back(current_table_tri);
+		Mesh::tris_tags.push_back(current_tag);
 
 		previous_tag = current_tag;
 	}
