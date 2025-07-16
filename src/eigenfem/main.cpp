@@ -28,15 +28,10 @@ int main()
     // std::cout << "Tetrahedra connectivity table:" << std::endl;
     // std::cout << mesh.table_tets << std::endl;
 
-    std::vector<int> dirichlet_tags = {2};
+    std::vector<int> dirichlet_tags = {2, 3};
     Model model(mesh, dirichlet_tags);
     model.create_dof_lists();
     std::cout << "Number of dirichlet dofs: " << model.dirichlet_dofs.size() << std::endl;
-    //std::cout << "dirichlet dofs:" << std::endl;
-    //for (size_t i = 0; i < model.dirichlet_dofs.size(); i++)
-    //{
-    //    std::cout << model.dirichlet_dofs[i] << std::endl;
-    //}
 
     return 0;
 }
