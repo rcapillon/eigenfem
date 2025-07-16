@@ -25,6 +25,7 @@ class Mesh
         std::string mesh_path;
         Material material;
         int n_nodes;
+        int n_dofs;
         int n_elements;
         Eigen::MatrixXf table_nodes;
         Eigen::MatrixXf table_tets;

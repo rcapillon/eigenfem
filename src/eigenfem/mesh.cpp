@@ -82,6 +82,7 @@ void Mesh::import_gmsh_matlab()
 		std::getline(file, current_line);
 	}
 	n_nodes = std::stoi(current_line.substr(12, std::string::npos));
+	n_dofs = 3 * n_nodes;
 	std::getline(file, current_line);
 	std::getline(file, current_line);
 
