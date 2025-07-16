@@ -8,7 +8,7 @@
 #include <tuple>
 
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
-#include "../../third-party/eigen-3.4.0/Eigen/Sparse"
+#include "../../third-party/eigen-3.4.0/Eigen/SparseCore"
 
 #include "mesh.h"
 

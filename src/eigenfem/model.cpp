@@ -171,5 +171,9 @@ void Model::compute_D_Rayleigh()
 
 void Model::apply_dirichlet()
 {
+    if (mat_M.rows() * mat_M.cols() != 0)
+    {
+        /* code */
+    }
     
 };
