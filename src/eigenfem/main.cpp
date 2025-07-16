@@ -14,7 +14,7 @@
 
 int main()
 {
-    std::string mesh_path = "../data/bar.m";
+    std::string mesh_path = "../data/bar.mesh";
     Mesh mesh(mesh_path);
     mesh.import_gmsh_matlab();
 
