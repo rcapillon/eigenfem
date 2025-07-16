@@ -30,7 +30,7 @@ class Element
 {
     public:
         Element() {};
-        Element(int num, Material mat, std::vector<int> nodes_numbers, Eigen::MatrixXf nodes_coordinates) {};
+        Element(int num, Material mat, std::vector<int> nodes_numbers, Eigen::MatrixXf nodes_coordinates);
         ~Element() {};
 
         int number;
@@ -46,9 +46,9 @@ class Element
         Eigen::VectorXf vec_nodes_coords;
         MatsGauss mats_gauss;
 
-        MatsJ compute_jacobian_at_gauss_points(int gauss_idx) {};
-        Eigen::MatrixXf compute_mat_Me() {};
-        Eigen::MatrixXf compute_mat_Ke() {};
+        MatsJ compute_jacobian_at_gauss_points(int gauss_idx);
+        Eigen::MatrixXf compute_mat_Me();
+        Eigen::MatrixXf compute_mat_Ke();
 };
 
 #endif

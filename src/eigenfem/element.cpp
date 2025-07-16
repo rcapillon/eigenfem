@@ -23,6 +23,7 @@ Element::Element(int num, Material mat, std::vector<int> nodes_numbers, Eigen::M
 
     n_nodes = 4;
     n_dofs = 3 * n_nodes;
+    vec_nodes_coords = Eigen::VectorXf(n_dofs);
     nodes_reference_coords = precalc_nodes_reference_coords;
     gauss_points = precalc_gauss_points;
     gauss_weights = precalc_gauss_weights;
@@ -34,9 +35,9 @@ Element::Element(int num, Material mat, std::vector<int> nodes_numbers, Eigen::M
     }
     for (size_t i = 0; i < nodes_coords.rows(); i++)
     {
-        vec_nodes_coords[3 * i] = nodes_coords[i, 0];
-        vec_nodes_coords[3 * i + 1] = nodes_coords[i, 1];
-        vec_nodes_coords[3 * i + 2] = nodes_coords[i, 2];
+        vec_nodes_coords(3 * i) = nodes_coords(i, 0);
+        vec_nodes_coords(3 * i + 1) = nodes_coords(i, 1);
+        vec_nodes_coords(3 * i + 2) = nodes_coords(i, 2);
     }
     mats_gauss = precalc_mats_gauss;
 };
@@ -47,9 +48,9 @@ MatsJ Element::compute_jacobian_at_gauss_points(int gauss_idx)
     std::vector<int> inds1 = {3, 4, 5};
     std::vector<int> inds2 = {6, 7, 8};
 
-    Eigen::MatrixXf mat_Ddx = mats_gauss.vec_mat_De_gauss[gauss_idx](inds0, Eigen::placeholders::all);
-    Eigen::MatrixXf mat_Ddy = mats_gauss.vec_mat_De_gauss[gauss_idx](inds1, Eigen::placeholders::all);
-    Eigen::MatrixXf mat_Ddz = mats_gauss.vec_mat_De_gauss[gauss_idx](inds2, Eigen::placeholders::all);
+    Eigen::MatrixXf mat_Ddx = mats_gauss.vec_mat_De_gauss[gauss_idx](inds0, Eigen::all);
+    Eigen::MatrixXf mat_Ddy = mats_gauss.vec_mat_De_gauss[gauss_idx](inds1, Eigen::all);
+    Eigen::MatrixXf mat_Ddz = mats_gauss.vec_mat_De_gauss[gauss_idx](inds2, Eigen::all);
 
     Eigen::MatrixXf vec_J1 = mat_Ddx * vec_nodes_coords;
     Eigen::MatrixXf vec_J2 = mat_Ddy * vec_nodes_coords;
@@ -70,6 +71,8 @@ MatsJ Element::compute_jacobian_at_gauss_points(int gauss_idx)
     mat_invJJJ(inds2, inds2) = mat_invJ;
 
     MatsJ mats_J(det_J, mat_invJJJ);
+
+    return mats_J;
 };
 
 Eigen::MatrixXf Element::compute_mat_Me()
@@ -94,4 +97,5 @@ Eigen::MatrixXf Element::compute_mat_Ke()
         mat_Ke += gauss_weights(i) * mats_J.det_J * mat_B.transpose() * material.mat_C * mat_B;
     }
     
+    return mat_Ke;
 };
