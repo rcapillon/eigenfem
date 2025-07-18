@@ -26,9 +26,6 @@ class ModalSolver
         std::vector<float> vec_freqs;
         Eigen::MatrixXf mat_modes;
 
-        Eigen::VectorXcf test_freqs;
-
-        void solve_test();
         void solve(int n_modes);
 };
 

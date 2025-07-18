@@ -63,7 +63,7 @@ MatsJ Element::compute_jacobian_at_gauss_points(int gauss_idx)
     float det_J = mat_J.determinant();
 
     Eigen::MatrixXf mat_I = Eigen::MatrixXf::Identity(3, 3);
-    Eigen::MatrixXf mat_invJ = mat_J.ldlt().solve(mat_I);
+    Eigen::MatrixXf mat_invJ = mat_J.colPivHouseholderQr().solve(mat_I);
     Eigen::MatrixXf mat_invJJJ(9, 9);
     mat_invJJJ(inds0, inds0) = mat_invJ;
     mat_invJJJ(inds1, inds1) = mat_invJ;

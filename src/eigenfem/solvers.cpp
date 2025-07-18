@@ -8,29 +8,12 @@
 
 #include "solvers.h"
 
-// #include "../../third-party/eigen-3.4.0/Eigen/Eigenvalues"
 
+const float PI = 3.141592653589793;
 
 ModalSolver::ModalSolver(Model mdl)
 {
     model = mdl;
-}
-
-void ModalSolver::solve_test()
-{
-    model.create_dof_lists();
-    model.assemble_M_K();
-    model.apply_dirichlet();
-
-    Eigen::GeneralizedEigenSolver<Eigen::MatrixXf> ges;
-    ges.compute(Eigen::MatrixXf(model.mat_Kff), Eigen::MatrixXf(model.mat_Mff));
-    Eigen::VectorXcf vec_eigvals = ges.eigenvalues();
-    test_freqs = Eigen::VectorXcf(vec_eigvals.size());
-    for (size_t i = 0; i < vec_eigvals.size(); i++)
-    {
-        // test_freqs(i) = sqrt(vec_eigvals(i));
-        test_freqs(i) = vec_eigvals(i);
-    }
 }
 
 void ModalSolver::solve(int n_modes)
@@ -42,7 +25,17 @@ void ModalSolver::solve(int n_modes)
     Spectra::SparseSymMatProd<float> Aop(model.mat_Kff);
     Spectra::SparseRegularInverse<float> Bop(model.mat_Mff);
 
-    int ncv = 2 * n_modes;
+    // very experimental scheme for choosing ncv
+    int ncv = std::max(20, 4 * n_modes);
+    while (ncv > model.mat_Mff.rows())
+    {
+        ncv /= 2;
+        while (ncv > n_modes)
+        {
+            ncv += 1;
+        }
+    }
+    
     Spectra::SymGEigsSolver<
         Spectra::SparseSymMatProd<float>, 
         Spectra::SparseRegularInverse<float>, 
@@ -66,13 +59,13 @@ void ModalSolver::solve(int n_modes)
         std::vector<int> sort_indices;
         for (size_t i = 0; i < vec_eigvals_to_sort.size(); i++)
         {
-            vec_freqs.push_back(sqrt(vec_eigvals_to_sort[i].first));
+            vec_freqs.push_back(sqrt(vec_eigvals_to_sort[i].first) / (2 * PI));
             sort_indices.push_back(vec_eigvals_to_sort[i].second);
         }
         mat_modes = mat_modes(Eigen::all, sort_indices);
     }
     else
     {
-        std::cout << "Eigensolver did not converge." << std::endl;
+        std::cout << "Eigensolver failed." << std::endl;
     }
 }
