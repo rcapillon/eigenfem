@@ -11,6 +11,7 @@
 
 
 typedef Eigen::SparseMatrix<float> SpMat;
+typedef Eigen::SparseMatrix<float, Eigen::RowMajor> RMSpMat;
 
 Eigen::MatrixXf compute_mat_G();
 Eigen::MatrixXf compute_mat_P();
