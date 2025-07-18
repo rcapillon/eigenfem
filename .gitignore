@@ -2,4 +2,5 @@
 .vscode/
 build/
 # ignore some files
+.DS_Store
 TODO.txt
