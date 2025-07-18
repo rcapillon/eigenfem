@@ -8,10 +8,29 @@
 
 #include "solvers.h"
 
+// #include "../../third-party/eigen-3.4.0/Eigen/Eigenvalues"
+
 
 ModalSolver::ModalSolver(Model mdl)
 {
     model = mdl;
+}
+
+void ModalSolver::solve_test()
+{
+    model.create_dof_lists();
+    model.assemble_M_K();
+    model.apply_dirichlet();
+
+    Eigen::GeneralizedEigenSolver<Eigen::MatrixXf> ges;
+    ges.compute(Eigen::MatrixXf(model.mat_Kff), Eigen::MatrixXf(model.mat_Mff));
+    Eigen::VectorXcf vec_eigvals = ges.eigenvalues();
+    test_freqs = Eigen::VectorXcf(vec_eigvals.size());
+    for (size_t i = 0; i < vec_eigvals.size(); i++)
+    {
+        // test_freqs(i) = sqrt(vec_eigvals(i));
+        test_freqs(i) = vec_eigvals(i);
+    }
 }
 
 void ModalSolver::solve(int n_modes)

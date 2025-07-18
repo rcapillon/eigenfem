@@ -76,7 +76,7 @@ MatsJ Element::compute_jacobian_at_gauss_points(int gauss_idx)
 
 Eigen::MatrixXf Element::compute_mat_Me()
 {
-    Eigen::MatrixXf mat_Me(n_dofs, n_dofs);
+    Eigen::MatrixXf mat_Me = Eigen::MatrixXf::Zero(n_dofs, n_dofs);
     for (size_t i = 0; i < gauss_points.rows(); i++)
     {
         MatsJ mats_J = compute_jacobian_at_gauss_points(i);
@@ -88,7 +88,7 @@ Eigen::MatrixXf Element::compute_mat_Me()
 
 Eigen::MatrixXf Element::compute_mat_Ke()
 {
-    Eigen::MatrixXf mat_Ke(n_dofs, n_dofs);
+    Eigen::MatrixXf mat_Ke = Eigen::MatrixXf::Zero(n_dofs, n_dofs);
     for (size_t i = 0; i < gauss_points.rows(); i++)
     {
         MatsJ mats_J = compute_jacobian_at_gauss_points(i);

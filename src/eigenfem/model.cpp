@@ -86,8 +86,8 @@ void Model::assemble_M()
         {
             for (size_t k = 0; k < mesh.elements[i].n_dofs; k++)
             {
-                ind_I.push_back(k);
-                ind_J.push_back(j);
+                ind_I.push_back(mesh.elements[i].dofs_num[k]);
+                ind_J.push_back(mesh.elements[i].dofs_num[j]);
             }
             
         }
@@ -115,8 +115,8 @@ void Model::assemble_K()
         {
             for (size_t k = 0; k < mesh.elements[i].n_dofs; k++)
             {
-                ind_I.push_back(k);
-                ind_J.push_back(j);
+                ind_I.push_back(mesh.elements[i].dofs_num[k]);
+                ind_J.push_back(mesh.elements[i].dofs_num[j]);
             }
             
         }
