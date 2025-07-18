@@ -101,6 +101,7 @@ void Model::assemble_M()
         }
     }
     mat_M.setFromTriplets(triplets.begin(), triplets.end());
+    mat_M.makeCompressed();
 };
 
 void Model::assemble_K()
@@ -129,6 +130,7 @@ void Model::assemble_K()
         }
     }
     mat_K.setFromTriplets(triplets.begin(), triplets.end());
+    mat_K.makeCompressed();
 };
 
 void Model::assemble_M_K()
@@ -161,12 +163,15 @@ void Model::assemble_M_K()
         }
     }
     mat_M.setFromTriplets(triplets_M.begin(), triplets_M.end());
+    mat_M.makeCompressed();
     mat_K.setFromTriplets(triplets_K.begin(), triplets_K.end());
+    mat_K.makeCompressed();
 };
 
 void Model::compute_D_Rayleigh()
 {
     mat_D = alpha_M * mat_M + alpha_K * mat_K;
+    mat_D.makeCompressed();
 };
 
 void Model::apply_dirichlet()
@@ -174,13 +179,16 @@ void Model::apply_dirichlet()
     if (mat_M.rows() * mat_M.cols() != 0)
     {
         mat_Mff = double_slice_spmat(mat_M, free_dofs, free_dofs);
+        mat_Mff.makeCompressed();
     }
     if (mat_K.rows() * mat_K.cols() != 0)
     {
         mat_Kff = double_slice_spmat(mat_K, free_dofs, free_dofs);
+        mat_Kff.makeCompressed();
     }
     if (mat_D.rows() * mat_D.cols() != 0)
     {
         mat_Dff = double_slice_spmat(mat_D, free_dofs, free_dofs);
+        mat_Dff.makeCompressed();
     }
 };
