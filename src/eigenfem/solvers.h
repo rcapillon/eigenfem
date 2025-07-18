@@ -8,7 +8,7 @@
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 #include "../../third-party/spectra-1.1.0/include/Spectra/SymGEigsSolver.h"
 #include "../../third-party/spectra-1.1.0/include/Spectra/MatOp/SparseSymMatProd.h"
-#include "../../third-party/spectra-1.1.0/include/Spectra/MatOp/SparseCholesky.h"
+#include "../../third-party/spectra-1.1.0/include/Spectra/MatOp/SparseRegularInverse.h"
 
 #include "model.h"
 #include "utils.h"

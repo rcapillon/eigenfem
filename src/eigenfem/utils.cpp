@@ -123,7 +123,7 @@ Eigen::MatrixXf get_shapefun_coeffs()
 
     Eigen::MatrixXf mat_I = Eigen::MatrixXf::Identity(4, 4);
 
-    Eigen::MatrixXf shapefun_coeffs = mat_A.ldlt().solve(mat_I);
+    Eigen::MatrixXf shapefun_coeffs = mat_A.colPivHouseholderQr().solve(mat_I);
 
     return shapefun_coeffs;
 }

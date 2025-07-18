@@ -10,7 +10,6 @@ Eigen::MatrixXf mat_P = compute_mat_P();
 Eigen::MatrixXf precalc_gauss_points = get_gauss_points();
 Eigen::MatrixXf precalc_gauss_weights = get_gauss_weights();
 Eigen::MatrixXf precalc_nodes_reference_coords = get_reference_coords();
-Eigen::MatrixXf precalc_shapefun_coeffs = get_shapefun_coeffs();
 
 MatsGauss precalc_mats_gauss = compute_mats_gauss();
 

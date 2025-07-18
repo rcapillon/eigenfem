@@ -2,8 +2,6 @@
 // model.cpp
 //
 
-#include <iostream>
-
 #include "model.h"
 
 
@@ -135,8 +133,8 @@ void Model::assemble_K()
 
 void Model::assemble_M_K()
 {
-    SpMat mat_M(mesh.n_dofs, mesh.n_dofs);
-    SpMat mat_K(mesh.n_dofs, mesh.n_dofs);
+    mat_M = SpMat(mesh.n_dofs, mesh.n_dofs);
+    mat_K = SpMat(mesh.n_dofs, mesh.n_dofs);
     std::vector<triplet> triplets_M;
     std::vector<triplet> triplets_K;
 
@@ -148,11 +146,14 @@ void Model::assemble_M_K()
         {
             for (size_t k = 0; k < mesh.elements[i].n_dofs; k++)
             {
-                ind_I.push_back(k);
-                ind_J.push_back(j);
+                ind_I.push_back(mesh.elements[i].dofs_num[k]);
+                ind_J.push_back(mesh.elements[i].dofs_num[j]);
             }
             
         }
+
+        Eigen::MatrixXf mat_Me = mesh.elements[i].compute_mat_Me();
+
         Eigen::VectorXf flattened_mat_Me = mesh.elements[i].compute_mat_Me().reshaped();
         Eigen::VectorXf flattened_mat_Ke = mesh.elements[i].compute_mat_Ke().reshaped();
 

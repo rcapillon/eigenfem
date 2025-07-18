@@ -20,14 +20,15 @@ void ModalSolver::solve(int n_modes)
     model.assemble_M_K();
     model.apply_dirichlet();
 
-    Spectra::SparseSymMatProd<float> Kop(model.mat_Kff);
-    Spectra::SparseCholesky<float>  Mop(model.mat_Mff);
+    Spectra::SparseSymMatProd<float> Aop(model.mat_Kff);
+    Spectra::SparseRegularInverse<float> Bop(model.mat_Mff);
 
     int ncv = 2 * n_modes;
     Spectra::SymGEigsSolver<
         Spectra::SparseSymMatProd<float>, 
-        Spectra::SparseCholesky<float>, 
-        Spectra::GEigsMode::Cholesky> geigs(Kop, Mop, n_modes, ncv);
+        Spectra::SparseRegularInverse<float>, 
+        Spectra::GEigsMode::RegularInverse> geigs(Aop, Bop, n_modes, ncv);
+    
     geigs.init();
     int nconv = geigs.compute(Spectra::SortRule::SmallestMagn);
 
