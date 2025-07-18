@@ -22,7 +22,7 @@ Eigen is used for linear algebra and Spectra is used to solve sparse generalized
 - Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Surface and volume forces must be constant vectors for each 2D or 3D physical groups
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
-- While the mesh is limited to a single element type, much performance is lost by computing element matrices every time like if there were numerous element types in unknown structure
+- While the mesh is limited to a single element type, much performance is lost by computing element matrices every time like if all element types were unknown and possibly producing more variations that the 4-node tetrahedron
 
 ## Documentation and usage
 Documentation and user guide will be put in the wiki of the github repository.
