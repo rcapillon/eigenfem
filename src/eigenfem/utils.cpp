@@ -262,3 +262,8 @@ SpMat double_slice_spmat(SpMat mat, std::vector<int> row_indices, std::vector<in
     
     return col_slice;
 }
+
+bool pair_comparator(const std::pair<float, int>& lhs, const std::pair<float, int>& rhs)
+{
+    return lhs.first < rhs.first; 
+}

@@ -5,6 +5,8 @@
 #ifndef utils_h
 #define utils_h
 
+#include <utility>
+
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 #include "../../third-party/eigen-3.4.0/Eigen/SparseCore"
 #include "../../third-party/eigen-3.4.0/Eigen/Dense"
@@ -43,5 +45,7 @@ struct MatsGauss{
 MatsGauss compute_mats_gauss();
 
 SpMat double_slice_spmat(SpMat mat, std::vector<int> row_indices, std::vector<int> col_indices);
+
+bool pair_comparator(const std::pair<float, int>& lhs, const std::pair<float, int>& rhs);
 
 #endif
