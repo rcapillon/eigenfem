@@ -9,11 +9,12 @@ Eigen is used for linear algebra and Spectra is used to solve sparse generalized
 - Spectra: https://spectralib.org/
 
 ## Intended features
-- Supported mesh types: 3D tetrahedral mesh generated using gmsh and saved in Matlab format
+- Supported mesh type: 3D tetrahedral mesh generated using gmsh and saved in Matlab format
 - Surface and volume forces applicable to tagged surfaces and volumes (physical groups)
 - Linear statics problems
 - Computation of linear elastic modes and corresponding eigenfrequencies
 - Frequency-domain dynamic analysis with a reduced-order model using elastic modes
+- Output deformed meshes as VTK files (recommended software for visualization is Paraview: https://www.paraview.org/)
 
 ## Limitations
 - Only fully tetrahedral (first order) meshes are handled
