@@ -34,7 +34,7 @@ void VTKwriter::write_deformed_mesh(std::string path_to_file, std::string filena
     {
         for (size_t j = 0; j < mesh.table_nodes.cols(); j++)
         {
-            file << mesh.table_nodes(i, j) << " " ;
+            file << mesh.table_nodes(i, j) << " ";
         }
         file << std::endl;
     }
@@ -51,6 +51,65 @@ void VTKwriter::write_deformed_mesh(std::string path_to_file, std::string filena
     int next_number = n_tets * 5 + n_tris * 4;
 
     file << "CELLS " << n_cells << " " << next_number << std::endl;
+        // TRI CELLS
+    for (size_t i = 0; i < mesh.tables_tris.size(); i++)
+    {
+        for (size_t j = 0; j < mesh.tables_tris[i].rows(); j++)
+        {
+            file << "3 ";
+            for (size_t k = 0; k < mesh.tables_tris[i].cols(); k++)
+            {
+                file << mesh.tables_tris[i](j, k) << " ";
+            }
+            file << std::endl;
+        }   
+    }
+        // TET CELLS
+    for (size_t i = 0; i < mesh.table_tets.rows(); i++)
+    {
+        file << "4 ";
+        for (size_t j = 0; j < mesh.table_tets.cols(); j++)
+        {
+            file << mesh.table_tets(i, j) << " ";
+        }
+        file << std::endl;
+    }
+    file << std::endl;
+    
+    // CELL_TYPES
+    file << "CELL_TYPES " << n_cells << std::endl;
+        // TRI CELLS
+    for (size_t i = 0; i < mesh.tables_tris.size(); i++)
+    {
+        for (size_t j = 0; j < mesh.tables_tris[i].rows(); j++)
+        {
+            file << "5" << std::endl;
+        }   
+    }
+        // TET CELLS
+    for (size_t i = 0; i < mesh.table_tets.rows(); i++)
+    {
+        file << "10" << std::endl;
+    }
+    file << std::endl;
+    
+    // CELL_DATA
+    file << "CELL_DATA " << n_cells << std::endl;
+    file << "SCALARS CellEntityIds int 1" << std::endl;
+    file << "LOOKUP_TABLE default" << std::endl;
+    for (size_t i = 0; i < mesh.tables_tris.size(); i++)
+    {
+        for (size_t j = 0; j < mesh.tables_tris[i].rows(); j++)
+        {
+            file << mesh.tris_tags[i] << std::endl;
+        }   
+    }
+        // TET CELLS
+    for (size_t i = 0; i < mesh.table_tets.rows(); i++)
+    {
+        file << "1" << std::endl;
+    }
+    file << std::endl;
 
     file.close();
 }
