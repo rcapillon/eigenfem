@@ -48,4 +48,6 @@ SpMat double_slice_spmat(SpMat mat, std::vector<int> row_indices, std::vector<in
 
 bool pair_comparator(const std::pair<float, int>& lhs, const std::pair<float, int>& rhs);
 
+int find_index(std::vector<int>& vec, int val);
+
 #endif

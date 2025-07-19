@@ -267,3 +267,14 @@ bool pair_comparator(const std::pair<float, int>& lhs, const std::pair<float, in
 {
     return lhs.first < rhs.first; 
 }
+
+int find_index(std::vector<int>& vec, int val) 
+{
+    for (int i = 0; i < vec.size(); i++) 
+    {
+        if (vec[i] == val) {
+            return i;
+        }
+    }
+  	return -1;
+}
