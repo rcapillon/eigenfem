@@ -27,6 +27,30 @@ void VTKwriter::write_deformed_mesh(std::string path_to_file, std::string filena
     file << filename_wo_extension << ", Created by eigenfem" << std::endl;
     file << "ASCII" << std::endl;
     file << "DATASET UNSTRUCTURED_GRID" << std::endl;
+    file << "POINTS " << mesh.n_nodes << " float" << std::endl;
+
+    // POINTS
+    for (size_t i = 0; i < mesh.table_nodes.rows(); i++)
+    {
+        for (size_t j = 0; j < mesh.table_nodes.cols(); j++)
+        {
+            file << mesh.table_nodes(i, j) << " " ;
+        }
+        file << std::endl;
+    }
+    file << std::endl;
+
+    // CELLS
+    int n_tets = mesh.table_tets.rows();
+    int n_tris = 0;
+    for (size_t i = 0; i < mesh.tables_tris.size(); i++)
+    {
+        n_tris += mesh.tables_tris[i].rows();
+    }
+    int n_cells = n_tets + n_tris;
+    int next_number = n_tets * 5 + n_tris * 4;
+
+    file << "CELLS " << n_cells << " " << next_number << std::endl;
 
     file.close();
 }
