@@ -6,6 +6,7 @@
 #include <ctime>
 
 #include "solvers.h"
+#include "io.h"
 
 
 int main()
@@ -36,6 +37,13 @@ int main()
     {
         std::cout << solver.vec_freqs[i] << std::endl;
     }
+
+    // Export a single mode shape to VTK format
+    int plotted_mode_num = 0;
+    Eigen::VectorXf plotted_mode = solver.mat_modes(Eigen::all, plotted_mode_num);
+    VTKwriter vtk_writer(mesh, plotted_mode);
+    vtk_writer.add_U_to_mesh();
+    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "undeformed_mesh"); // the first argument (path to folder) needs to end with "/"
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
