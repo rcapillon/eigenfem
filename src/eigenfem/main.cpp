@@ -43,7 +43,10 @@ int main()
     Eigen::VectorXf plotted_mode = solver.mat_modes(Eigen::all, plotted_mode_num);
     VTKwriter vtk_writer(mesh, plotted_mode);
     vtk_writer.add_U_to_mesh();
-    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "undeformed_mesh"); // the first argument (path to folder) needs to end with "/"
+
+    // The first argument (path to folder) needs to end with "/"
+    // The folders/subfolders also need to already be created.
+    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "mode0_shape");
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
