@@ -21,7 +21,7 @@ int main()
     Mesh mesh(mesh_path, material); // Chosen material will be used for the whole domain
     mesh.import_gmsh_matlab(); // Constructs coordinates and connectivity tables
 
-    std::vector<int> dirichlet_tags = {2, 3}; // Specifies physical group tags where 0-dirichlet conditions are imposed
+    std::vector<int> dirichlet_tags = {2, 3}; // Specifies 2D physical group tags where 0-dirichlet conditions are imposed
     Model model(mesh, dirichlet_tags);
     
     ModalSolver solver(model); // ModalSolver can be used to compute the first N smallest eigenfrequencies and eigenvectors
