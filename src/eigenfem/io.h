@@ -26,7 +26,7 @@ class VTKwriter
         Mesh deformed_mesh;
 
         void add_U_to_mesh();
-        void write_deformed_mesh(std::string path_to_file, std::string filename_wo_extension, std::string trail = "");
+        void write_deformed_mesh(std::string path_to_folder, std::string filename_wo_extension, std::string trail = "");
 };
 
 #endif
