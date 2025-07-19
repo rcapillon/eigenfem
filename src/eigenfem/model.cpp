@@ -11,7 +11,7 @@ Model::Model(Mesh msh, std::vector<int> dir_tags)
     dirichlet_tags = dir_tags;
     alpha_M = 0.;
     alpha_K = 0.;
-};
+}
 
 Model::Model(Mesh msh, std::vector<int> dir_tags, float a_M, float a_K)
 {
@@ -19,7 +19,7 @@ Model::Model(Mesh msh, std::vector<int> dir_tags, float a_M, float a_K)
     dirichlet_tags = dir_tags;
     alpha_M = a_M;
     alpha_K = a_K;
-};
+}
 
 Model::Model(Mesh msh,
     std::vector<int> dir_tags, 
@@ -29,11 +29,11 @@ Model::Model(Mesh msh,
 {
     mesh = msh;
     dirichlet_tags = dir_tags;
-    surface_forces = surf_forces;
-    volume_forces = vol_forces;
+    tuples_surface_forces = surf_forces;
+    tuples_volume_forces = vol_forces;
     alpha_M = a_M;
     alpha_K = a_K;
-};
+}
 
 void Model::create_dof_lists()
 {
@@ -71,7 +71,7 @@ void Model::create_dof_lists()
             }
         }
     }
-};
+}
 
 void Model::assemble_M()
 {
@@ -100,7 +100,7 @@ void Model::assemble_M()
     }
     mat_M.setFromTriplets(triplets.begin(), triplets.end());
     mat_M.makeCompressed();
-};
+}
 
 void Model::assemble_K()
 {
@@ -129,7 +129,7 @@ void Model::assemble_K()
     }
     mat_K.setFromTriplets(triplets.begin(), triplets.end());
     mat_K.makeCompressed();
-};
+}
 
 void Model::assemble_M_K()
 {
@@ -167,13 +167,86 @@ void Model::assemble_M_K()
     mat_M.makeCompressed();
     mat_K.setFromTriplets(triplets_K.begin(), triplets_K.end());
     mat_K.makeCompressed();
-};
+}
 
 void Model::compute_D_Rayleigh()
 {
     mat_D = alpha_M * mat_M + alpha_K * mat_K;
     mat_D.makeCompressed();
-};
+}
+
+void Model::assemble_Fs()
+{
+    vec_Fs = Eigen::VectorXf::Zero(mesh.n_dofs);
+
+    for (size_t i = 0; i < tuples_surface_forces.size(); i++)
+    {
+        int tag = std::get<0>(tuples_surface_forces[i]);
+        Eigen::VectorXf vec_fs = std::get<1>(tuples_surface_forces[i]);
+
+        int num_tables_tris = find_index(mesh.tris_tags, tag);
+
+        for (size_t j = 0; j < mesh.tables_tris[num_tables_tris].rows(); j++)
+        {
+            Eigen::VectorXf X0 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 0), Eigen::all);
+            Eigen::VectorXf X1 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 1), Eigen::all);
+            Eigen::VectorXf X2 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 2), Eigen::all);
+            Eigen::VectorXf X10 = X1 - X0;
+            Eigen::VectorXf X20 = X2 - X0;
+            float tri_area = 0.5 * abs(X10.dot(X20));
+
+            for (size_t k = 0; k < mesh.tables_tris[num_tables_tris].cols(); k++)
+            {
+                int node = mesh.tables_tris[num_tables_tris](j, k);
+                std::vector<int> dofs;
+                dofs.push_back(node * 3);
+                dofs.push_back(node * 3 + 1);
+                dofs.push_back(node * 3 + 2);
+
+                vec_Fs(dofs) += tri_area * vec_fs / 3.;
+            }
+        }
+    }
+}
+
+void Model::assemble_Fv()
+{
+    vec_Fv = Eigen::VectorXf::Zero(mesh.n_dofs);
+
+    for (size_t i = 0; i < tuples_volume_forces.size(); i++)
+    {
+        Eigen::VectorXf vec_fv = std::get<1>(tuples_volume_forces[i]);
+
+        for (size_t j = 0; j < mesh.table_tets.rows(); j++)
+        {
+            Eigen::VectorXf X0 = mesh.table_nodes(mesh.table_tets(j, 0), Eigen::all);
+            Eigen::VectorXf X1 = mesh.table_nodes(mesh.table_tets(j, 1), Eigen::all);
+            Eigen::VectorXf X2 = mesh.table_nodes(mesh.table_tets(j, 2), Eigen::all);
+            Eigen::VectorXf X3 = mesh.table_nodes(mesh.table_tets(j, 3), Eigen::all);
+            Eigen::VectorXf X10 = X1 - X0;
+            Eigen::VectorXf X20 = X2 - X0;
+            Eigen::VectorXf X30 = X3 - X0;
+            Eigen::VectorXf cross_21 = X20.cross(X10);
+            float tet_volume = abs(cross_21.dot(X30)) / 6. ;
+
+            for (size_t k = 0; k < mesh.table_tets.cols(); k++)
+            {
+                int node = mesh.table_tets(j, k);
+                std::vector<int> dofs;
+                dofs.push_back(node * 3);
+                dofs.push_back(node * 3 + 1);
+                dofs.push_back(node * 3 + 2);
+
+                vec_Fv(dofs) += tet_volume * vec_fv / 4.;
+            }
+        }
+    }
+}
+
+void Model::compute_F()
+{
+    vec_F = vec_Fs + vec_Fv;
+}
 
 void Model::apply_dirichlet()
 {
@@ -192,4 +265,8 @@ void Model::apply_dirichlet()
         mat_Dff = double_slice_spmat(mat_D, free_dofs, free_dofs);
         mat_Dff.makeCompressed();
     }
-};
+    if (vec_F.size() != 0)
+    {
+        vec_Ff = vec_F(free_dofs);
+    }   
+}
