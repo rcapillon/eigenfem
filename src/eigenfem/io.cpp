@@ -11,10 +11,22 @@ VTKwriter::VTKwriter(Mesh msh, Eigen::VectorXf vec_displacement)
     U = vec_displacement;
 }
 
-void VTKwriter::write_deformed_mesh(std::string path_to_file)
+void VTKwriter::add_U_to_mesh()
 {
-    // std::ofstream myfile;
-    // myfile.open("example.txt");
-    // myfile << "Writing this to a file.\n";
-    // myfile.close();
+    deformed_mesh = mesh;
+    Eigen::MatrixXf reshaped_U = U.reshaped(3, mesh.n_nodes).transpose();
+}
+
+void VTKwriter::write_deformed_mesh(std::string path_to_file, std::string filename_wo_extension, std::string trail)
+{
+    std::ofstream file;
+    std::string full_path_to_file = path_to_file + filename_wo_extension + trail + ".vtk";
+    file.open(full_path_to_file);
+
+    file << "# vtk DataFile Version 2.0" << std::endl;
+    file << filename_wo_extension << ", Created by eigenfem" << std::endl;
+    file << "ASCII" << std::endl;
+    file << "DATASET UNSTRUCTURED_GRID" << std::endl;
+
+    file.close();
 }
