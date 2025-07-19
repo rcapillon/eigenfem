@@ -47,7 +47,7 @@ void ModalSolver::solve(int n_modes)
     if (geigs.info() == Spectra::CompInfo::Successful)
     {
         Eigen::VectorXf eigenvalues = geigs.eigenvalues();
-        mat_modes = geigs.eigenvectors();
+        Eigen::MatrixXf mat_modes_free = geigs.eigenvectors();
 
         std::vector<float> vec_eigenvalues(eigenvalues.data(), eigenvalues.data() + eigenvalues.size());
         std::vector<std::pair<float, int>> vec_eigvals_to_sort;
@@ -62,7 +62,10 @@ void ModalSolver::solve(int n_modes)
             vec_freqs.push_back(sqrt(vec_eigvals_to_sort[i].first) / (2 * PI));
             sort_indices.push_back(vec_eigvals_to_sort[i].second);
         }
-        mat_modes = mat_modes(Eigen::all, sort_indices);
+        mat_modes_free = mat_modes_free(Eigen::all, sort_indices);
+
+        mat_modes = Eigen::MatrixXf::Zero(model.mesh.n_dofs, mat_modes_free.cols());
+        mat_modes(model.free_dofs, Eigen::all) = mat_modes_free;
     }
     else
     {
