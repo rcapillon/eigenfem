@@ -5,7 +5,12 @@
 #ifndef solvers_h
 #define solvers_h
 
+#include <iostream>
+#include <utility>
+#include <cmath>
+
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
+#include "../../third-party/eigen-3.4.0/Eigen/SparseCholesky"
 #include "../../third-party/spectra-1.1.0/include/Spectra/SymGEigsSolver.h"
 #include "../../third-party/spectra-1.1.0/include/Spectra/MatOp/SparseSymMatProd.h"
 #include "../../third-party/spectra-1.1.0/include/Spectra/MatOp/SparseRegularInverse.h"
@@ -27,6 +32,20 @@ class ModalSolver
         Eigen::MatrixXf mat_modes;
 
         void solve(int n_modes);
+};
+
+class LinearStaticsSolver
+{
+    public:
+        LinearStaticsSolver() {};
+        LinearStaticsSolver(Model mdl);
+        ~LinearStaticsSolver() {};
+
+        Model model;
+
+        Eigen::VectorXf U;
+
+        void solve();
 };
 
 #endif

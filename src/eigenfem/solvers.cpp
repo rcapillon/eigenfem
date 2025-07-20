@@ -2,10 +2,6 @@
 // solvers.cpp
 //
 
-#include <iostream>
-#include <utility>
-#include <cmath>
-
 #include "solvers.h"
 
 
@@ -70,5 +66,40 @@ void ModalSolver::solve(int n_modes)
     else
     {
         std::cout << "Eigensolver failed." << std::endl;
+    }
+}
+
+LinearStaticsSolver::LinearStaticsSolver(Model mdl)
+{
+    model = mdl;
+}
+
+void LinearStaticsSolver::solve()
+{
+    model.create_dof_lists();
+    model.assemble_K();
+    model.assemble_Fs();
+    model.assemble_Fv();
+    model.compute_F();
+    model.apply_dirichlet();
+
+    Eigen::SimplicialLDLT<SpMat> solver;
+    solver.compute(model.mat_Kff);
+    if (solver.info() == Eigen::Success)
+    {
+        Eigen::VectorXf U_free = solver.solve(model.vec_Ff);
+        if (solver.info() == Eigen::Success)
+        {
+            U = Eigen::VectorXf::Zero(model.mesh.n_dofs);
+            U(model.free_dofs) = U_free;
+        }
+        else
+        {
+            std::cout << "Solver failed." << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Matrix decomposition failed." << std::endl;
     }
 }
