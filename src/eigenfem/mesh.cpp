@@ -143,7 +143,7 @@ void Mesh::import_gmsh_matlab()
 		}
 		
 		int group_n_elements = current_tri_group.size();
-		Eigen::MatrixXf current_table_tri(group_n_elements, 3);
+		Eigen::MatrixXi current_table_tri(group_n_elements, 3);
 		for (size_t i = 0; i < group_n_elements; i++)
 		{
 			current_table_tri(i, 0) = current_tri_group[i][0];
@@ -169,7 +169,7 @@ void Mesh::import_gmsh_matlab()
 		std::getline(file, current_line);
 	}
 	n_elements = nums_tetra.size();
-	table_tets = Eigen::MatrixXf(n_elements, 4);
+	table_tets = Eigen::MatrixXi(n_elements, 4);
 	for (size_t i = 0; i < n_elements; i++)
 	{
 		table_tets(i, 0) = nums_tetra[i][0];

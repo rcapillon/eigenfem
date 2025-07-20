@@ -75,7 +75,7 @@ void Model::create_dof_lists()
 
 void Model::assemble_M()
 {
-    SpMat mat_M(mesh.n_dofs, mesh.n_dofs);
+    mat_M = SpMat(mesh.n_dofs, mesh.n_dofs);
     std::vector<triplet> triplets;
 
     for (size_t i = 0; i < mesh.n_elements; i++)
@@ -104,7 +104,7 @@ void Model::assemble_M()
 
 void Model::assemble_K()
 {
-    SpMat mat_K(mesh.n_dofs, mesh.n_dofs);
+    mat_K = SpMat(mesh.n_dofs, mesh.n_dofs);
     std::vector<triplet> triplets;
 
     for (size_t i = 0; i < mesh.n_elements; i++)
@@ -188,11 +188,11 @@ void Model::assemble_Fs()
 
         for (size_t j = 0; j < mesh.tables_tris[num_tables_tris].rows(); j++)
         {
-            Eigen::VectorXf X0 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 0), Eigen::all);
-            Eigen::VectorXf X1 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 1), Eigen::all);
-            Eigen::VectorXf X2 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 2), Eigen::all);
-            Eigen::VectorXf X10 = X1 - X0;
-            Eigen::VectorXf X20 = X2 - X0;
+            Eigen::Vector3f X0 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 0), Eigen::all);
+            Eigen::Vector3f X1 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 1), Eigen::all);
+            Eigen::Vector3f X2 = mesh.table_nodes(mesh.tables_tris[num_tables_tris](j, 2), Eigen::all);
+            Eigen::Vector3f X10 = X1 - X0;
+            Eigen::Vector3f X20 = X2 - X0;
             float tri_area = 0.5 * abs(X10.dot(X20));
 
             for (size_t k = 0; k < mesh.tables_tris[num_tables_tris].cols(); k++)
@@ -219,14 +219,14 @@ void Model::assemble_Fv()
 
         for (size_t j = 0; j < mesh.table_tets.rows(); j++)
         {
-            Eigen::VectorXf X0 = mesh.table_nodes(mesh.table_tets(j, 0), Eigen::all);
-            Eigen::VectorXf X1 = mesh.table_nodes(mesh.table_tets(j, 1), Eigen::all);
-            Eigen::VectorXf X2 = mesh.table_nodes(mesh.table_tets(j, 2), Eigen::all);
-            Eigen::VectorXf X3 = mesh.table_nodes(mesh.table_tets(j, 3), Eigen::all);
-            Eigen::VectorXf X10 = X1 - X0;
-            Eigen::VectorXf X20 = X2 - X0;
-            Eigen::VectorXf X30 = X3 - X0;
-            Eigen::VectorXf cross_21 = X20.cross(X10);
+            Eigen::Vector3f X0 = mesh.table_nodes(mesh.table_tets(j, 0), Eigen::all);
+            Eigen::Vector3f X1 = mesh.table_nodes(mesh.table_tets(j, 1), Eigen::all);
+            Eigen::Vector3f X2 = mesh.table_nodes(mesh.table_tets(j, 2), Eigen::all);
+            Eigen::Vector3f X3 = mesh.table_nodes(mesh.table_tets(j, 3), Eigen::all);
+            Eigen::Vector3f X10 = X1 - X0;
+            Eigen::Vector3f X20 = X2 - X0;
+            Eigen::Vector3f X30 = X3 - X0;
+            Eigen::Vector3f cross_21 = X20.cross(X10);
             float tet_volume = abs(cross_21.dot(X30)) / 6. ;
 
             for (size_t k = 0; k < mesh.table_tets.cols(); k++)

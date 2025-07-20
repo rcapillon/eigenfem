@@ -28,8 +28,8 @@ class Mesh
         int n_dofs;
         int n_elements;
         Eigen::MatrixXf table_nodes;
-        Eigen::MatrixXf table_tets;
-        std::vector<Eigen::MatrixXf> tables_tris;
+        Eigen::MatrixXi table_tets;
+        std::vector<Eigen::MatrixXi> tables_tris;
         std::vector<int> tris_tags;
         std::vector<Element> elements;
 
