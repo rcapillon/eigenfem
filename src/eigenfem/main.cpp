@@ -22,31 +22,44 @@ int main()
     Mesh mesh(mesh_path, material); // Chosen material will be used for the whole domain
     mesh.import_gmsh_matlab(); // Constructs coordinates and connectivity tables
 
-    std::vector<int> dirichlet_tags = {2, 3}; // Specifies 2D physical group tags where 0-dirichlet conditions are imposed
-    Model model(mesh, dirichlet_tags);
+    std::vector<int> dirichlet_tags = {2}; // Specifies 2D physical group tags where 0-dirichlet conditions are imposed
     
-    ModalSolver solver(model); // ModalSolver can be used to compute the first N smallest eigenfrequencies and eigenvectors
-    int n_modes = 5;
+    int surface_force_tag = 3; // Specifies 2D physical group tag where a surface force is applied
+
+    // Defines the surface force vector
+    Eigen::VectorXf vec_surface_force = Eigen::VectorXf::Zero(3);
+    vec_surface_force(0) = 1e6;
+
+    std::tuple<int, Eigen::VectorXf> tuple_surface_force = std::make_tuple(surface_force_tag, vec_surface_force);
+    std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
+    surf_forces.push_back(tuple_surface_force);
+
+    int volume_force_tag = 1; // Specifies 3D physical group tag where a volume force is applied (can only be 1 for the moment)
+
+    // Defines the volume force vector
+    Eigen::VectorXf vec_volume_force = Eigen::VectorXf::Zero(3);
+    // vec_volume_force(2) = 9.81 * 1e6;
+
+    std::tuple<int, Eigen::VectorXf> tuple_volume_force = std::make_tuple(volume_force_tag, vec_volume_force);
+    std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces;
+    vol_forces.push_back(tuple_volume_force);
+
+    Model model(mesh, dirichlet_tags, surf_forces, vol_forces);
+    
+    // LinearStaticsSolver can be used to solve a linear statics problem involving surface and volume forces
+    LinearStaticsSolver solver(model);
     time_t solver_timer_start = time(nullptr); // Starts timer for solver execution
-    solver.solve(n_modes);
+    solver.solve();
     time_t solver_timer_end = time(nullptr); // Ends timer for solver execution
 
-    // Print eigenfrequencies calculated by the solver
-    std::cout << "First " << n_modes << " smallest eigenfrequencies:" << std::endl;
-    for (size_t i = 0; i < solver.vec_freqs.size(); i++)
-    {
-        std::cout << solver.vec_freqs[i] << std::endl;
-    }
-
-    // Export a single mode shape to VTK format
-    int plotted_mode_num = 0;
-    Eigen::VectorXf plotted_mode = solver.mat_modes(Eigen::all, plotted_mode_num);
-    VTKwriter vtk_writer(mesh, plotted_mode);
+    // Export deformed mesh to VTK format
+    Eigen::VectorXf U = solver.U;
+    VTKwriter vtk_writer(mesh, U);
     vtk_writer.add_U_to_mesh();
 
     // The first argument (path to folder) needs to end with "/"
     // The folders/subfolders also need to already be created.
-    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "mode0_shape");
+    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "statics");
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
