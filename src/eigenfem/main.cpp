@@ -11,6 +11,23 @@
 
 int main()
 {
+    /* Eigen::MatrixXcf ctest(1, 2);
+    ctest(0, 0) = std::complex<float>(1, 2);
+    ctest(0, 1) = std::complex<float>(3, 4);
+
+    Eigen::MatrixXf cmod = ctest.cwiseAbs(); */
+
+    /* Eigen::MatrixXf ctest(1, 2);
+    ctest(0, 0) = 1;
+    ctest(0, 1) = 2;
+    std::complex<float> my_i(0, 1);
+    Eigen::MatrixXcf ic = my_i * ctest;
+
+    std::cout << "ctest : " << std::endl;
+    std::cout << ctest << std::endl << std::endl;
+    std::cout << "ic : " << std::endl;
+    std::cout << ic << std::endl; */
+
     time_t global_timer_start = time(nullptr); // Starts timer for whole code execution
 
     // Defines two basic metals as usable materials

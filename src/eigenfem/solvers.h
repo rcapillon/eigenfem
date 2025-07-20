@@ -48,4 +48,29 @@ class LinearStaticsSolver
         void solve();
 };
 
+class FrequencySweepSolver
+{
+    public:
+        FrequencySweepSolver() {};
+        FrequencySweepSolver(Model mdl);
+        ~FrequencySweepSolver() {};
+
+        Model model;
+
+        int n_modes;
+        Eigen::MatrixXf mat_rom_basis;
+        Eigen::MatrixXf mat_Mrom;
+        Eigen::MatrixXf mat_Krom;
+        Eigen::MatrixXf mat_Drom;
+        Eigen::VectorXf vec_From;
+        Eigen::MatrixXcf mat_Kdyn_rom;
+
+        Eigen::MatrixXf mat_U_modulus;
+
+        void load_rom(Eigen::MatrixXf rom_basis);
+        void compute_rom(int n);
+        void compute_Kdyn(float w);
+        void solve(std::vector<float> angular_freqs);
+};
+
 #endif

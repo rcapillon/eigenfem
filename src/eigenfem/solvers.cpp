@@ -7,6 +7,10 @@
 
 const float PI = 3.141592653589793;
 
+//
+// MODAL SOLVER
+//
+
 ModalSolver::ModalSolver(Model mdl)
 {
     model = mdl;
@@ -69,6 +73,10 @@ void ModalSolver::solve(int n_modes)
     }
 }
 
+//
+// LINEAR STATICS SOLVER
+//
+
 LinearStaticsSolver::LinearStaticsSolver(Model mdl)
 {
     model = mdl;
@@ -102,4 +110,50 @@ void LinearStaticsSolver::solve()
     {
         std::cout << "Matrix decomposition failed." << std::endl;
     }
+}
+
+//
+// FREQUENCY SWEEP SOLVER
+//
+
+FrequencySweepSolver::FrequencySweepSolver(Model mdl)
+{
+    model = mdl;
+}
+
+void FrequencySweepSolver::load_rom(Eigen::MatrixXf rom_basis)
+{
+    mat_rom_basis = rom_basis;
+    n_modes = mat_rom_basis.cols();
+
+    model.create_dof_lists();
+    model.assemble_M_K();
+    model.compute_D_Rayleigh();
+    model.assemble_Fs();
+    model.assemble_Fv();
+    model.compute_F();
+    model.apply_dirichlet();
+
+    Eigen::MatrixXf mat_Mrom = mat_rom_basis.transpose() * model.mat_Mff * mat_rom_basis;
+    Eigen::MatrixXf mat_Krom = mat_rom_basis.transpose() * model.mat_Kff * mat_rom_basis;
+    Eigen::MatrixXf mat_Drom = mat_rom_basis.transpose() * model.mat_Dff * mat_rom_basis;
+    Eigen::VectorXf vec_From = mat_rom_basis.transpose() * model.vec_Ff;
+}
+
+void FrequencySweepSolver::compute_rom(int n)
+{
+    n_modes = n;
+    ModalSolver modal_solver(model);
+    modal_solver.solve(n_modes);
+}
+
+void FrequencySweepSolver::compute_Kdyn(float w)
+{
+    std::complex<float> pure_imag(0, 1);
+    mat_Kdyn_rom = -pow(w, 2.) * mat_Mrom + pure_imag * mat_Drom + mat_Krom;
+}
+
+void FrequencySweepSolver::solve(std::vector<float> freqs)
+{
+    
 }
