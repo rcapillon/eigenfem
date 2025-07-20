@@ -25,7 +25,7 @@ Model::Model(Mesh msh,
     std::vector<int> dir_tags, 
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces,
     std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces,
-    float a_M, float a_K) : alpha_M{0.}, alpha_K{0.}
+    float a_M, float a_K)
 {
     mesh = msh;
     dirichlet_tags = dir_tags;

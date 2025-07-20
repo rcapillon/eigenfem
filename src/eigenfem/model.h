@@ -28,7 +28,7 @@ class Model
             std::vector<int> dir_tags, 
             std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces,
             std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces,
-            float a_M, float a_K);
+            float a_M = 0., float a_K = 0.);
         ~Model() {};
 
         Mesh mesh;
