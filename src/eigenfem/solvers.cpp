@@ -145,6 +145,20 @@ void FrequencySweepSolver::compute_rom(int n)
     n_modes = n;
     ModalSolver modal_solver(model);
     modal_solver.solve(n_modes);
+    mat_rom_basis = modal_solver.mat_modes;
+
+    model.create_dof_lists();
+    model.assemble_M_K();
+    model.compute_D_Rayleigh();
+    model.assemble_Fs();
+    model.assemble_Fv();
+    model.compute_F();
+    model.apply_dirichlet();
+
+    Eigen::MatrixXf mat_Mrom = mat_rom_basis.transpose() * model.mat_Mff * mat_rom_basis;
+    Eigen::MatrixXf mat_Krom = mat_rom_basis.transpose() * model.mat_Kff * mat_rom_basis;
+    Eigen::MatrixXf mat_Drom = mat_rom_basis.transpose() * model.mat_Dff * mat_rom_basis;
+    Eigen::VectorXf vec_From = mat_rom_basis.transpose() * model.vec_Ff;
 }
 
 void FrequencySweepSolver::compute_Kdyn(float w)
@@ -153,7 +167,32 @@ void FrequencySweepSolver::compute_Kdyn(float w)
     mat_Kdyn_rom = -pow(w, 2.) * mat_Mrom + pure_imag * mat_Drom + mat_Krom;
 }
 
-void FrequencySweepSolver::solve(std::vector<float> freqs)
+void FrequencySweepSolver::solve(std::vector<float> angular_freqs)
 {
+    mat_U_modulus = Eigen::MatrixXf::Zero(model.mesh.n_dofs, angular_freqs.size());
+
+    for (size_t i = 0; i < angular_freqs.size(); i++)
+    {
+        compute_Kdyn(angular_freqs[i]);
+
+        Eigen::SimplicialLDLT<Eigen::MatrixXcf> solver;
+        solver.compute(mat_Kdyn_rom);
+        if (solver.info() == Eigen::Success)
+        {
+            Eigen::VectorXcf U_free = solver.solve(vec_From);
+            if (solver.info() == Eigen::Success)
+            {
+                mat_U_modulus(model.free_dofs, i) = U_free.cwiseAbs();
+            }
+            else
+            {
+                std::cout << "Solver failed." << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "Matrix decomposition failed." << std::endl;
+        }
+    }
     
 }
