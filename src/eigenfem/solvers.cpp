@@ -163,8 +163,8 @@ void FrequencySweepSolver::compute_rom(int n)
 
 void FrequencySweepSolver::compute_Kdyn(float w)
 {
-    std::complex<float> pure_imag(0, 1);
-    mat_Kdyn_rom = -pow(w, 2.) * mat_Mrom + pure_imag * w * mat_Drom + mat_Krom;
+    std::complex<float> unit_imag_num(0, 1);
+    mat_Kdyn_rom = -pow(w, 2.) * mat_Mrom + unit_imag_num * w * mat_Drom + mat_Krom;
 }
 
 void FrequencySweepSolver::solve(std::vector<float> angular_freqs)
