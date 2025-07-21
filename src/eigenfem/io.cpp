@@ -12,10 +12,28 @@ VTKwriter::VTKwriter(Mesh msh, Eigen::VectorXf vec_displacement)
     deformed_mesh = mesh;
 }
 
+VTKwriter::VTKwriter(Mesh msh, Eigen::MatrixXf mat_displacement)
+{
+    mesh = msh;
+    mat_U = mat_displacement;
+    deformed_mesh = mesh;
+}
+
 void VTKwriter::add_U_to_mesh()
 {
     Eigen::MatrixXf reshaped_U = U.reshaped(3, mesh.n_nodes).transpose();
     deformed_mesh.table_nodes += reshaped_U;
+}
+
+void VTKwriter::add_U_to_mesh(int idx_U)
+{
+    Eigen::MatrixXf reshaped_U = mat_U(Eigen::all, idx_U).reshaped(3, mesh.n_nodes).transpose();
+    deformed_mesh.table_nodes += reshaped_U;
+}
+
+void VTKwriter::reset_deformed_mesh()
+{
+    deformed_mesh = mesh;
 }
 
 void VTKwriter::write_deformed_mesh(std::string path_to_folder, std::string filename_wo_extension, std::string trail)
@@ -113,4 +131,23 @@ void VTKwriter::write_deformed_mesh(std::string path_to_folder, std::string file
     file << std::endl;
 
     file.close();
+}
+
+void VTKwriter::write_mesh_animation(std::string path_to_folder, std::string filename_wo_extension)
+{
+    int n_freqs = mat_U.cols();
+    std::string str_n_freqs = std::to_string(n_freqs);
+    size_t max_digits = str_n_freqs.length();
+    for (size_t i = 0; i < n_freqs; i++)
+    {
+        std::string trail = std::to_string(i + 1);
+        size_t n_leading_zeros = max_digits - std::min(max_digits, trail.length());
+        std::string complete_trail = "_" + std::string(n_leading_zeros, '0').append(trail);
+
+        reset_deformed_mesh();
+        add_U_to_mesh(i);
+        write_deformed_mesh(path_to_folder, filename_wo_extension, complete_trail);
+    }
+
+    
 }
