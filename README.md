@@ -2,7 +2,10 @@
 Finite Element solver written in C++ using Eigen and Spectra.
 Eigen is used for linear algebra and Spectra is used to solve sparse generalized eigenvalue problems.
 
-**IMPORTANT NOTE**: The code is still in development and not fully usable at this time. Only specific demonstration cases can be run. The eigensolver used in computation of modes is currently bugged. Installation and usage documentation will be added later when custom computations can be performed using a custom input file format.
+**IMPORTANT NOTE**: 
+The code is still in development and not fully usable at this time. Only specific demonstration cases can be run. 
+Installation procedure will be specified once all 4 example cases can be compiled and run without bugs.
+Usage documentation will be added later when custom computations can be performed using a custom input file format.
 
 ## Dependencies
 - Eigen: https://eigen.tuxfamily.org/
