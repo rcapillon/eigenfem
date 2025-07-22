@@ -5,6 +5,24 @@
 #include "io.h"
 
 
+std::vector<float> read_matrix_row_from_line(std::string line)
+{
+	std::vector<float> row;
+	size_t prev = 0;
+	size_t pos;
+	std::string substr;
+    while ((pos = line.find_first_of(" ,", prev)) != std::string::npos)
+    {
+        if (pos > prev)
+            row.push_back(std::stof(line.substr(prev, pos-prev)));
+        prev = pos + 1;
+    }
+    if (prev < line.length())
+        row.push_back(std::stof(line.substr(prev, std::string::npos)));
+
+	return row;
+}
+
 VTKwriter::VTKwriter(Mesh msh, Eigen::VectorXf vec_displacement)
 {
     mesh = msh;
@@ -147,7 +165,59 @@ void VTKwriter::write_mesh_animation(std::string path_to_folder, std::string fil
         reset_deformed_mesh();
         add_U_to_mesh(i);
         write_deformed_mesh(path_to_folder, filename_wo_extension, complete_trail);
-    }
+    }   
+}
 
+DATio::DATio(Eigen::MatrixXf mat)
+{
+    matrix = mat;
+}
+
+void DATio::write_matrix(std::string path_to_file)
+{
+    std::ofstream file;
+    file.open(path_to_file);
+
+    file << "ROWS" << std::endl;
+    file << matrix.rows() << std::endl;
+    file << "COLS" << std::endl;
+    file << matrix.cols() << std::endl << std::endl;
+
+    for (size_t i = 0; i < matrix.rows(); i++)
+    {
+        for (size_t j = 0; j < matrix.cols(); j++)
+        {
+            file << matrix(i, j) << " , ";
+        }
+        file << std::endl;
+    }
+    file << "END" << std::endl;
+}
+
+Eigen::MatrixXf DATio::load_dat(std::string path_to_file)
+{
+    std::ifstream file(path_to_file);
+    std::string current_line;
+
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    int n_rows = std::stoi(current_line);
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    int n_cols = std::stoi(current_line);
+    std::getline(file, current_line);
+
+    Eigen::MatrixXf mat(n_rows, n_cols);
+
+    for (size_t i = 0; i < n_rows; i++)
+    {
+        std::getline(file, current_line);
+        std::vector<float> row = read_matrix_row_from_line(current_line);
+        for (size_t j = 0; j < row.size(); j++)
+        {
+            mat(i, j) = row[j];
+        }
+    }
     
+    return mat;
 }

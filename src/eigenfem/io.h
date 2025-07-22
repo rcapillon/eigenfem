@@ -35,4 +35,17 @@ class VTKwriter
         void write_mesh_animation(std::string path_to_folder, std::string filename_wo_extension);
 };
 
+class DATio
+{
+    public:
+        DATio() {};
+        DATio(Eigen::MatrixXf mat);
+        ~DATio() {};
+
+        Eigen::MatrixXf matrix;
+
+        void write_matrix(std::string path_to_file);
+        Eigen::MatrixXf load_dat(std::string path_to_file);
+};
+
 #endif
