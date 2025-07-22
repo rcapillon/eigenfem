@@ -149,7 +149,6 @@ void Model::assemble_M_K()
                 ind_I.push_back(mesh.elements[i].dofs_num[k]);
                 ind_J.push_back(mesh.elements[i].dofs_num[j]);
             }
-            
         }
 
         Eigen::MatrixXf mat_Me = mesh.elements[i].compute_mat_Me();

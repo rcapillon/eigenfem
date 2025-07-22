@@ -1,5 +1,5 @@
 //
-// main.cpp
+// example_frequency_fine.cpp
 //
 
 #include <iostream>
