@@ -135,10 +135,10 @@ void FrequencySweepSolver::load_rom(Eigen::MatrixXf rom_basis)
     model.apply_dirichlet();
 
     mat_rom_basis_free = mat_rom_basis(model.free_dofs, Eigen::all);
-    Eigen::MatrixXf mat_Mrom = mat_rom_basis.transpose() * model.mat_Mff * mat_rom_basis;
-    Eigen::MatrixXf mat_Krom = mat_rom_basis.transpose() * model.mat_Kff * mat_rom_basis;
-    Eigen::MatrixXf mat_Drom = mat_rom_basis.transpose() * model.mat_Dff * mat_rom_basis;
-    Eigen::VectorXf vec_From = mat_rom_basis.transpose() * model.vec_Ff;
+    Eigen::MatrixXf mat_Mrom = mat_rom_basis_free.transpose() * model.mat_Mff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Krom = mat_rom_basis_free.transpose() * model.mat_Kff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Drom = mat_rom_basis_free.transpose() * model.mat_Dff * mat_rom_basis_free;
+    Eigen::VectorXf vec_From = mat_rom_basis_free.transpose() * model.vec_Ff;
 }
 
 void FrequencySweepSolver::compute_rom(int n)
