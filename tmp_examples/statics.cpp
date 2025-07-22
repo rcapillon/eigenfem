@@ -65,8 +65,7 @@ int main()
 
     // Prints timer values
     std::cout << 
-        std::endl << "Time spent solving the problem: " << solver_timer_end - solver_timer_start << " seconds." << std::endl;
-
+    std::endl << "Time spent solving the problem: " << solver_timer_end - solver_timer_start << " seconds." << std::endl;
     std::cout << "Global elapsed time: " << global_timer_end - global_timer_start << " seconds." << std::endl;
 
     return 0;
