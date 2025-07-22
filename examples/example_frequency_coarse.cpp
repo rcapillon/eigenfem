@@ -32,7 +32,7 @@ int main()
 
     // Defines the surface force vector
     Eigen::VectorXf vec_surface_force = Eigen::VectorXf::Zero(3);
-    vec_surface_force(0) = 1e11;
+    vec_surface_force(0) = 1.25e10;
 
     std::tuple<int, Eigen::VectorXf> tuple_surface_force = std::make_tuple(surface_force_tag, vec_surface_force);
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
@@ -49,8 +49,8 @@ int main()
     FrequencySweepSolver solver(model);
     int n_modes = 10;
     int n_freqs = 300;
-    float min_w = 2 * PI * 1;
-    float max_w = 2 * PI * 1200;
+    float min_w = 2 * PI * 1200;
+    float max_w = 2 * PI * 2200;
     float delta_w = (max_w - min_w) / (n_freqs - 1);
     float current_w = min_w - delta_w;
     std::vector<float> angular_freqs;
