@@ -1,5 +1,5 @@
 //
-// statics.cpp
+// example_statics.cpp
 //
 
 #include <iostream>

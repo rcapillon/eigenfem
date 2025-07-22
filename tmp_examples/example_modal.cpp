@@ -1,5 +1,5 @@
 //
-// modal.cpp
+// example_modal.cpp
 //
 
 #include <iostream>
