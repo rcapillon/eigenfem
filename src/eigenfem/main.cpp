@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <cmath>
 #include <ctime>
 
 #include "solvers.h"
@@ -20,7 +21,7 @@ int main()
     Material steel(7800., 2.1e11, 0.3); 
     Material aluminium(2700., 7e10, 0.33);
 
-    std::string mesh_path = "../data/bar.mesh";
+    std::string mesh_path = "../data/plate.mesh";
     Material material = aluminium;
     Mesh mesh(mesh_path, material); // Chosen material will be used for the whole domain
     mesh.import_gmsh_matlab(); // Constructs coordinates and connectivity tables
@@ -31,15 +32,15 @@ int main()
 
     // Defines the surface force vector
     Eigen::VectorXf vec_surface_force = Eigen::VectorXf::Zero(3);
-    vec_surface_force(0) = 1e6;
+    vec_surface_force(0) = 2e9;
 
     std::tuple<int, Eigen::VectorXf> tuple_surface_force = std::make_tuple(surface_force_tag, vec_surface_force);
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
     surf_forces.push_back(tuple_surface_force);
 
     // Rayleigh damping coefficients
-    float alpha_M = 1e-2;
-    float alpha_K = 1e-2;
+    float alpha_M = 1e0;
+    float alpha_K = 1e-4;
 
     Model model(mesh, dirichlet_tags, surf_forces, {}, alpha_M, alpha_K);
     
@@ -47,9 +48,9 @@ int main()
     // using a reduced-order model and involving surface and volume forces
     FrequencySweepSolver solver(model);
     int n_modes = 10;
-    int n_freqs = 100;
-    float min_w = 2 * PI * 0.1;
-    float max_w = 2 * PI * 1250;
+    int n_freqs = 300;
+    float min_w = 2 * PI * 1700;
+    float max_w = 2 * PI * 2100;
     float delta_w = (max_w - min_w) / (n_freqs - 1);
     float current_w = min_w - delta_w;
     std::vector<float> angular_freqs;
@@ -62,7 +63,8 @@ int main()
     time_t rom_timer_start = time(nullptr); // Starts timer for reduced-order model construction
     std::cout << "Computing ROM..." << std::endl;
     solver.compute_rom(n_modes);
-    time_t rom_timer_end = time(nullptr); // Ends timer for reduced-order model construction and starts timer for solver execution
+    time_t rom_timer_end = time(nullptr); // Ends timer for reduced-order model construction
+    time_t solver_timer_start = time(nullptr); // Starts timer for solver execution
     std::cout << "Solving for all frequencies..." << std::endl;
     solver.solve(angular_freqs);
     time_t solver_timer_end = time(nullptr); // Ends timer for solver execution
@@ -79,7 +81,7 @@ int main()
     // Prints timer values
     std::cout << 
     std::endl << "Time spent constructing the reduced-order model: " << rom_timer_end - rom_timer_start << " seconds." << std::endl;
-    std::cout << "Time spent solving the problem: " << solver_timer_end - rom_timer_end << " seconds." << std::endl;
+    std::cout << "Time spent solving the problem: " << solver_timer_end - solver_timer_start << " seconds." << std::endl;
     std::cout << "Global elapsed time: " << global_timer_end - global_timer_start << " seconds." << std::endl;
 
     return 0;
