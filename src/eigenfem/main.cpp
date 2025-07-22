@@ -11,24 +11,10 @@
 
 int main()
 {
-    /* Eigen::MatrixXcf ctest(1, 2);
-    ctest(0, 0) = std::complex<float>(1, 2);
-    ctest(0, 1) = std::complex<float>(3, 4);
-
-    Eigen::MatrixXf cmod = ctest.cwiseAbs(); */
-
-    /* Eigen::MatrixXf ctest(1, 2);
-    ctest(0, 0) = 1;
-    ctest(0, 1) = 2;
-    std::complex<float> my_i(0, 1);
-    Eigen::MatrixXcf ic = my_i * ctest;
-
-    std::cout << "ctest : " << std::endl;
-    std::cout << ctest << std::endl << std::endl;
-    std::cout << "ic : " << std::endl;
-    std::cout << ic << std::endl; */
-
     time_t global_timer_start = time(nullptr); // Starts timer for whole code execution
+
+    // value used for pi
+    const float PI = 3.141592653589793;
 
     // Defines two basic metals as usable materials
     Material steel(7800., 2.1e11, 0.3); 
@@ -45,45 +31,55 @@ int main()
 
     // Defines the surface force vector
     Eigen::VectorXf vec_surface_force = Eigen::VectorXf::Zero(3);
-    vec_surface_force(0) = 4e8;
+    vec_surface_force(0) = 1e6;
 
     std::tuple<int, Eigen::VectorXf> tuple_surface_force = std::make_tuple(surface_force_tag, vec_surface_force);
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
     surf_forces.push_back(tuple_surface_force);
 
-    int volume_force_tag = 1; // Specifies 3D physical group tag where a volume force is applied (can only be 1 for the moment)
+    // Rayleigh damping coefficients
+    float alpha_M = 1e-2;
+    float alpha_K = 1e-2;
 
-    // Defines the volume force vector
-    Eigen::VectorXf vec_volume_force = Eigen::VectorXf::Zero(3);
-    // vec_volume_force(2) = 9.81 * 1e6;
-
-    std::tuple<int, Eigen::VectorXf> tuple_volume_force = std::make_tuple(volume_force_tag, vec_volume_force);
-    std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces;
-    vol_forces.push_back(tuple_volume_force);
-
-    Model model(mesh, dirichlet_tags, surf_forces, vol_forces);
+    Model model(mesh, dirichlet_tags, surf_forces, {}, alpha_M, alpha_K);
     
-    // LinearStaticsSolver can be used to solve a linear statics problem involving surface and volume forces
-    LinearStaticsSolver solver(model);
-    time_t solver_timer_start = time(nullptr); // Starts timer for solver execution
-    solver.solve();
+    // FrequencySweepSolver can be used to solve a frequency-domain dynamic problem 
+    // using a reduced-order model and involving surface and volume forces
+    FrequencySweepSolver solver(model);
+    int n_modes = 10;
+    int n_freqs = 100;
+    float min_w = 2 * PI * 0.1;
+    float max_w = 2 * PI * 1250;
+    float delta_w = (max_w - min_w) / (n_freqs - 1);
+    float current_w = min_w - delta_w;
+    std::vector<float> angular_freqs;
+    for (size_t i = 0; i < n_freqs; i++)
+    {
+        current_w += delta_w;
+        angular_freqs.push_back(current_w);
+    }
+    
+    time_t rom_timer_start = time(nullptr); // Starts timer for reduced-order model construction
+    std::cout << "Computing ROM..." << std::endl;
+    solver.compute_rom(n_modes);
+    time_t rom_timer_end = time(nullptr); // Ends timer for reduced-order model construction and starts timer for solver execution
+    std::cout << "Solving for all frequencies..." << std::endl;
+    solver.solve(angular_freqs);
     time_t solver_timer_end = time(nullptr); // Ends timer for solver execution
 
-    // Export deformed mesh to VTK format
-    Eigen::VectorXf U = solver.U;
-    VTKwriter vtk_writer(mesh, U);
-    vtk_writer.add_U_to_mesh();
+    // Export deformed meshes of frequency sweep to VTK format
+    VTKwriter vtk_writer(mesh, solver.mat_U_modulus);
 
     // The first argument (path to folder) needs to end with "/"
     // The folders/subfolders also need to already be created.
-    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "statics");
+    vtk_writer.write_mesh_animation("../../eigenfem_vtk/", "frequencysweep");
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
     // Prints timer values
     std::cout << 
-        std::endl << "Time spent solving the problem: " << solver_timer_end - solver_timer_start << " seconds." << std::endl;
-
+    std::endl << "Time spent constructing the reduced-order model: " << rom_timer_end - rom_timer_start << " seconds." << std::endl;
+    std::cout << "Time spent solving the problem: " << solver_timer_end - rom_timer_end << " seconds." << std::endl;
     std::cout << "Global elapsed time: " << global_timer_end - global_timer_start << " seconds." << std::endl;
 
     return 0;

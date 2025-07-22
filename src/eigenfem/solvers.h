@@ -59,10 +59,11 @@ class FrequencySweepSolver
 
         int n_modes;
         Eigen::MatrixXf mat_rom_basis;
+        Eigen::MatrixXf mat_rom_basis_free;
         Eigen::MatrixXf mat_Mrom;
         Eigen::MatrixXf mat_Krom;
         Eigen::MatrixXf mat_Drom;
-        Eigen::VectorXf vec_From;
+        Eigen::VectorXcf vec_From;
         Eigen::MatrixXcf mat_Kdyn_rom;
 
         Eigen::MatrixXf mat_U_modulus;
