@@ -156,12 +156,6 @@ void FrequencySweepSolver::compute_rom(int n)
     modal_solver.solve(n_modes);
     mat_rom_basis = modal_solver.mat_modes;
 
-    std::cout << n_modes << " eigenfrequencies used for the reduced-order model:" << std::endl;
-    for (size_t i = 0; i < modal_solver.vec_freqs.size(); i++)
-    {
-        std::cout << modal_solver.vec_freqs[i] << std::endl;
-    }
-
     mat_rom_basis_free = mat_rom_basis(model.free_dofs, Eigen::all);
     mat_Mrom = mat_rom_basis_free.transpose() * model.mat_Mff * mat_rom_basis_free;
     mat_Krom = mat_rom_basis_free.transpose() * model.mat_Kff * mat_rom_basis_free;
