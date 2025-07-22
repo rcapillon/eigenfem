@@ -23,7 +23,7 @@ void ModalSolver::solve(int n_modes)
     model.apply_dirichlet();
 
     Spectra::SparseSymMatProd<float> Aop(model.mat_Kff);
-    Spectra::SparseRegularInverse<float> Bop(model.mat_Mff);
+    Spectra::SparseCholesky<float> Bop(model.mat_Mff);
 
     // very experimental scheme for choosing ncv
     int ncv = std::max(20, 4 * n_modes);
@@ -38,8 +38,8 @@ void ModalSolver::solve(int n_modes)
     
     Spectra::SymGEigsSolver<
         Spectra::SparseSymMatProd<float>, 
-        Spectra::SparseRegularInverse<float>, 
-        Spectra::GEigsMode::RegularInverse> geigs(Aop, Bop, n_modes, ncv);
+        Spectra::SparseCholesky<float>, 
+        Spectra::GEigsMode::Cholesky> geigs(Aop, Bop, n_modes, ncv);
     
     geigs.init();
     int nconv = geigs.compute(Spectra::SortRule::SmallestMagn);
@@ -62,10 +62,8 @@ void ModalSolver::solve(int n_modes)
             vec_freqs.push_back(sqrt(vec_eigvals_to_sort[i].first) / (2 * PI));
             sort_indices.push_back(vec_eigvals_to_sort[i].second);
         }
-        mat_modes_free = mat_modes_free(Eigen::all, sort_indices);
-
         mat_modes = Eigen::MatrixXf::Zero(model.mesh.n_dofs, mat_modes_free.cols());
-        mat_modes(model.free_dofs, Eigen::all) = mat_modes_free;
+        mat_modes(model.free_dofs, Eigen::all) = mat_modes_free(Eigen::all, sort_indices);
     }
     else
     {
@@ -135,10 +133,14 @@ void FrequencySweepSolver::load_rom(Eigen::MatrixXf rom_basis)
     model.apply_dirichlet();
 
     mat_rom_basis_free = mat_rom_basis(model.free_dofs, Eigen::all);
-    Eigen::MatrixXf mat_Mrom = mat_rom_basis_free.transpose() * model.mat_Mff * mat_rom_basis_free;
-    Eigen::MatrixXf mat_Krom = mat_rom_basis_free.transpose() * model.mat_Kff * mat_rom_basis_free;
-    Eigen::MatrixXf mat_Drom = mat_rom_basis_free.transpose() * model.mat_Dff * mat_rom_basis_free;
-    Eigen::VectorXf vec_From = mat_rom_basis_free.transpose() * model.vec_Ff;
+    Eigen::MatrixXf mat_Mrom_tmp = mat_rom_basis_free.transpose() * model.mat_Mff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Krom_tmp = mat_rom_basis_free.transpose() * model.mat_Kff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Drom_tmp = mat_rom_basis_free.transpose() * model.mat_Dff * mat_rom_basis_free;
+    mat_Mrom = 0.5 * (mat_Mrom_tmp + mat_Mrom_tmp.transpose());
+    mat_Krom = 0.5 * (mat_Krom_tmp + mat_Krom_tmp.transpose());
+    mat_Drom = 0.5 * (mat_Drom_tmp + mat_Drom_tmp.transpose());
+    std::complex<float> unit_real_num(1, 0);
+    vec_From = unit_real_num * mat_rom_basis_free.transpose() * model.vec_Ff;
 }
 
 void FrequencySweepSolver::compute_rom(int n)
@@ -157,9 +159,12 @@ void FrequencySweepSolver::compute_rom(int n)
     mat_rom_basis = modal_solver.mat_modes;
 
     mat_rom_basis_free = mat_rom_basis(model.free_dofs, Eigen::all);
-    mat_Mrom = mat_rom_basis_free.transpose() * model.mat_Mff * mat_rom_basis_free;
-    mat_Krom = mat_rom_basis_free.transpose() * model.mat_Kff * mat_rom_basis_free;
-    mat_Drom = mat_rom_basis_free.transpose() * model.mat_Dff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Mrom_tmp = mat_rom_basis_free.transpose() * model.mat_Mff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Krom_tmp = mat_rom_basis_free.transpose() * model.mat_Kff * mat_rom_basis_free;
+    Eigen::MatrixXf mat_Drom_tmp = mat_rom_basis_free.transpose() * model.mat_Dff * mat_rom_basis_free;
+    mat_Mrom = 0.5 * (mat_Mrom_tmp + mat_Mrom_tmp.transpose());
+    mat_Krom = 0.5 * (mat_Krom_tmp + mat_Krom_tmp.transpose());
+    mat_Drom = 0.5 * (mat_Drom_tmp + mat_Drom_tmp.transpose());
     std::complex<float> unit_real_num(1, 0);
     vec_From = unit_real_num * mat_rom_basis_free.transpose() * model.vec_Ff;
 }
