@@ -19,14 +19,7 @@ First, clone the repository, for instance with:
 ```
 git clone git@github.com:rcapillon/eigenfem.git
 ```
-Then, go into the repository's root folder and use the following commands to install dependencies (headers-only libraries):
-```
-cd third-party/
-git clone --depth 1 --branch 3.4.0 git@gitlab.com:libeigen/eigen.git
-
-```
-
-
+Then, go into the repository's root folder and use the following commands:
 ```
 mkdir build
 cd build/
