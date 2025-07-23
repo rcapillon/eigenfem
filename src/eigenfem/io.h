@@ -48,4 +48,12 @@ class DATio
         Eigen::MatrixXf load_dat(std::string path_to_file);
 };
 
+class InputParser
+{
+    public:
+        InputParser() {};
+        InputParser(std::string path_to_input_file);
+        ~InputParser() {};
+};
+
 #endif

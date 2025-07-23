@@ -221,3 +221,8 @@ Eigen::MatrixXf DATio::load_dat(std::string path_to_file)
     
     return mat;
 }
+
+InputParser::InputParser(std::string path_to_input_file)
+{
+
+}
