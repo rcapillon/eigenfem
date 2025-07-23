@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <cmath>
 #include <ctime>
 
 #include "../src/eigenfem/solvers.h"
