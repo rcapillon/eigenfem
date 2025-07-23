@@ -6,8 +6,8 @@
 #include <cmath>
 #include <ctime>
 
-#include "solvers.h"
-#include "io.h"
+#include "../src/eigenfem/solvers.h"
+#include "../src/eigenfem/io.h"
 
 
 int main()
@@ -21,7 +21,7 @@ int main()
     Material steel(7800., 2.1e11, 0.3); 
     Material aluminium(2700., 7e10, 0.33);
 
-    std::string mesh_path = "../data/plate.mesh";
+    std::string mesh_path = "../examples/data/plate.mesh";
     Material material = aluminium;
     Mesh mesh(mesh_path, material); // Chosen material will be used for the whole domain
     mesh.import_gmsh_matlab(); // Constructs coordinates and connectivity tables
@@ -70,6 +70,7 @@ int main()
     time_t solver_timer_end = time(nullptr); // Ends timer for solver execution
 
     // Export deformed meshes of frequency sweep to VTK format
+    std::cout << "Exporting frequency sweep to group of VTK files..." << std::endl;
     VTKwriter vtk_writer(mesh, solver.mat_U_modulus);
 
     // The first argument (path to folder) needs to end with "/"

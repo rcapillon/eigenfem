@@ -5,8 +5,8 @@
 #include <iostream>
 #include <ctime>
 
-#include "solvers.h"
-#include "io.h"
+#include "../src/eigenfem/solvers.h"
+#include "../src/eigenfem/io.h"
 
 
 int main()
@@ -17,7 +17,7 @@ int main()
     Material steel(7800., 2.1e11, 0.3); 
     Material aluminium(2700., 7e10, 0.33);
 
-    std::string mesh_path = "../data/bar.mesh";
+    std::string mesh_path = "../examples/data/bar.mesh";
     Material material = aluminium;
     Mesh mesh(mesh_path, material); // Chosen material will be used for the whole domain
     mesh.import_gmsh_matlab(); // Constructs coordinates and connectivity tables
@@ -49,10 +49,12 @@ int main()
     // LinearStaticsSolver can be used to solve a linear statics problem involving surface and volume forces
     LinearStaticsSolver solver(model);
     time_t solver_timer_start = time(nullptr); // Starts timer for solver execution
+    std::cout << "Solving linear problem..." << std::endl;
     solver.solve();
     time_t solver_timer_end = time(nullptr); // Ends timer for solver execution
 
     // Export deformed mesh to VTK format
+    std::cout << "Exporting deformed mesh to VTK..." << std::endl;
     Eigen::VectorXf U = solver.U;
     VTKwriter vtk_writer(mesh, U);
     vtk_writer.add_U_to_mesh();

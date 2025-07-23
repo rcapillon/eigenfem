@@ -5,8 +5,8 @@
 #include <iostream>
 #include <ctime>
 
-#include "solvers.h"
-#include "io.h"
+#include "../src/eigenfem/solvers.h"
+#include "../src/eigenfem/io.h"
 
 
 int main()
@@ -17,7 +17,7 @@ int main()
     Material steel(7800., 2.1e11, 0.3); 
     Material aluminium(2700., 7e10, 0.33);
 
-    std::string mesh_path = "../data/bar.mesh";
+    std::string mesh_path = "../examples/data/bar.mesh";
     Material material = aluminium;
     Mesh mesh(mesh_path, material); // Chosen material will be used for the whole domain
     mesh.import_gmsh_matlab(); // Constructs coordinates and connectivity tables
@@ -28,6 +28,7 @@ int main()
     ModalSolver solver(model); // ModalSolver can be used to compute the first N smallest eigenfrequencies and eigenvectors
     int n_modes = 5;
     time_t solver_timer_start = time(nullptr); // Starts timer for solver execution
+    std::cout << "Calculating elastic modes..." << std::endl;
     solver.solve(n_modes);
     time_t solver_timer_end = time(nullptr); // Ends timer for solver execution
 
@@ -40,6 +41,7 @@ int main()
 
     // Export a single mode shape to VTK format
     int plotted_mode_num = 0;
+    std::cout << "Exporting mode " << plotted_mode_num << " to VTK..." << std::endl;
     Eigen::VectorXf plotted_mode = solver.mat_modes(Eigen::all, plotted_mode_num);
     VTKwriter vtk_writer(mesh, plotted_mode);
     vtk_writer.add_U_to_mesh();
