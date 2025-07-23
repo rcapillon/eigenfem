@@ -13,14 +13,15 @@ Custom usage documentation will be added later.
     - Licensed under MPL2
     - Copyright 2015-2025, Yixuan Qiu
 
-## Installation and basic usage
+## Installation and running example scripts
 Installation can be performed using CMake. The installation procedure has been tested on MacOS only for now, but should work for Linux as well.
-First, clone the repository, for instance with:
+First, clone the repository in the folder of your choice with:
 ```
 git clone git@github.com:rcapillon/eigenfem.git
 ```
-Then, go into the repository's root folder and use the following commands:
+Then, use the following commands:
 ```
+cd eigenfem/
 mkdir build
 cd build/
 cmake ..
@@ -46,10 +47,11 @@ The recommended software to visualize output VTK files is Paraview: https://www.
 - Saving or loading a basis of modes to use for reduced-order modeling with the frequency-domain solver
 - Output deformed meshes as VTK files
 
-## Current limitations
+## Limitations
 - Only fully tetrahedral (first order) meshes are handled
 - No multi-threading, parallelization of any sort
 - Only zero Dirichlet boundary conditions are handled
 - Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
+- Only isotropic elastic materials are handled
 - It is not currently possible to define and run a fully custom simulation using one of the available solvers
