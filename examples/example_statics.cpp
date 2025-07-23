@@ -61,8 +61,10 @@ int main()
 
     // The first argument (path to folder) needs to end with "/"
     // The folders/subfolders also need to already be created.
-    vtk_writer.write_deformed_mesh("../../eigenfem_vtk/", "statics");
+    vtk_writer.write_deformed_mesh("../examples/results/example_statics/", "statics");
     
+    std::cout << "Done." << std::endl;
+
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
     // Prints timer values

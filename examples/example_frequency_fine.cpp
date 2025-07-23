@@ -77,8 +77,10 @@ int main()
 
     // The first argument (path to folder) needs to end with "/"
     // The folders/subfolders also need to already be created.
-    vtk_writer.write_mesh_animation("../../eigenfem_vtk/", "frequencysweep");
+    vtk_writer.write_mesh_animation("../examples/results/example_frequency_fine/", "frequencysweep");
     
+    std::cout << "Done." << std::endl;
+
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
     // Prints timer values
