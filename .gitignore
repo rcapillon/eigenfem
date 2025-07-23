@@ -1,6 +1,7 @@
 # ignore some folders
 .vscode/
 build/
+third-party/
 # ignore some files
 .DS_Store
 TODO.txt
