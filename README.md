@@ -3,9 +3,8 @@ Finite Element solver written in C++ using Eigen and Spectra.
 Eigen is used for linear algebra and Spectra is used to solve sparse generalized eigenvalue problems.
 
 **IMPORTANT NOTE**: 
-The code is still in development and not fully usable at this time. Only specific demonstration cases can be run. 
-Installation procedure will be specified once all 4 example cases can be compiled and run without bugs.
-Usage documentation will be added later when custom computations can be performed using a custom input file format.
+The code is still in development and not fully usable at this time. At the time, only specific demonstration cases can be run. 
+Custom usage documentation will be added later.
 
 ## Dependencies
 - Eigen v3.4.0: https://eigen.tuxfamily.org/
@@ -14,20 +13,43 @@ Usage documentation will be added later when custom computations can be performe
     - Licensed under MPL2
     - Copyright 2015-2025, Yixuan Qiu
 
-## Intended features
+## Installation and basic usage
+Installation can be performed using CMake. The installation procedure has been tested on MacOS only for now, but should work for Linux as well.
+First, clone the repository, for instance with:
+```
+git clone git@github.com:rcapillon/eigenfem.git
+```
+Then, go into the repository's root folder and use the following commands:
+```
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+This will produce 5 executables in the build folder:
+- eigenfem: meant to use custom input files to run a custom simulation using one of the 3 available solvers (will be available later)
+- example_modal, example_statics, example_frequency_coarse, example_frequency_fine: examples showcasing the code's features and the 3 available solvers.
+
+You can then run one of the examples from the build folder with, for instance:
+```
+./example_modal
+```
+Results (VTK files of deformed meshes) will be created in subfolders of the /examples/results folder.
+The recommended software to visualize output VTK files is Paraview: https://www.paraview.org/
+
+## Current features
 - Supported mesh type: 3D tetrahedral mesh generated using gmsh and saved in Matlab format
 - Surface and volume forces applicable to tagged surfaces and volumes (physical groups)
 - Linear statics problems
 - Computation of linear elastic modes and corresponding eigenfrequencies
-- Frequency-domain dynamic analysis with a reduced-order model using elastic modes
-- Output deformed meshes as VTK files (recommended software for visualization is Paraview: https://www.paraview.org/)
+- Frequency-domain dynamic analysis with a reduced-order model using elastic modes (or a loaded reduced-order basis)
+- Saving or loading a basis of modes to use for reduced-order modeling with the frequency-domain solver
+- Output deformed meshes as VTK files
 
-## Limitations
+## Current limitations
 - Only fully tetrahedral (first order) meshes are handled
 - No multi-threading, parallelization of any sort
 - Only zero Dirichlet boundary conditions are handled
 - Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
-
-## Documentation and usage
-Documentation and user guide will be put in the wiki of the github repository.
+- It is not currently possible to define and run a fully custom simulation using one of the available solvers
