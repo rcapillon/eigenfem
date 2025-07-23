@@ -3,14 +3,13 @@
 //
 
 #include <iostream>
-#include <cmath>
 #include <ctime>
 
 #include "solvers.h"
 #include "io.h"
 
 
-int main()
+int main(int argc, char *argv[])
 {
     time_t global_timer_start = time(nullptr); // Starts timer for whole code execution
 
