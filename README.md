@@ -3,7 +3,7 @@ Finite Element solver written in C++ using Eigen and Spectra.
 Eigen is used for linear algebra and Spectra is used to solve sparse generalized eigenvalue problems.
 
 **IMPORTANT NOTE**: 
-The code is still in development and not fully usable at this time. At the time, only specific demonstration cases can be run. 
+The code is still in development and not fully usable at this time. The code has not been validated on test cases. For now, only specific demonstration cases can be run. 
 Custom usage documentation will be added later.
 
 ## Dependencies
