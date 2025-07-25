@@ -59,3 +59,7 @@ The recommended software to visualize output VTK files is Paraview: https://www.
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
 - Only isotropic elastic materials are handled
 - It is not currently possible to define and run a fully custom simulation using one of the available solvers
+
+## (Non-exhaustive) list of future features
+- Handling of 0D physical groups to enable nodal forces and plotting of nodal displacement values
+- Handling of multiple 3D physical groups to enable domains with multiple materials or to isolate 3D elements to, for instance, calculate stress
