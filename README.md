@@ -38,6 +38,7 @@ You can then run one of the examples from the build folder with, for instance:
 ```
 ./example_modal
 ```
+A short description of these examples can be found in the repository's Wiki.
 Results (VTK files of deformed meshes) will be created in subfolders of the /examples/results folder.
 The recommended software to visualize output VTK files is Paraview: https://www.paraview.org/
 
