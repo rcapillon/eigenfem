@@ -13,7 +13,7 @@ int main()
 {
     time_t global_timer_start = time(nullptr); // Starts timer for whole code execution
 
-    // value used for pi
+    // Value used for pi
     const float PI = 3.141592653589793;
 
     // Defines two basic metals as usable materials
