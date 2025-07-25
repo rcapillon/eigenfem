@@ -57,7 +57,7 @@
 ## STIFFNESS
 1e-3
 
-// The '# SOLVER' subsection first expects the desired solver's name, followed by subsections defining specific arguments
+// The '# SOLVER' section first expects the desired solver's name, followed by subsections defining specific arguments
 // required by the chosen solver. The 3 available solvers are 'MODAL', 'STATICS' and 'FREQUENCYSWEEP'.
 
 // The 'MODAL' solver only requires a '## NUMBER OF MODES' subsection defining the number N of modes to be calculated 
@@ -85,3 +85,13 @@ FREQUENCYSWEEP
 1200
 2200
 300
+
+// The '# OUTPUT' section requires a '## STUDY NAME' subsection followed by a string 
+// that will be used in the name for the output files.
+// Finally, a '## PATH' subsection is needed and must provide an absolute or relative path 
+// to a folder where the output VTK files will be stored.
+# OUTPUT
+## STUDY NAME
+example_custom
+## PATH
+../examples/results/example_custom/
