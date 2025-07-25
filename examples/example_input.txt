@@ -83,7 +83,7 @@
 // (first N lowest eigenfrequencies just as with the MODAL solver).
 // The '## LOAD ROM' subsection must be followed by the path to the data file where the reduced basis is located.
 // The path may be an absolute path or a path relative to the build folder where the 'eigenfem' executable is located.
-// Finally, a '## FREQUENCIES' subsection is necessary, providing 3 values in separated lines, 
+// After these subsections, a '## FREQUENCIES' subsection is necessary, providing 3 values in separated lines, 
 // defining the frequency range with a minimum frequency, a maximum frequency and the number of desired frequency values. 
 // All frequencies must be given in Hz. 
 # SOLVER
