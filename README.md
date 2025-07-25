@@ -14,7 +14,10 @@ Custom usage documentation will be added later.
     - Copyright 2015-2025, Yixuan Qiu
 
 ## Installation and running example scripts
-Installation can be performed using CMake (minimal version required: 3.28.3). The installation procedure has been tested on MacOS only for now, but should work for Linux as well.
+Installation can be performed using CMake (minimal version required: 3.28.3). 
+The installation procedure has been tested on MacOS Sequoia 15.5 and Ubuntu 24.04.2, but should work for other versions as well. No testing on Windows has been done for now.
+
+
 First, clone the repository in the folder of your choice with:
 ```
 git clone git@github.com:rcapillon/eigenfem.git
