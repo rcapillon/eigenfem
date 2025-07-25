@@ -67,6 +67,8 @@ struct Inputs
     float damping_alpha_M;
     float damping_alpha_K;
 
+    std::string solver_type;
+
     int modal_n_modes;
 
     int frequency_n_modes;
@@ -77,6 +79,12 @@ struct Inputs
 
     std::string output_name;
     std::string output_path;
+
+    bool has_surface_force;
+    bool has_volume_force;
+    bool has_damping;
+    bool compute_rom;
+    bool has_output;
 
     Inputs() {};
 };
@@ -89,8 +97,16 @@ class InputParser
         ~InputParser() {};
 
         std::string path_to_file;
+
         Inputs inputs;
 
+        void parse_mesh();
+        void parse_material();
+        void parse_dirichlet();
+        void parse_forces();
+        void parse_damping();
+        void parse_solver();
+        void parse_output();
         void parse_input_file();
 };
 

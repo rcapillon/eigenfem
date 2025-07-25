@@ -227,7 +227,86 @@ InputParser::InputParser(std::string path_to_input_file)
     path_to_file = path_to_input_file;
 }
 
+void InputParser::parse_mesh()
+{
+    
+}
+
+void InputParser::parse_material()
+{
+
+}
+
+void InputParser::parse_dirichlet()
+{
+
+}
+
+void InputParser::parse_forces()
+{
+
+}
+
+void InputParser::parse_damping()
+{
+
+}
+
+void InputParser::parse_solver()
+{
+
+}
+
+void InputParser::parse_output()
+{
+
+}
+
 void InputParser::parse_input_file()
 {
+    std::ifstream file(path_to_file);
+
+    std::string current_line = "init";
+    while (current_line.substr(0, 1).compare("#") != 0)
+    {
+        std::getline(file, current_line);
+    }
+    
+    while (current_line.compare("# END") != 0)
+    {
+        if (current_line.compare("# MESH") == 0)
+        {
+            parse_mesh();
+        }
+        else if (current_line.compare("# MATERIAL") == 0)
+        {
+            parse_material();
+        }
+        else if (current_line.compare("# DIRICHLET CONDITIONS") == 0)
+        {
+            parse_dirichlet();
+        }
+        else if (current_line.compare("# FORCES") == 0)
+        {
+            parse_forces();
+        }
+        else if (current_line.compare("# DAMPING") == 0)
+        {
+            parse_damping();
+        }
+        else if (current_line.compare("# SOLVER") == 0)
+        {
+            parse_solver();
+        }
+        else if (current_line.compare("# OUTPUT") == 0)
+        {
+            parse_output();
+        }
+        
+        while (current_line.substr(0, 1).compare("#") != 0)
+        {
+            std::getline(file, current_line);
+        }
+    }
     
 }
