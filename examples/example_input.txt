@@ -10,6 +10,9 @@
 // Such lists are written on the same line, with a comma used to separate values. 
 // You can see examples of lists in this sample file for the definition of material properties or force vectors.
 
+// The input file should end with the last line being "# END" to help signal the input parser 
+// that then end of file has been reached.
+
 // It is the user's responsibility to make sure that all required arguments have been given 
 // for the required study to be able to run correctly.
 
@@ -95,3 +98,6 @@ FREQUENCYSWEEP
 example_custom
 ## PATH
 ../examples/results/example_custom/
+
+// Signal end of file
+# END
