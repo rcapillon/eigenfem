@@ -45,7 +45,7 @@
 // and then the surface force vector given as a list (in N/m^2).
 # FORCES
 ## VOLUME FORCE
-0 , 0 , 7500
+0, 0, 7500
 ## SURFACE FORCE
 3
 0, 0, 1.5e10
