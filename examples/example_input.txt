@@ -43,17 +43,23 @@
 // followed by the force vector given as a list (in N/m^3), and for an arbitrary number of '## SURFACE FORCE' subsections (possibly none),
 // each followed by two lines, first, a single tag number for the 2D surface where the force will be applied, 
 // and then the surface force vector given as a list (in N/m^2).
+// If you want to include a volume force, specify it first before any surface force.
+// End the force definitions with the following line: '# END FORCES'.
 # FORCES
 ## VOLUME FORCE
-0, 0, 7500
+0, 0, 76518
 ## SURFACE FORCE
 3
-0, 0, 1.5e10
+0, 0, 7.5e9
+## SURFACE FORCE
+3
+0, 0, 7.5e9
+# END FORCES
 
-// The '# DAMPING' section expects two subsections, namely '## MASS' and '## STIFFNESS' 
-// each followed by the value of the corresponding Rayleigh-damping coefficients.
+// The '# DAMPING' section expects two subsections, namely '## MASS' and '## STIFFNESS' in that order,
+// each followed by the value of the corresponding Rayleigh-damping coefficients on the next line.
 // Providing this section is optional, and in its absence, both damping coefficients will be set to 0.
-// If only one value is provided, the other one will be set to 0.
+// If only one value is used, set the other one to 0 and still put '## MASS' before '## STIFFNESS'.
 # DAMPING
 ## MASS
 1e-3
@@ -91,7 +97,7 @@ FREQUENCYSWEEP
 
 // The '# OUTPUT' section requires a '## STUDY NAME' subsection followed by a string 
 // that will be used in the name for the output files.
-// Finally, a '## PATH' subsection is needed and must provide an absolute or relative path 
+// After that, a '## PATH' subsection is needed and must provide an absolute or relative path 
 // to a folder where the output VTK files will be stored.
 # OUTPUT
 ## STUDY NAME
