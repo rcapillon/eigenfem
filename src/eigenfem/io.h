@@ -15,6 +15,7 @@
 
 
 std::vector<float> read_matrix_row_from_line(std::string line);
+std::vector<int> read_ints_from_line(std::string line);
 
 class VTKwriter
 {
@@ -98,15 +99,17 @@ class InputParser
 
         std::string path_to_file;
 
+        std::string current_line;
+
         Inputs inputs;
 
-        void parse_mesh();
-        void parse_material();
-        void parse_dirichlet();
-        void parse_forces();
-        void parse_damping();
-        void parse_solver();
-        void parse_output();
+        void parse_mesh(std::ifstream& file);
+        void parse_material(std::ifstream& file);
+        void parse_dirichlet(std::ifstream& file);
+        void parse_forces(std::ifstream& file);
+        void parse_damping(std::ifstream& file);
+        void parse_solver(std::ifstream& file);
+        void parse_output(std::ifstream& file);
         void parse_input_file();
 };
 

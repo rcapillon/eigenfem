@@ -23,6 +23,24 @@ std::vector<float> read_matrix_row_from_line(std::string line)
 	return row;
 }
 
+std::vector<int> read_ints_from_line(std::string line)
+{
+	std::vector<int> row;
+	size_t prev = 0;
+	size_t pos;
+	std::string substr;
+    while ((pos = line.find_first_of(" ,", prev)) != std::string::npos)
+    {
+        if (pos > prev)
+            row.push_back(std::stoi(line.substr(prev, pos-prev)));
+        prev = pos + 1;
+    }
+    if (prev < line.length())
+        row.push_back(std::stoi(line.substr(prev, std::string::npos)));
+
+	return row;
+}
+
 VTKwriter::VTKwriter(Mesh msh, Eigen::VectorXf vec_displacement)
 {
     mesh = msh;
@@ -227,46 +245,109 @@ InputParser::InputParser(std::string path_to_input_file)
     path_to_file = path_to_input_file;
 }
 
-void InputParser::parse_mesh()
+void InputParser::parse_mesh(std::ifstream& file)
 {
-    
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.mesh_path = current_line;
 }
 
-void InputParser::parse_material()
+void InputParser::parse_material(std::ifstream& file)
+{
+    std::getline(file, current_line);
+
+    // mass density
+    std::getline(file, current_line);
+    inputs.material_rho = std::stof(current_line);
+
+    // Young modulus
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.material_youngmodulus = std::stof(current_line);
+
+    // Poisson ratio
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.material_poissonratio = std::stof(current_line);
+}
+
+void InputParser::parse_dirichlet(std::ifstream& file)
+{
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.dirichlet_tags = read_ints_from_line(current_line);
+}
+
+void InputParser::parse_forces(std::ifstream& file)
+{
+    std::getline(file, current_line);
+    if (current_line.compare("VOLUME FORCE") == 0)
+    {
+        inputs.has_volume_force = true;
+
+        std::getline(file, current_line);
+        inputs.volume_force = read_matrix_row_from_line(current_line);
+    }
+    while (current_line.compare("# END FORCES") != 0)
+    {    
+        while (current_line.compare("SURFACE FORCE") != 0)
+        {
+            std::getline(file, current_line);
+            if (current_line.compare("SURFACE FORCE") == 0)
+            {
+                inputs.has_surface_force = true;
+
+                std::getline(file, current_line);
+                int surf_tag = std::stoi(current_line);
+                inputs.tags_surface_forces.push_back(surf_tag);
+                std::getline(file, current_line);
+                std::vector<float> vec_surf = read_matrix_row_from_line(current_line);
+                inputs.surface_forces.push_back(vec_surf);
+            }
+        }
+    }
+}
+
+void InputParser::parse_damping(std::ifstream& file)
+{
+    inputs.has_damping = true;
+
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.damping_alpha_M = std::stof(current_line);
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.damping_alpha_K = std::stof(current_line);
+}
+
+void InputParser::parse_solver(std::ifstream& file)
 {
 
 }
 
-void InputParser::parse_dirichlet()
+void InputParser::parse_output(std::ifstream& file)
 {
+    inputs.has_output = true;
 
-}
-
-void InputParser::parse_forces()
-{
-
-}
-
-void InputParser::parse_damping()
-{
-
-}
-
-void InputParser::parse_solver()
-{
-
-}
-
-void InputParser::parse_output()
-{
-
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.output_name = current_line;
+    std::getline(file, current_line);
+    std::getline(file, current_line);
+    inputs.output_path = current_line;
 }
 
 void InputParser::parse_input_file()
 {
+    inputs.has_surface_force = false;
+    inputs.has_volume_force = false;
+    inputs.has_damping = false;
+    inputs.compute_rom = false;
+    inputs.has_output = false;
+
     std::ifstream file(path_to_file);
 
-    std::string current_line = "init";
+    current_line = "init";
     while (current_line.substr(0, 1).compare("#") != 0)
     {
         std::getline(file, current_line);
@@ -276,31 +357,31 @@ void InputParser::parse_input_file()
     {
         if (current_line.compare("# MESH") == 0)
         {
-            parse_mesh();
+            parse_mesh(file);
         }
         else if (current_line.compare("# MATERIAL") == 0)
         {
-            parse_material();
+            parse_material(file);
         }
         else if (current_line.compare("# DIRICHLET CONDITIONS") == 0)
         {
-            parse_dirichlet();
+            parse_dirichlet(file);
         }
         else if (current_line.compare("# FORCES") == 0)
         {
-            parse_forces();
+            parse_forces(file);
         }
         else if (current_line.compare("# DAMPING") == 0)
         {
-            parse_damping();
+            parse_damping(file);
         }
         else if (current_line.compare("# SOLVER") == 0)
         {
-            parse_solver();
+            parse_solver(file);
         }
         else if (current_line.compare("# OUTPUT") == 0)
         {
-            parse_output();
+            parse_output(file);
         }
         
         while (current_line.substr(0, 1).compare("#") != 0)
@@ -308,5 +389,5 @@ void InputParser::parse_input_file()
             std::getline(file, current_line);
         }
     }
-    
+    file.close();
 }
