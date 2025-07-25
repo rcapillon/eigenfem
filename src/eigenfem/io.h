@@ -14,6 +14,8 @@
 #include "mesh.h"
 
 
+std::vector<float> read_matrix_row_from_line(std::string line);
+
 class VTKwriter
 {
     public:
