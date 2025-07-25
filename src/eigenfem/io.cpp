@@ -322,7 +322,43 @@ void InputParser::parse_damping(std::ifstream& file)
 
 void InputParser::parse_solver(std::ifstream& file)
 {
+    std::getline(file, current_line);
+    inputs.solver_type = current_line;
 
+    if (inputs.solver_type.compare("MODAL") == 0)
+    {
+        std::getline(file, current_line);
+        std::getline(file, current_line);
+        inputs.modal_n_modes = std::stoi(current_line);
+    }
+    else if (inputs.solver_type.compare("FREQUENCYSWEEP") == 0)
+    {
+        std::getline(file, current_line);
+        if (inputs.solver_type.compare("COMPUTE ROM") == 0)
+        {
+            inputs.compute_rom = true;
+            std::getline(file, current_line);
+            inputs.frequency_n_modes = std::stoi(current_line);
+        }
+        else if (inputs.solver_type.compare("LOAD ROM") == 0)
+        {
+            inputs.compute_rom = false;
+            std::getline(file, current_line);
+            inputs.frequency_path_to_basis = current_line;
+        }
+        while (current_line.compare("# FREQUENCIES") != 0)
+        {
+            std::getline(file, current_line);
+        }
+        std::getline(file, current_line);
+        inputs.frequency_min_freq = std::stof(current_line);
+        std::getline(file, current_line);
+        inputs.frequency_max_freq = std::stof(current_line);
+        std::getline(file, current_line);
+        inputs.frequency_n_freq = std::stoi(current_line);
+    }
+    
+    
 }
 
 void InputParser::parse_output(std::ifstream& file)

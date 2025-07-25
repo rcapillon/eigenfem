@@ -76,7 +76,7 @@ struct Inputs
     std::string frequency_path_to_basis;
     float frequency_min_freq;
     float frequency_max_freq;
-    float frequency_n_freq;
+    int frequency_n_freq;
 
     std::string output_name;
     std::string output_path;
