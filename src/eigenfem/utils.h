@@ -47,7 +47,8 @@ MatsGauss compute_mats_gauss();
 SpMat double_slice_spmat(SpMat mat, std::vector<int> row_indices, std::vector<int> col_indices);
 
 bool pair_comparator(const std::pair<float, int>& lhs, const std::pair<float, int>& rhs);
-
 int find_index(std::vector<int>& vec, int val);
+
+void righttrim_newline(std::string& str);
 
 #endif

@@ -278,3 +278,11 @@ int find_index(std::vector<int>& vec, int val)
     }
   	return -1;
 }
+
+void righttrim_newline(std::string& str)
+{
+    if (!str.empty() && str[str.length() - 1] == '\n')
+    {
+        str.erase(str.length() - 1);
+    }
+}
