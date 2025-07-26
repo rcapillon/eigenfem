@@ -5,3 +5,4 @@ third-party/
 # ignore some files
 .DS_Store
 TODO.txt
+*.vtk
