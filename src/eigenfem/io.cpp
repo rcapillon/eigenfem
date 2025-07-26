@@ -264,21 +264,93 @@ void InputParser::parse_mesh()
         idx++;
         current_line = lines[idx];
     }
-    while (current_line.compare("# END MESH") != 0)
+    int new_idx = idx;
+    while (current_line.compare("## PATH") != 0 && current_line.compare("# END MESH") != 0)
     {
-        
+        new_idx++;
+        current_line = lines[new_idx];
     }
-    
+    if (current_line.compare("## PATH") == 0)
+    {
+        inputs.has_mesh = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.mesh_path = current_line; 
+    }
 }
 
 void InputParser::parse_material()
 {
-
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# MATERIAL") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    int new_idx = idx;
+    while (current_line.compare("## MASS DENSITY") != 0 && current_line.compare("# END MATERIAL") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## MASS DENSITY") == 0)
+    {
+        inputs.has_material = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.material_rho = std::stof(current_line);
+    }
+    new_idx = idx;
+    while (current_line.compare("## YOUNG MODULUS") != 0 && current_line.compare("# END MATERIAL") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## YOUNG MODULUS") == 0)
+    {
+        inputs.has_material = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.material_youngmodulus = std::stof(current_line); 
+    }
+    new_idx = idx;
+    while (current_line.compare("## POISSON RATIO") != 0 && current_line.compare("# END MATERIAL") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## POISSON RATIO") == 0)
+    {
+        inputs.has_material = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.material_poissonratio = std::stof(current_line); 
+    }
 }
 
 void InputParser::parse_dirichlet()
 {
-
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# DIRICHLET") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    int new_idx = idx;
+    while (current_line.compare("## TAGS") != 0 && current_line.compare("# END DIRICHLET") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## TAGS") == 0)
+    {
+        inputs.has_dirichlet = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.dirichlet_tags = read_ints_from_line(current_line);
+    }
 }
 
 void InputParser::parse_forces()
@@ -288,7 +360,39 @@ void InputParser::parse_forces()
 
 void InputParser::parse_damping()
 {
-
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# DAMPING") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    int new_idx = idx;
+    while (current_line.compare("## MASS") != 0 && current_line.compare("# END DAMPING") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## MASS") == 0)
+    {
+        inputs.has_damping = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.damping_alpha_M = std::stof(current_line);
+    }
+    new_idx = idx;
+    while (current_line.compare("## STIFFNESS") != 0 && current_line.compare("# END DAMPING") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## STIFFNESS") == 0)
+    {
+        inputs.has_damping = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.damping_alpha_K = std::stof(current_line); 
+    }
 }
 
 void InputParser::parse_solver()
@@ -319,6 +423,14 @@ void InputParser::parse_input_file()
 
     current_line = "init";
     get_lines(input_file, current_line);
+
+    parse_mesh();
+    parse_material();
+    parse_dirichlet();
+    parse_forces();
+    parse_damping();
+    parse_solver();
+    parse_output();
 
     input_file.close();
 }
