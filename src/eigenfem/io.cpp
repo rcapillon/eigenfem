@@ -302,6 +302,7 @@ void InputParser::parse_material()
         inputs.material_rho = std::stof(current_line);
     }
     new_idx = idx;
+    current_line = lines[idx];
     while (current_line.compare("## YOUNG MODULUS") != 0 && current_line.compare("# END MATERIAL") != 0)
     {
         new_idx++;
@@ -315,6 +316,7 @@ void InputParser::parse_material()
         inputs.material_youngmodulus = std::stof(current_line); 
     }
     new_idx = idx;
+    current_line = lines[idx];
     while (current_line.compare("## POISSON RATIO") != 0 && current_line.compare("# END MATERIAL") != 0)
     {
         new_idx++;
@@ -376,6 +378,27 @@ void InputParser::parse_forces()
         current_line = lines[new_idx];
         inputs.volume_force = read_matrix_row_from_line(current_line);
     }
+    new_idx = idx;
+    current_line = lines[idx];
+    while (current_line.compare("# END FORCES") != 0)
+    {
+        while (current_line.compare("## SURFACE FORCE") != 0 && current_line.compare("# END FORCES") != 0)
+        {
+            new_idx++;
+            current_line = lines[new_idx];
+        }
+        if (current_line.compare("## SURFACE FORCE") == 0)
+        {
+            inputs.has_forces = true;
+            inputs.has_surface_forces = true;
+            new_idx++;
+            current_line = lines[new_idx];
+            inputs.tags_surface_forces.push_back(std::stoi(current_line));
+            new_idx++;
+            current_line = lines[new_idx];
+            inputs.surface_forces.push_back(read_matrix_row_from_line(current_line));
+        }
+    }
 }
 
 void InputParser::parse_damping()
@@ -417,7 +440,7 @@ void InputParser::parse_damping()
 
 void InputParser::parse_solver()
 {
-
+    
 }
 
 void InputParser::parse_output()

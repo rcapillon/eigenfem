@@ -45,6 +45,13 @@ int main(int argc, char *argv[])
     }
     std::cout << std::endl;
     std::cout << "volume force: " << ip.inputs.volume_force[0] << " , " << ip.inputs.volume_force[1] << " , " << ip.inputs.volume_force[2] << std::endl << std::endl;
+    for (size_t i = 0; i < ip.inputs.tags_surface_forces.size(); i++)
+    {
+        std::cout << "surface force: " << std::endl;
+        std::cout << "tag: " << ip.inputs.tags_surface_forces[i] << std::endl;
+        std::cout << ip.inputs.surface_forces[i][0] << " , " << ip.inputs.surface_forces[i][1] << " , " << ip.inputs.surface_forces[i][2] << std::endl;
+    }
+    std::cout << std::endl;
     std::cout << "damping M: " << ip.inputs.damping_alpha_M << std::endl << std::endl;
     std::cout << "damping K: " << ip.inputs.damping_alpha_K << std::endl << std::endl;
     std::cout << "output name: " << ip.inputs.output_name << std::endl << std::endl;
