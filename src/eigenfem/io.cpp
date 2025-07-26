@@ -355,7 +355,27 @@ void InputParser::parse_dirichlet()
 
 void InputParser::parse_forces()
 {
-
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# FORCES") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    int new_idx = idx;
+    while (current_line.compare("## VOLUME FORCE") != 0 && current_line.compare("# END FORCES") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## VOLUME FORCE") == 0)
+    {
+        inputs.has_forces = true;
+        inputs.has_volume_force = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.volume_force = read_matrix_row_from_line(current_line);
+    }
 }
 
 void InputParser::parse_damping()
@@ -402,7 +422,38 @@ void InputParser::parse_solver()
 
 void InputParser::parse_output()
 {
-
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# OUTPUT") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    int new_idx = idx;
+    while (current_line.compare("## STUDY NAME") != 0 && current_line.compare("# END OUTPUT") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## STUDY NAME") == 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.output_name = current_line;
+    }
+    new_idx = idx;
+    while (current_line.compare("## PATH") != 0 && current_line.compare("# END OUTPUT") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## PATH") == 0)
+    {
+        inputs.has_output = true;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.output_path = current_line;
+    }
 }
 
 void InputParser::parse_input_file()

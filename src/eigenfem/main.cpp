@@ -38,15 +38,17 @@ int main(int argc, char *argv[])
     std::cout << "material rho: " << ip.inputs.material_rho << std::endl << std::endl;
     std::cout << "material young: " << ip.inputs.material_youngmodulus << std::endl << std::endl;
     std::cout << "material nu: " << ip.inputs.material_poissonratio << std::endl << std::endl;
+    std::cout << "dirichlet tags: " << std::endl;
     for (size_t i = 0; i < ip.inputs.dirichlet_tags.size(); i++)
     {
-        std::cout << "dirichlet tags: " << std::endl;
         std::cout << ip.inputs.dirichlet_tags[i] << std::endl;
     }
     std::cout << std::endl;
-
+    std::cout << "volume force: " << ip.inputs.volume_force[0] << " , " << ip.inputs.volume_force[1] << " , " << ip.inputs.volume_force[2] << std::endl << std::endl;
     std::cout << "damping M: " << ip.inputs.damping_alpha_M << std::endl << std::endl;
     std::cout << "damping K: " << ip.inputs.damping_alpha_K << std::endl << std::endl;
+    std::cout << "output name: " << ip.inputs.output_name << std::endl << std::endl;
+    std::cout << "output path: " << ip.inputs.output_path << std::endl << std::endl;
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
