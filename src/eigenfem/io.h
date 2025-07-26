@@ -12,6 +12,7 @@
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 
 #include "mesh.h"
+#include "utils.h"
 
 
 std::vector<float> read_matrix_row_from_line(std::string line);
@@ -81,10 +82,15 @@ struct Inputs
     std::string output_name;
     std::string output_path;
 
-    bool has_surface_force;
+    bool has_mesh;
+    bool has_material;
+    bool has_dirichlet;
+    bool has_forces;
+    bool has_surface_forces;
     bool has_volume_force;
     bool has_damping;
-    bool compute_rom;
+    bool has_solver;
+    bool solver_computes_rom;
     bool has_output;
 
     Inputs() {};
@@ -99,17 +105,18 @@ class InputParser
 
         std::string path_to_file;
 
-        std::string current_line;
+        std::vector<std::string> lines;
 
         Inputs inputs;
 
-        void parse_mesh(std::ifstream& file);
-        void parse_material(std::ifstream& file);
-        void parse_dirichlet(std::ifstream& file);
-        void parse_forces(std::ifstream& file);
-        void parse_damping(std::ifstream& file);
-        void parse_solver(std::ifstream& file);
-        void parse_output(std::ifstream& file);
+        void get_lines();
+        void parse_mesh();
+        void parse_material();
+        void parse_dirichlet();
+        void parse_forces();
+        void parse_damping();
+        void parse_solver();
+        void parse_output();
         void parse_input_file();
 };
 

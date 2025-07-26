@@ -242,188 +242,60 @@ Eigen::MatrixXf DATio::load_dat(std::string path_to_file)
 
 InputParser::InputParser(std::string path_to_input_file)
 {
-    path_to_file = path_to_input_file;
+    path_to_input_file = path_to_input_file;
 }
 
-void InputParser::parse_mesh(std::ifstream& file)
+void InputParser::parse_mesh()
 {
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.mesh_path = current_line;
+
 }
 
-void InputParser::parse_material(std::ifstream& file)
+void InputParser::parse_material()
 {
-    std::getline(file, current_line);
 
-    // mass density
-    std::getline(file, current_line);
-    inputs.material_rho = std::stof(current_line);
-
-    // Young modulus
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.material_youngmodulus = std::stof(current_line);
-
-    // Poisson ratio
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.material_poissonratio = std::stof(current_line);
 }
 
-void InputParser::parse_dirichlet(std::ifstream& file)
+void InputParser::parse_dirichlet()
 {
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.dirichlet_tags = read_ints_from_line(current_line);
+
 }
 
-void InputParser::parse_forces(std::ifstream& file)
+void InputParser::parse_forces()
 {
-    std::getline(file, current_line);
-    if (current_line.compare("VOLUME FORCE") == 0)
-    {
-        inputs.has_volume_force = true;
 
-        std::getline(file, current_line);
-        inputs.volume_force = read_matrix_row_from_line(current_line);
-    }
-    while (current_line.compare("# END FORCES") != 0)
-    {    
-        while (current_line.compare("SURFACE FORCE") != 0)
-        {
-            std::getline(file, current_line);
-            if (current_line.compare("SURFACE FORCE") == 0)
-            {
-                inputs.has_surface_force = true;
-
-                std::getline(file, current_line);
-                int surf_tag = std::stoi(current_line);
-                inputs.tags_surface_forces.push_back(surf_tag);
-                std::getline(file, current_line);
-                std::vector<float> vec_surf = read_matrix_row_from_line(current_line);
-                inputs.surface_forces.push_back(vec_surf);
-            }
-        }
-    }
 }
 
-void InputParser::parse_damping(std::ifstream& file)
+void InputParser::parse_damping()
 {
-    inputs.has_damping = true;
 
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.damping_alpha_M = std::stof(current_line);
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.damping_alpha_K = std::stof(current_line);
 }
 
-void InputParser::parse_solver(std::ifstream& file)
+void InputParser::parse_solver()
 {
-    std::getline(file, current_line);
-    inputs.solver_type = current_line;
 
-    if (inputs.solver_type.compare("MODAL") == 0)
-    {
-        std::getline(file, current_line);
-        std::getline(file, current_line);
-        inputs.modal_n_modes = std::stoi(current_line);
-    }
-    else if (inputs.solver_type.compare("FREQUENCYSWEEP") == 0)
-    {
-        std::getline(file, current_line);
-        if (inputs.solver_type.compare("COMPUTE ROM") == 0)
-        {
-            inputs.compute_rom = true;
-            std::getline(file, current_line);
-            inputs.frequency_n_modes = std::stoi(current_line);
-        }
-        else if (inputs.solver_type.compare("LOAD ROM") == 0)
-        {
-            inputs.compute_rom = false;
-            std::getline(file, current_line);
-            inputs.frequency_path_to_basis = current_line;
-        }
-        while (current_line.compare("# FREQUENCIES") != 0)
-        {
-            std::getline(file, current_line);
-        }
-        std::getline(file, current_line);
-        inputs.frequency_min_freq = std::stof(current_line);
-        std::getline(file, current_line);
-        inputs.frequency_max_freq = std::stof(current_line);
-        std::getline(file, current_line);
-        inputs.frequency_n_freq = std::stoi(current_line);
-    }
-    
-    
 }
 
-void InputParser::parse_output(std::ifstream& file)
+void InputParser::parse_output()
 {
-    inputs.has_output = true;
 
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.output_name = current_line;
-    std::getline(file, current_line);
-    std::getline(file, current_line);
-    inputs.output_path = current_line;
 }
 
 void InputParser::parse_input_file()
 {
-    inputs.has_surface_force = false;
+    inputs.has_mesh = false;
+    inputs.has_material = false;
+    inputs.has_dirichlet = false;
+    inputs.has_forces = false;
+    inputs.has_surface_forces = false;
     inputs.has_volume_force = false;
     inputs.has_damping = false;
-    inputs.compute_rom = false;
+    inputs.has_solver = false;
+    inputs.solver_computes_rom = false;
     inputs.has_output = false;
 
     std::ifstream file(path_to_file);
+    std::string current_line;
+    std::getline(file, current_line);
 
-    current_line = "init";
-    while (current_line.substr(0, 1).compare("#") != 0)
-    {
-        std::getline(file, current_line);
-    }
-    
-    while (current_line.compare("# END") != 0)
-    {
-        if (current_line.compare("# MESH") == 0)
-        {
-            parse_mesh(file);
-        }
-        else if (current_line.compare("# MATERIAL") == 0)
-        {
-            parse_material(file);
-        }
-        else if (current_line.compare("# DIRICHLET CONDITIONS") == 0)
-        {
-            parse_dirichlet(file);
-        }
-        else if (current_line.compare("# FORCES") == 0)
-        {
-            parse_forces(file);
-        }
-        else if (current_line.compare("# DAMPING") == 0)
-        {
-            parse_damping(file);
-        }
-        else if (current_line.compare("# SOLVER") == 0)
-        {
-            parse_solver(file);
-        }
-        else if (current_line.compare("# OUTPUT") == 0)
-        {
-            parse_output(file);
-        }
-        
-        while (current_line.substr(0, 1).compare("#") != 0)
-        {
-            std::getline(file, current_line);
-        }
-    }
     file.close();
 }

@@ -24,9 +24,11 @@ int main(int argc, char *argv[])
         std::cout << argv[i] << std::endl;
     }
 
+    std::string path_to_input_file = argv[1];
+
     // Parse input file
-    // InputParser ip(path_to_input_file);
-    // ip.parse_input_file();
+    InputParser ip(path_to_input_file);
+    ip.parse_input_file();
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
