@@ -440,6 +440,34 @@ void InputParser::parse_damping()
 
 void InputParser::parse_solver()
 {
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# SOLVER") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    if (current_line.compare("# SOLVER") == 0)
+    {
+        inputs.has_solver = true;
+        int new_idx = idx;
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.solver_type = current_line;
+        if (inputs.solver_type.compare("MODAL") == 0)
+        {
+            /* code */
+        }
+        else if (inputs.solver_type.compare("STATICS") == 0)
+        {
+            /* code */
+        }
+        else if (inputs.solver_type.compare("FREQUENCYSWEEP") == 0)
+        {
+            /* code */
+        }
+    }
+    
     
 }
 
