@@ -17,18 +17,22 @@ int main(int argc, char *argv[])
     const float PI = 3.141592653589793;
 
     // count and print of arguments fed to main
-    std::cout << "Number of arguments: " << argc << std::endl;
-    for (size_t i = 0; i < argc; i++)
-    {
-        std::cout << "Argument " << i << ":" << std::endl;
-        std::cout << argv[i] << std::endl;
-    }
+    // std::cout << "Number of arguments: " << argc << std::endl;
+    // for (size_t i = 0; i < argc; i++)
+    // {
+    //     std::cout << "Argument " << i << ":" << std::endl;
+    //     std::cout << argv[i] << std::endl << std::endl;
+    // }
 
     std::string path_to_input_file = argv[1];
 
     // Parse input file
     InputParser ip(path_to_input_file);
     ip.parse_input_file();
+    // for (size_t i = 0; i < ip.lines.size(); i++)
+    // {
+    //     std::cout << ip.lines[i] << std::endl;        
+    // }
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 

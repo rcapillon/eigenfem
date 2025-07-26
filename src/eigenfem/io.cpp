@@ -242,12 +242,33 @@ Eigen::MatrixXf DATio::load_dat(std::string path_to_file)
 
 InputParser::InputParser(std::string path_to_input_file)
 {
-    path_to_input_file = path_to_input_file;
+    path_to_file = path_to_input_file;
+}
+
+void InputParser::get_lines(std::ifstream &file, std::string &line)
+{
+    while (line.compare("# END FILE") != 0)
+    {
+        std::getline(file, line);
+        lines.push_back(line);
+    }
+    
 }
 
 void InputParser::parse_mesh()
 {
-
+    int idx = 0;
+    std::string current_line = lines[idx];
+    while (current_line.compare("# MESH") != 0)
+    {
+        idx++;
+        current_line = lines[idx];
+    }
+    while (current_line.compare("# END MESH") != 0)
+    {
+        
+    }
+    
 }
 
 void InputParser::parse_material()
@@ -293,9 +314,11 @@ void InputParser::parse_input_file()
     inputs.solver_computes_rom = false;
     inputs.has_output = false;
 
-    std::ifstream file(path_to_file);
+    std::ifstream input_file(path_to_file);
     std::string current_line;
-    std::getline(file, current_line);
 
-    file.close();
+    current_line = "init";
+    get_lines(input_file, current_line);
+
+    input_file.close();
 }

@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 
@@ -106,10 +107,17 @@ class InputParser
         std::string path_to_file;
 
         std::vector<std::string> lines;
+        std::vector<std::string> lines_mesh;
+        std::vector<std::string> lines_material;
+        std::vector<std::string> lines_dirichlet;
+        std::vector<std::string> lines_forces;
+        std::vector<std::string> lines_damping;
+        std::vector<std::string> lines_solver;
+        std::vector<std::string> lines_output;
 
         Inputs inputs;
 
-        void get_lines();
+        void get_lines(std::ifstream &file, std::string &line);
         void parse_mesh();
         void parse_material();
         void parse_dirichlet();
