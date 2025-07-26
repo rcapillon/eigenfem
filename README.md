@@ -14,9 +14,11 @@ Custom usage documentation will be added later.
     - Copyright 2015-2025, Yixuan Qiu
 
 ## Installation and running example scripts
-Installation can be performed using CMake (minimal version required: 3.28.3). 
-The installation procedure has been tested on MacOS Sequoia 15.5 and Ubuntu 24.04.2, but should work for other versions as well. No testing on Windows has been done for now.
+Requirements: 
+- CMake (minimal version required: 3.28.3)
+- OS: MacOS (tested on MacOS Sequoia 15.5 with a M1 2020 Macbook Pro), Linux (tested on Ubuntu arm64 24.04.2).
 
+No testing on Windows has been done for now.
 
 First, clone the repository in the folder of your choice with:
 ```
