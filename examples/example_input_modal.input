@@ -1,6 +1,6 @@
 # MESH
 ## PATH
-../examples/data/plate.mesh
+../examples/data/bar.mesh
 # END MESH
 
 # MATERIAL
