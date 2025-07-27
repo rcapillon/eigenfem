@@ -575,6 +575,19 @@ void InputParser::parse_output()
         current_line = lines[new_idx];
         inputs.output_path = current_line;
     }
+    new_idx = idx;
+    current_line = lines[new_idx];
+    while (current_line.compare("## PLOTTED MODE NUM") != 0 && current_line.compare("# END OUTPUT") != 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+    }
+    if (current_line.compare("## PLOTTED MODE NUM") == 0)
+    {
+        new_idx++;
+        current_line = lines[new_idx];
+        inputs.plotted_mode_num = std::stoi(current_line); 
+    }
 }
 
 void InputParser::parse_input_file()

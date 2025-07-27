@@ -73,6 +73,7 @@ struct Inputs
     std::string solver_type;
 
     int modal_n_modes;
+    int plotted_mode_num;
 
     int frequency_n_modes;
     std::string frequency_path_to_basis;
