@@ -1,0 +1,57 @@
+# MESH
+## PATH
+../examples/data/plate_fine.mesh
+# END MESH
+
+# MATERIAL
+## MASS DENSITY
+7800
+## YOUNG MODULUS
+2.1e11
+## POISSON RATIO
+0.3
+# END MATERIAL
+
+# DIRICHLET
+## TAGS
+2
+# END DIRICHLET
+
+# FORCES
+## VOLUME FORCE
+0, 0, 76518
+## SURFACE FORCE
+3
+0, 0, 7.5e9
+## SURFACE FORCE
+3
+0, 0, 7.5e9
+# END FORCES
+
+# DAMPING
+## MASS
+1e-3
+## STIFFNESS
+1e-3
+# END DAMPING
+
+# SOLVER
+FREQUENCYSWEEP
+## LOAD ROM
+../examples/data/plate_fine_rom_basis.dat
+## MIN FREQUENCY
+1200
+## MAX FREQUENCY
+2200
+## N FREQUENCIES
+300
+# END SOLVER
+
+# OUTPUT
+## STUDY NAME
+example_eigenfem_frequency_fine
+## PATH
+../examples/results/example_custom/
+# END OUTPUT
+
+# END FILE

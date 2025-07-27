@@ -1,6 +1,6 @@
 # MESH
 ## PATH
-../examples/data/plate.mesh
+../examples/data/bar.mesh
 # END MESH
 
 # MATERIAL
@@ -22,36 +22,21 @@
 0, 0, 76518
 ## SURFACE FORCE
 3
-0, 0, 7.5e9
+2e8, 0, 0
 ## SURFACE FORCE
 3
-0, 0, 7.5e9
+2e8, 0, 0
 # END FORCES
 
-# DAMPING
-## MASS
-1e-3
-## STIFFNESS
-1e-3
-# END DAMPING
-
 # SOLVER
-FREQUENCYSWEEP
-## COMPUTE ROM
-10
-## MIN FREQUENCY
-1200
-## MAX FREQUENCY
-2200
-## N FREQUENCIES
-300
+STATICS
 # END SOLVER
 
 # OUTPUT
 ## STUDY NAME
-example_custom
+example_eigenfem_statics
 ## PATH
-../examples/results/example_custom/
+../examples/results/example_eigenfem/
 # END OUTPUT
 
 # END FILE

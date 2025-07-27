@@ -1,0 +1,33 @@
+# MESH
+## PATH
+../examples/data/plate.mesh
+# END MESH
+
+# MATERIAL
+## MASS DENSITY
+7800
+## YOUNG MODULUS
+2.1e11
+## POISSON RATIO
+0.3
+# END MATERIAL
+
+# DIRICHLET
+## TAGS
+2, 3
+# END DIRICHLET
+
+# SOLVER
+MODAL
+## N MODES
+10
+# END SOLVER
+
+# OUTPUT
+## STUDY NAME
+example_eigenfem_modal
+## PATH
+../examples/results/example_eigenfem/
+# END OUTPUT
+
+# END FILE
