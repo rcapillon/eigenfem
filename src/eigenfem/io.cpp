@@ -259,7 +259,7 @@ void InputParser::parse_mesh()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# MESH") != 0)
+    while (current_line.compare("# MESH") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
@@ -283,13 +283,13 @@ void InputParser::parse_material()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# MATERIAL") != 0)
+    while (current_line.compare("# MATERIAL") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
     }
     int new_idx = idx;
-    while (current_line.compare("## MASS DENSITY") != 0 && current_line.compare("# END MATERIAL") != 0)
+    while (current_line.compare("## MASS DENSITY") != 0 && current_line.compare("# END MATERIAL") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -303,7 +303,7 @@ void InputParser::parse_material()
     }
     new_idx = idx;
     current_line = lines[new_idx];
-    while (current_line.compare("## YOUNG MODULUS") != 0 && current_line.compare("# END MATERIAL") != 0)
+    while (current_line.compare("## YOUNG MODULUS") != 0 && current_line.compare("# END MATERIAL") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -317,7 +317,7 @@ void InputParser::parse_material()
     }
     new_idx = idx;
     current_line = lines[new_idx];
-    while (current_line.compare("## POISSON RATIO") != 0 && current_line.compare("# END MATERIAL") != 0)
+    while (current_line.compare("## POISSON RATIO") != 0 && current_line.compare("# END MATERIAL") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -335,13 +335,13 @@ void InputParser::parse_dirichlet()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# DIRICHLET") != 0)
+    while (current_line.compare("# DIRICHLET") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
     }
     int new_idx = idx;
-    while (current_line.compare("## TAGS") != 0 && current_line.compare("# END DIRICHLET") != 0)
+    while (current_line.compare("## TAGS") != 0 && current_line.compare("# END DIRICHLET") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -359,13 +359,13 @@ void InputParser::parse_forces()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# FORCES") != 0)
+    while (current_line.compare("# FORCES") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
     }
     int new_idx = idx;
-    while (current_line.compare("## VOLUME FORCE") != 0 && current_line.compare("# END FORCES") != 0)
+    while (current_line.compare("## VOLUME FORCE") != 0 && current_line.compare("# END FORCES") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -380,9 +380,9 @@ void InputParser::parse_forces()
     }
     new_idx = idx;
     current_line = lines[new_idx];
-    while (current_line.compare("# END FORCES") != 0)
+    while (current_line.compare("# END FORCES") != 0 && current_line.compare("# END FILE") != 0)
     {
-        while (current_line.compare("## SURFACE FORCE") != 0 && current_line.compare("# END FORCES") != 0)
+        while (current_line.compare("## SURFACE FORCE") != 0 && current_line.compare("# END FORCES") != 0 && current_line.compare("# END FILE") != 0)
         {
             new_idx++;
             current_line = lines[new_idx];
@@ -405,13 +405,13 @@ void InputParser::parse_damping()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# DAMPING") != 0)
+    while (current_line.compare("# DAMPING") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
     }
     int new_idx = idx;
-    while (current_line.compare("## MASS") != 0 && current_line.compare("# END DAMPING") != 0)
+    while (current_line.compare("## MASS") != 0 && current_line.compare("# END DAMPING") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -425,7 +425,7 @@ void InputParser::parse_damping()
     }
     new_idx = idx;
     current_line = lines[new_idx];
-    while (current_line.compare("## STIFFNESS") != 0 && current_line.compare("# END DAMPING") != 0)
+    while (current_line.compare("## STIFFNESS") != 0 && current_line.compare("# END DAMPING") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -443,7 +443,7 @@ void InputParser::parse_solver()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# SOLVER") != 0)
+    while (current_line.compare("# SOLVER") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
@@ -457,7 +457,7 @@ void InputParser::parse_solver()
         inputs.solver_type = current_line;
         if (inputs.solver_type.compare("MODAL") == 0)
         {
-            while (current_line.compare("## N MODES") != 0 && current_line.compare("# END SOLVER") != 0)
+            while (current_line.compare("## N MODES") != 0 && current_line.compare("# END SOLVER") != 0 && current_line.compare("# END FILE") != 0)
             {
                 new_idx++;
                 current_line = lines[new_idx];
@@ -471,7 +471,7 @@ void InputParser::parse_solver()
         }
         else if (inputs.solver_type.compare("FREQUENCYSWEEP") == 0)
         {
-            while (current_line.compare("## COMPUTE ROM") != 0 && current_line.compare("# END SOLVER") != 0)
+            while (current_line.compare("## COMPUTE ROM") != 0 && current_line.compare("# END SOLVER") != 0 && current_line.compare("# END FILE") != 0)
             {
                 new_idx++;
                 current_line = lines[new_idx];
@@ -485,7 +485,7 @@ void InputParser::parse_solver()
             }
             new_idx = idx;
             current_line = lines[new_idx];
-            while (current_line.compare("## LOAD ROM") != 0 && current_line.compare("# END SOLVER") != 0)
+            while (current_line.compare("## LOAD ROM") != 0 && current_line.compare("# END SOLVER") != 0 && current_line.compare("# END FILE") != 0)
             {
                 new_idx++;
                 current_line = lines[new_idx];
@@ -499,7 +499,7 @@ void InputParser::parse_solver()
             }
             new_idx = idx;
             current_line = lines[new_idx];
-            while (current_line.compare("## MIN FREQUENCY") != 0 && current_line.compare("# END SOLVER") != 0)
+            while (current_line.compare("## MIN FREQUENCY") != 0 && current_line.compare("# END SOLVER") != 0 && current_line.compare("# END FILE") != 0)
             {
                 new_idx++;
                 current_line = lines[new_idx];
@@ -512,7 +512,7 @@ void InputParser::parse_solver()
             }
             new_idx = idx;
             current_line = lines[new_idx];
-            while (current_line.compare("## MAX FREQUENCY") != 0 && current_line.compare("# END SOLVER") != 0)
+            while (current_line.compare("## MAX FREQUENCY") != 0 && current_line.compare("# END SOLVER") != 0 && current_line.compare("# END FILE") != 0)
             {
                 new_idx++;
                 current_line = lines[new_idx];
@@ -525,7 +525,7 @@ void InputParser::parse_solver()
             }
             new_idx = idx;
             current_line = lines[new_idx];
-            while (current_line.compare("## N FREQUENCIES") != 0 && current_line.compare("# END SOLVER") != 0)
+            while (current_line.compare("## N FREQUENCIES") != 0 && current_line.compare("# END SOLVER") != 0 && current_line.compare("# END FILE") != 0)
             {
                 new_idx++;
                 current_line = lines[new_idx];
@@ -544,13 +544,13 @@ void InputParser::parse_output()
 {
     int idx = 0;
     std::string current_line = lines[idx];
-    while (current_line.compare("# OUTPUT") != 0)
+    while (current_line.compare("# OUTPUT") != 0 && current_line.compare("# END FILE") != 0)
     {
         idx++;
         current_line = lines[idx];
     }
     int new_idx = idx;
-    while (current_line.compare("## STUDY NAME") != 0 && current_line.compare("# END OUTPUT") != 0)
+    while (current_line.compare("## STUDY NAME") != 0 && current_line.compare("# END OUTPUT") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -563,7 +563,7 @@ void InputParser::parse_output()
     }
     new_idx = idx;
     current_line = lines[new_idx];
-    while (current_line.compare("## PATH") != 0 && current_line.compare("# END OUTPUT") != 0)
+    while (current_line.compare("## PATH") != 0 && current_line.compare("# END OUTPUT") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
@@ -577,7 +577,7 @@ void InputParser::parse_output()
     }
     new_idx = idx;
     current_line = lines[new_idx];
-    while (current_line.compare("## PLOTTED MODE NUM") != 0 && current_line.compare("# END OUTPUT") != 0)
+    while (current_line.compare("## PLOTTED MODE NUM") != 0 && current_line.compare("# END OUTPUT") != 0 && current_line.compare("# END FILE") != 0)
     {
         new_idx++;
         current_line = lines[new_idx];
