@@ -302,7 +302,7 @@ void InputParser::parse_material()
         inputs.material_rho = std::stof(current_line);
     }
     new_idx = idx;
-    current_line = lines[idx];
+    current_line = lines[new_idx];
     while (current_line.compare("## YOUNG MODULUS") != 0 && current_line.compare("# END MATERIAL") != 0)
     {
         new_idx++;
@@ -316,7 +316,7 @@ void InputParser::parse_material()
         inputs.material_youngmodulus = std::stof(current_line); 
     }
     new_idx = idx;
-    current_line = lines[idx];
+    current_line = lines[new_idx];
     while (current_line.compare("## POISSON RATIO") != 0 && current_line.compare("# END MATERIAL") != 0)
     {
         new_idx++;
@@ -379,7 +379,7 @@ void InputParser::parse_forces()
         inputs.volume_force = read_matrix_row_from_line(current_line);
     }
     new_idx = idx;
-    current_line = lines[idx];
+    current_line = lines[new_idx];
     while (current_line.compare("# END FORCES") != 0)
     {
         while (current_line.compare("## SURFACE FORCE") != 0 && current_line.compare("# END FORCES") != 0)
@@ -424,6 +424,7 @@ void InputParser::parse_damping()
         inputs.damping_alpha_M = std::stof(current_line);
     }
     new_idx = idx;
+    current_line = lines[new_idx];
     while (current_line.compare("## STIFFNESS") != 0 && current_line.compare("# END DAMPING") != 0)
     {
         new_idx++;
@@ -456,19 +457,87 @@ void InputParser::parse_solver()
         inputs.solver_type = current_line;
         if (inputs.solver_type.compare("MODAL") == 0)
         {
-            /* code */
-        }
-        else if (inputs.solver_type.compare("STATICS") == 0)
-        {
-            /* code */
+            while (current_line.compare("## N MODES") != 0 && current_line.compare("# END SOLVER") != 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+            }
+            if (current_line.compare("## N MODES") == 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+                inputs.modal_n_modes = std::stoi(current_line); 
+            }
         }
         else if (inputs.solver_type.compare("FREQUENCYSWEEP") == 0)
         {
-            /* code */
+            while (current_line.compare("## COMPUTE ROM") != 0 && current_line.compare("# END SOLVER") != 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+            }
+            if (current_line.compare("## COMPUTE ROM") == 0)
+            {
+                inputs.solver_computes_rom = true;
+                new_idx++;
+                current_line = lines[new_idx];
+                inputs.frequency_n_modes = std::stoi(current_line); 
+            }
+            new_idx = idx;
+            current_line = lines[new_idx];
+            while (current_line.compare("## LOAD ROM") != 0 && current_line.compare("# END SOLVER") != 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+            }
+            if (current_line.compare("## LOAD ROM") == 0)
+            {
+                inputs.solver_computes_rom = false;
+                new_idx++;
+                current_line = lines[new_idx];
+                inputs.frequency_path_to_basis = current_line; 
+            }
+            new_idx = idx;
+            current_line = lines[new_idx];
+            while (current_line.compare("## MIN FREQUENCY") != 0 && current_line.compare("# END SOLVER") != 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+            }
+            if (current_line.compare("## MIN FREQUENCY") == 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+                inputs.frequency_min_freq = std::stof(current_line); 
+            }
+            new_idx = idx;
+            current_line = lines[new_idx];
+            while (current_line.compare("## MAX FREQUENCY") != 0 && current_line.compare("# END SOLVER") != 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+            }
+            if (current_line.compare("## MAX FREQUENCY") == 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+                inputs.frequency_max_freq = std::stof(current_line); 
+            }
+            new_idx = idx;
+            current_line = lines[new_idx];
+            while (current_line.compare("## N FREQUENCIES") != 0 && current_line.compare("# END SOLVER") != 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+            }
+            if (current_line.compare("## N FREQUENCIES") == 0)
+            {
+                new_idx++;
+                current_line = lines[new_idx];
+                inputs.frequency_n_freq = std::stoi(current_line); 
+            }
         }
     }
-    
-    
 }
 
 void InputParser::parse_output()
@@ -493,6 +562,7 @@ void InputParser::parse_output()
         inputs.output_name = current_line;
     }
     new_idx = idx;
+    current_line = lines[new_idx];
     while (current_line.compare("## PATH") != 0 && current_line.compare("# END OUTPUT") != 0)
     {
         new_idx++;

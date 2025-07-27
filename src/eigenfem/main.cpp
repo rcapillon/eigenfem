@@ -54,6 +54,11 @@ int main(int argc, char *argv[])
     std::cout << std::endl;
     std::cout << "damping M: " << ip.inputs.damping_alpha_M << std::endl << std::endl;
     std::cout << "damping K: " << ip.inputs.damping_alpha_K << std::endl << std::endl;
+    std::cout << "solver type: " << ip.inputs.solver_type << std::endl << std::endl;
+    std::cout << "solver n modes: " << ip.inputs.frequency_n_modes << std::endl << std::endl;
+    std::cout << "solver min freq: " << ip.inputs.frequency_min_freq << std::endl << std::endl;
+    std::cout << "solver max freq: " << ip.inputs.frequency_max_freq << std::endl << std::endl;
+    std::cout << "solver n freq: " << ip.inputs.frequency_n_freq << std::endl << std::endl;
     std::cout << "output name: " << ip.inputs.output_name << std::endl << std::endl;
     std::cout << "output path: " << ip.inputs.output_path << std::endl << std::endl;
     
