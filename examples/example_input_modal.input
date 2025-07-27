@@ -28,6 +28,8 @@ MODAL
 example_eigenfem_modal
 ## PATH
 ../examples/results/example_eigenfem/
+## PLOTTED MODE NUM
+0
 # END OUTPUT
 
 # END FILE
