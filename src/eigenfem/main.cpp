@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
     InputParser ip(path_to_input_file);
     ip.parse_input_file();
 
+    std::cout << "Parsed input file." << std::endl;
+
     std::string mesh_path;
     if (ip.inputs.has_mesh)
     {
@@ -109,7 +111,7 @@ int main(int argc, char *argv[])
     
     Model model(mesh, dirichlet_tags, surf_forces, vol_forces, alpha_M, alpha_K);
 
-    if (ip.inputs.has_solver)
+    /* if (ip.inputs.has_solver)
     {
         if (ip.inputs.solver_type.compare("MODAL") == 0)
         {
@@ -180,7 +182,7 @@ int main(int argc, char *argv[])
                 vtk_writer.write_mesh_animation(ip.inputs.output_path, ip.inputs.output_name);
             }
         }
-    }
+    } */
     
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
