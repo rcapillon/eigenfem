@@ -2,8 +2,7 @@
 // mesh.cpp
 //
 
-#include <fstream>
-#include <string>
+#include <iostream>
 
 #include "mesh.h"
 
@@ -220,7 +219,9 @@ void Mesh::import_gmsh_matlab()
 		all_nodes_tags.push_back(node_num_and_tag[1]);
 		std::getline(file, current_line);
 	}
-	int n_nodes_tags = std::unique(all_nodes_tags.begin(), all_nodes_tags.end()) - all_nodes_tags.begin();
+	std::vector<int> all_nodes_tags_copy = all_nodes_tags ;
+	int n_nodes_tags = std::unique(all_nodes_tags_copy.begin(), all_nodes_tags_copy.end()) - all_nodes_tags_copy.begin();
+	all_nodes_tags_copy.erase(std::unique(all_nodes_tags_copy.begin(), all_nodes_tags_copy.end()), all_nodes_tags_copy.end());
 	for (size_t i = 0; i < n_nodes_tags; i++)
 	{
 		std::vector<int> nodes_in_group;
@@ -228,7 +229,7 @@ void Mesh::import_gmsh_matlab()
 	}
 	for (size_t i = 0; i < n_nodes_tags; i++)
 	{
-		int current_tag = all_nodes_tags[i];
+		int current_tag = all_nodes_tags_copy[i];
 		nodes_tags.push_back(current_tag);
 		for (size_t j = 0; j < all_nodes_in_groups.size(); j++)
 		{

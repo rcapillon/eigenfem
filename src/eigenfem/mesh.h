@@ -5,6 +5,9 @@
 #ifndef mesh_h
 #define mesh_h
 
+#include <fstream>
+#include <string>
+
 #include "../../third-party/eigen-3.4.0/Eigen/Core"
 
 #include "element.h"
