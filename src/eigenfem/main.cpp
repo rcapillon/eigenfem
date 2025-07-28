@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     }
     std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces;
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
+    std::vector<std::tuple<int, Eigen::VectorXf>> nod_forces;
     if (ip.inputs.has_forces)
     {
         if (ip.inputs.has_volume_force)
@@ -89,11 +90,29 @@ int main(int argc, char *argv[])
         {
             surf_forces = {};
         }
+        if (ip.inputs.has_nodal_forces)
+        {
+            for (size_t i = 0; i < ip.inputs.tags_nodal_forces.size(); i++)
+            {
+                Eigen::VectorXf vec_nodal_force = Eigen::VectorXf::Zero(3);
+                int nodal_force_tag = ip.inputs.tags_nodal_forces[i];
+                vec_nodal_force(0) = ip.inputs.nodal_forces[i][0];
+                vec_nodal_force(1) = ip.inputs.nodal_forces[i][1];
+                vec_nodal_force(2) = ip.inputs.nodal_forces[i][2];
+                std::tuple<int, Eigen::VectorXf> tuple_nodal_force = std::make_tuple(nodal_force_tag, vec_nodal_force);
+                surf_forces.push_back(tuple_nodal_force);
+            }
+        }
+        else
+        {
+            nod_forces = {};
+        }
     }
     else
     {
         vol_forces = {};
         surf_forces = {};
+        nod_forces = {};
     }
     float alpha_M;
     float alpha_K;
@@ -108,7 +127,7 @@ int main(int argc, char *argv[])
         alpha_K = 0.;
     }
     
-    Model model(mesh, dirichlet_tags, surf_forces, vol_forces, alpha_M, alpha_K);
+    Model model(mesh, dirichlet_tags, nod_forces, surf_forces, vol_forces, alpha_M, alpha_K);
     
     if (ip.inputs.has_solver)
     {

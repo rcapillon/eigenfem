@@ -44,7 +44,7 @@ int main()
     std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces;
     vol_forces.push_back(tuple_volume_force);
 
-    Model model(mesh, dirichlet_tags, surf_forces, vol_forces);
+    Model model(mesh, dirichlet_tags, {}, surf_forces, vol_forces);
     
     // LinearStaticsSolver can be used to solve a linear statics problem involving surface and volume forces
     LinearStaticsSolver solver(model);

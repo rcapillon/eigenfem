@@ -41,7 +41,7 @@ int main()
     float alpha_M = 1e-6;
     float alpha_K = 1e-6;
 
-    Model model(mesh, dirichlet_tags, surf_forces, {}, alpha_M, alpha_K);
+    Model model(mesh, dirichlet_tags, {}, surf_forces, {}, alpha_M, alpha_K);
     
     // FrequencySweepSolver can be used to solve a frequency-domain dynamic problem 
     // using a reduced-order model and involving surface and volume forces

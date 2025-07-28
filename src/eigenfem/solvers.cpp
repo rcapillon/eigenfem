@@ -84,6 +84,7 @@ void LinearStaticsSolver::solve()
 {
     model.create_dof_lists();
     model.assemble_K();
+    model.assemble_Fn();
     model.assemble_Fs();
     model.assemble_Fv();
     model.compute_F();
@@ -127,6 +128,7 @@ void FrequencySweepSolver::load_rom(Eigen::MatrixXf rom_basis)
     model.create_dof_lists();
     model.assemble_M_K();
     model.compute_D_Rayleigh();
+    model.assemble_Fn();
     model.assemble_Fs();
     model.assemble_Fv();
     model.compute_F();

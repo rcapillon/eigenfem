@@ -26,6 +26,7 @@ class Model
         Model(Mesh msh, std::vector<int> dir_tags, float a_M, float a_K);
         Model(Mesh msh, 
             std::vector<int> dir_tags, 
+            std::vector<std::tuple<int, Eigen::VectorXf>> nod_forces,
             std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces,
             std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces,
             float a_M = 0., float a_K = 0.);
@@ -33,6 +34,7 @@ class Model
 
         Mesh mesh;
         std::vector<int> dirichlet_tags;
+        std::vector<std::tuple<int, Eigen::VectorXf>> tuples_nodal_forces;
         std::vector<std::tuple<int, Eigen::VectorXf>> tuples_surface_forces;
         std::vector<std::tuple<int, Eigen::VectorXf>> tuples_volume_forces;
         float alpha_M;
@@ -41,8 +43,9 @@ class Model
         SpMat mat_M;
         SpMat mat_K;
         SpMat mat_D;
-        Eigen::VectorXf vec_Fs;
-        Eigen::VectorXf vec_Fv;
+        Eigen::VectorXf vec_Fn = Eigen::VectorXf::Zero(mesh.n_dofs);
+        Eigen::VectorXf vec_Fs = Eigen::VectorXf::Zero(mesh.n_dofs);
+        Eigen::VectorXf vec_Fv = Eigen::VectorXf::Zero(mesh.n_dofs);
         Eigen::VectorXf vec_F;
 
         std::vector<int> free_dofs;
@@ -59,6 +62,7 @@ class Model
         void assemble_M_K();
         void compute_D_Rayleigh();
 
+        void assemble_Fn();
         void assemble_Fs();
         void assemble_Fv();
         void compute_F();

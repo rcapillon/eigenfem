@@ -23,12 +23,14 @@ Model::Model(Mesh msh, std::vector<int> dir_tags, float a_M, float a_K)
 
 Model::Model(Mesh msh,
     std::vector<int> dir_tags, 
+    std::vector<std::tuple<int, Eigen::VectorXf>> nod_forces,
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces,
     std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces,
     float a_M, float a_K)
 {
     mesh = msh;
     dirichlet_tags = dir_tags;
+    tuples_nodal_forces = nod_forces;
     tuples_surface_forces = surf_forces;
     tuples_volume_forces = vol_forces;
     alpha_M = a_M;
@@ -173,10 +175,30 @@ void Model::compute_D_Rayleigh()
     mat_D.makeCompressed();
 }
 
+void Model::assemble_Fn()
+{
+    for (size_t i = 0; i < tuples_nodal_forces.size(); i++)
+    {
+        int tag = std::get<0>(tuples_nodal_forces[i]);
+        Eigen::VectorXf vec_fn = std::get<1>(tuples_nodal_forces[i]);
+
+        int num_node_group = find_index(mesh.nodes_tags, tag);
+
+        for (size_t j = 0; j < mesh.nodes_groups[num_node_group].size(); j++)
+        {
+            int node = mesh.nodes_groups[num_node_group][j];
+            std::vector<int> dofs;
+            dofs.push_back(node * 3);
+            dofs.push_back(node * 3 + 1);
+            dofs.push_back(node * 3 + 2);
+
+            vec_Fn(dofs) += vec_fn;
+        }
+    }
+}
+
 void Model::assemble_Fs()
 {
-    vec_Fs = Eigen::VectorXf::Zero(mesh.n_dofs);
-
     for (size_t i = 0; i < tuples_surface_forces.size(); i++)
     {
         int tag = std::get<0>(tuples_surface_forces[i]);
@@ -209,8 +231,6 @@ void Model::assemble_Fs()
 
 void Model::assemble_Fv()
 {
-    vec_Fv = Eigen::VectorXf::Zero(mesh.n_dofs);
-
     for (size_t i = 0; i < tuples_volume_forces.size(); i++)
     {
         Eigen::VectorXf vec_fv = std::get<1>(tuples_volume_forces[i]);
@@ -243,7 +263,7 @@ void Model::assemble_Fv()
 
 void Model::compute_F()
 {
-    vec_F = vec_Fs + vec_Fv;
+    vec_F = vec_Fn + vec_Fs + vec_Fv;
 }
 
 void Model::apply_dirichlet()

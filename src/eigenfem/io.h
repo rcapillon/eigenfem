@@ -66,6 +66,8 @@ struct Inputs
     std::vector<float> volume_force;
     std::vector<int> tags_surface_forces;
     std::vector<std::vector<float>> surface_forces;
+    std::vector<int> tags_nodal_forces;
+    std::vector<std::vector<float>> nodal_forces;
 
     float damping_alpha_M;
     float damping_alpha_K;
@@ -88,6 +90,7 @@ struct Inputs
     bool has_material;
     bool has_dirichlet;
     bool has_forces;
+    bool has_nodal_forces;
     bool has_surface_forces;
     bool has_volume_force;
     bool has_damping;

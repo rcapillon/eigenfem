@@ -2,8 +2,6 @@
 // mesh.cpp
 //
 
-#include <iostream>
-
 #include "mesh.h"
 
 
