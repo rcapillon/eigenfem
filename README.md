@@ -5,6 +5,9 @@ Eigen is used for linear algebra and Spectra is used to solve sparse generalized
 **IMPORTANT NOTE**: 
 The code has not been validated on test cases. Demonstration cases can be run and custom simulations can be performed, but usage documentation will be added soon to the repository's wiki.
 
+**Recent update**:
+Nodal forces have been implemented properly, but lack demonstration examples yet.
+
 ## Dependencies
 - Eigen v3.4.0: https://eigen.tuxfamily.org/
     - Licensed under MPL2
@@ -59,7 +62,7 @@ The input file specifies a directory to store VTK output files. In the provided 
 
 ## Current features
 - Supported mesh type: 3D tetrahedral mesh generated using gmsh and saved in Matlab format
-- Surface and volume forces applicable to tagged surfaces and volumes (physical groups)
+- Nodal, surface and volume forces applicable to tagged surfaces and volumes (physical groups)
 - Linear statics problems
 - Computation of linear elastic modes and corresponding eigenfrequencies
 - Frequency-domain dynamic analysis with a reduced-order model using elastic modes (or a loaded reduced-order basis)
@@ -70,11 +73,9 @@ The input file specifies a directory to store VTK output files. In the provided 
 - Only fully tetrahedral (first order) meshes are handled
 - No multi-threading, parallelization of any sort
 - Only zero Dirichlet boundary conditions are handled
-- Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
 - Only isotropic elastic materials are handled
 
 ## (Non-exhaustive) list of intended future features
-- Handling of 0D physical groups to enable nodal forces and plotting of nodal displacement values
 - Handling of multiple 3D physical groups to enable domains with multiple materials or to isolate 3D elements to, for instance, calculate stress
 - Handling of first-order hexahedral (6 rectangular faces) and prism (2 triangular faces and 3 rectangular faces) elements
