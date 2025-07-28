@@ -3,8 +3,7 @@ Finite Element solver written in C++ using Eigen and Spectra.
 Eigen is used for linear algebra and Spectra is used to solve sparse generalized eigenvalue problems.
 
 **IMPORTANT NOTE**: 
-The code is still in development and not fully usable at this time. The code has not been validated on test cases. For now, only specific demonstration cases can be run. 
-Custom usage documentation will be added later.
+The code has not been validated on test cases. Demonstration cases can be run and custom simulations can be performed, but usage documentation will be added soon to the repository's wiki.
 
 ## Dependencies
 - Eigen v3.4.0: https://eigen.tuxfamily.org/
@@ -32,17 +31,31 @@ cd build/
 cmake ..
 cmake --build .
 ```
-This will produce 5 executables in the build folder:
-- eigenfem: meant to use custom input files to run a custom simulation using one of the 3 available solvers (will be available later)
+
+## Running example scripts
+The installation produces 5 executables in the build folder:
+- eigenfem: requires custom input files to run a simulation
 - example_modal, example_statics, example_frequency_coarse, example_frequency_fine: examples showcasing the code's features and the 3 available solvers.
 
-You can then run one of the examples from the build folder with, for instance:
+You can run one of the examples from the build folder with, for instance:
 ```
 ./example_modal
 ```
 A short description of these examples can be found in the repository's Wiki.
-Results (VTK files of deformed meshes) will be created in subfolders of the /examples/results folder.
+Results (VTK files of deformed meshes) will be created in subfolders of the /examples/results/ folder.
 The recommended software to visualize output VTK files is Paraview: https://www.paraview.org/
+
+## Running custom simulations
+Running a custom simulation requires using the eigenfem executable in the build folder and passing it a text input file as argument. 4 example input files are given in the /examples/ folder (.input files), performing simulations very close to the example scripts described in the previous section.
+
+Documentation on how to write a custom input file will be added shortly to the repository's wiki. Users can read the sample input files for inspiration to create their own for now.
+
+In order to run a custom simulation, assuming the eigenfem executable is in the /build/ folder and the input file is located in the examples folder and named 'custom.input' (the file's extension is irrelevant), run the following command inside the /build/ folder:
+```
+./eigenfem ../examples/custom.input
+```
+
+The input file specifies a directory to store VTK output files. In the provided examples, this folder is set as '/examples/results/example_eigenfem/'.
 
 ## Current features
 - Supported mesh type: 3D tetrahedral mesh generated using gmsh and saved in Matlab format
@@ -60,7 +73,6 @@ The recommended software to visualize output VTK files is Paraview: https://www.
 - Nodal forces are not handled because the code doesn't look for 0D physical groups in the mesh file
 - Only one 3D physical group is handled, which forces to use a single material for the whole domain
 - Only isotropic elastic materials are handled
-- It is not currently possible to define and run a fully custom simulation using one of the available solvers
 
 ## (Non-exhaustive) list of intended future features
 - Handling of 0D physical groups to enable nodal forces and plotting of nodal displacement values
