@@ -31,7 +31,7 @@ int main()
 
     // Defines the surface force vector
     Eigen::VectorXf vec_surface_force = Eigen::VectorXf::Zero(3);
-    vec_surface_force(0) = 1.6e9;
+    vec_surface_force(2) = 1.6e9;
 
     std::tuple<int, Eigen::VectorXf> tuple_surface_force = std::make_tuple(surface_force_tag, vec_surface_force);
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
