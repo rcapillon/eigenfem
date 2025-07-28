@@ -53,6 +53,25 @@ std::vector<float> read_node_coords_from_line(std::string line)
 	return coords;
 }
 
+// Reads lines in Matlab-format GMSH mesh files for nodes groups (0D physical groups)
+std::vector<int> read_nodes_groups_line(std::string line)
+{
+	std::vector<int> node_num_and_tag;
+	size_t prev = 0;
+	size_t pos;
+	std::string substr;
+	while ((pos = line.find_first_of(" ", prev)) != std::string::npos)
+    {
+        if (pos > prev)
+            node_num_and_tag.push_back(std::stoi(line.substr(prev, pos-prev)));
+        prev = pos + 1;
+    }
+    if (prev < line.length())
+        node_num_and_tag.push_back(std::stoi(line.substr(prev, std::string::npos)));
+
+	return node_num_and_tag;
+}
+
 // Mesh class constructors
 Mesh::Mesh(std::string path_to_mesh) 
 {
@@ -160,7 +179,7 @@ void Mesh::import_gmsh_matlab()
 	std::getline(file, current_line);
 	std::getline(file, current_line);
 
-	// fill table of tetrahedra connectivity
+	// fill table of tetrahedra connectivity and create elements
 	std::vector<std::vector<int>> nums_tetra;
 	while (current_line.compare("];") != 0)
 	{
@@ -185,6 +204,40 @@ void Mesh::import_gmsh_matlab()
 		nodes_coords(3, inds) = table_nodes(nums_tetra[i][3], inds);
 		Element element = Element(int(i), material, nums_tetra[i], nodes_coords);
 		elements.push_back(element);
+	}
+
+	// initialize nodes groups reading
+	std::getline(file, current_line);
+	std::getline(file, current_line);
+
+	// fill nodes groups and save tags
+	std::vector<int> all_nodes_in_groups;
+	std::vector<int> all_nodes_tags;
+	while (current_line.compare("];") != 0)
+	{
+		std::vector<int> node_num_and_tag = read_nodes_groups_line(current_line);
+		all_nodes_in_groups.push_back(node_num_and_tag[0]);
+		all_nodes_tags.push_back(node_num_and_tag[1]);
+		std::getline(file, current_line);
+	}
+	int n_nodes_tags = std::unique(all_nodes_tags.begin(), all_nodes_tags.end()) - all_nodes_tags.begin();
+	for (size_t i = 0; i < n_nodes_tags; i++)
+	{
+		std::vector<int> nodes_in_group;
+		nodes_groups.push_back(nodes_in_group);
+	}
+	for (size_t i = 0; i < n_nodes_tags; i++)
+	{
+		int current_tag = all_nodes_tags[i];
+		nodes_tags.push_back(current_tag);
+		for (size_t j = 0; j < all_nodes_in_groups.size(); j++)
+		{
+			int tested_tag = all_nodes_tags[j];
+			if (tested_tag == current_tag)
+			{
+				nodes_groups[i].push_back(all_nodes_in_groups[j]);
+			}	
+		}
 	}
 	
 	file.close();
