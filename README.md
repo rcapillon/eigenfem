@@ -12,7 +12,7 @@ The code has not been validated on test cases. Demonstration cases can be run an
     - Licensed under MPL2
     - Copyright 2015-2025, Yixuan Qiu
 
-## Installation and running example scripts
+## Installation
 Requirements: 
 - CMake (minimal version required: 3.28.3)
 - OS: MacOS (tested on MacOS Sequoia 15.5 with a M1 2020 Macbook Pro), Linux (tested on Ubuntu arm64 24.04.2).
