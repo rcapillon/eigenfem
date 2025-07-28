@@ -51,7 +51,7 @@ FREQUENCYSWEEP
 ## STUDY NAME
 example_eigenfem_frequency_fine
 ## PATH
-../examples/results/example_custom/
+../examples/results/example_eigenfem/
 # END OUTPUT
 
 # END FILE
