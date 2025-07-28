@@ -208,34 +208,37 @@ void Mesh::import_gmsh_matlab()
 	std::getline(file, current_line);
 
 	// fill nodes groups and save tags
-	std::vector<int> all_nodes_in_groups;
-	std::vector<int> all_nodes_tags;
-	while (current_line.compare("];") != 0)
+	if (!current_line.empty())
 	{
-		std::vector<int> node_num_and_tag = read_nodes_groups_line(current_line);
-		all_nodes_in_groups.push_back(node_num_and_tag[0]);
-		all_nodes_tags.push_back(node_num_and_tag[1]);
-		std::getline(file, current_line);
-	}
-	std::vector<int> all_nodes_tags_copy = all_nodes_tags ;
-	int n_nodes_tags = std::unique(all_nodes_tags_copy.begin(), all_nodes_tags_copy.end()) - all_nodes_tags_copy.begin();
-	all_nodes_tags_copy.erase(std::unique(all_nodes_tags_copy.begin(), all_nodes_tags_copy.end()), all_nodes_tags_copy.end());
-	for (size_t i = 0; i < n_nodes_tags; i++)
-	{
-		std::vector<int> nodes_in_group;
-		nodes_groups.push_back(nodes_in_group);
-	}
-	for (size_t i = 0; i < n_nodes_tags; i++)
-	{
-		int current_tag = all_nodes_tags_copy[i];
-		nodes_tags.push_back(current_tag);
-		for (size_t j = 0; j < all_nodes_in_groups.size(); j++)
+		std::vector<int> all_nodes_in_groups;
+		std::vector<int> all_nodes_tags;
+		while (current_line.compare("];") != 0)
 		{
-			int tested_tag = all_nodes_tags[j];
-			if (tested_tag == current_tag)
+			std::vector<int> node_num_and_tag = read_nodes_groups_line(current_line);
+			all_nodes_in_groups.push_back(node_num_and_tag[0]);
+			all_nodes_tags.push_back(node_num_and_tag[1]);
+			std::getline(file, current_line);
+		}
+		std::vector<int> all_nodes_tags_copy = all_nodes_tags ;
+		int n_nodes_tags = std::unique(all_nodes_tags_copy.begin(), all_nodes_tags_copy.end()) - all_nodes_tags_copy.begin();
+		all_nodes_tags_copy.erase(std::unique(all_nodes_tags_copy.begin(), all_nodes_tags_copy.end()), all_nodes_tags_copy.end());
+		for (size_t i = 0; i < n_nodes_tags; i++)
+		{
+			std::vector<int> nodes_in_group;
+			nodes_groups.push_back(nodes_in_group);
+		}
+		for (size_t i = 0; i < n_nodes_tags; i++)
+		{
+			int current_tag = all_nodes_tags_copy[i];
+			nodes_tags.push_back(current_tag);
+			for (size_t j = 0; j < all_nodes_in_groups.size(); j++)
 			{
-				nodes_groups[i].push_back(all_nodes_in_groups[j]);
-			}	
+				int tested_tag = all_nodes_tags[j];
+				if (tested_tag == current_tag)
+				{
+					nodes_groups[i].push_back(all_nodes_in_groups[j]);
+				}	
+			}
 		}
 	}
 	
