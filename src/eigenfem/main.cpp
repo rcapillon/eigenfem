@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
         {
             int n_modes = ip.inputs.modal_n_modes;
             ModalSolver solver(model);
+            std::cout << "Calculating elastic modes..." << std::endl;
             solver.solve(n_modes);
 
             if (ip.inputs.has_output)
@@ -126,6 +127,7 @@ int main(int argc, char *argv[])
                     std::cout << solver.vec_freqs[i] << std::endl;
                 }
 
+                std::cout << "Exporting VTK file..." << std::endl;
                 int plotted_mode_num = ip.inputs.plotted_mode_num;
                 Eigen::VectorXf plotted_mode = solver.mat_modes(Eigen::all, plotted_mode_num);
                 VTKwriter vtk_writer(mesh, plotted_mode);
@@ -136,10 +138,12 @@ int main(int argc, char *argv[])
         else if (ip.inputs.solver_type.compare("STATICS") == 0)
         {
             LinearStaticsSolver solver(model);
+            std::cout << "Solving linear problem..." << std::endl;
             solver.solve();
 
             if (ip.inputs.has_output)
             {
+                std::cout << "Exporting VTK file..." << std::endl;
                 Eigen::VectorXf U = solver.U;
                 VTKwriter vtk_writer(mesh, U);
                 vtk_writer.add_U_to_mesh();
@@ -164,25 +168,32 @@ int main(int argc, char *argv[])
             if (ip.inputs.solver_computes_rom)
             {
                 int n_modes = ip.inputs.frequency_n_modes;
+                std::cout << "Computing ROM..." << std::endl;
                 solver.compute_rom(n_modes);
+                std::cout << "Solving for all frequencies..." << std::endl;
                 solver.solve(angular_freqs);
             }
             else
             {
+                std::cout << "Loading ROM..." << std::endl;
                 DATio dat_io = DATio();
                 Eigen::MatrixXf rom_basis = dat_io.load_dat(ip.inputs.frequency_path_to_basis) ;
                 solver.load_rom(rom_basis);
+                std::cout << "Solving for all frequencies..." << std::endl;
                 solver.solve(angular_freqs);
             }
 
             if (ip.inputs.has_output)
             {
+                std::cout << "Exporting VTK files..." << std::endl;
                 VTKwriter vtk_writer(mesh, solver.mat_U_modulus);
                 vtk_writer.write_mesh_animation(ip.inputs.output_path, ip.inputs.output_name);
             }
         }
     }
     
+    std::cout << "Done." << std::endl;
+
     time_t global_timer_end = time(nullptr); // Ends timer for whole code execution
 
     // Prints timer values
