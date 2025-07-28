@@ -43,9 +43,9 @@ class Model
         SpMat mat_M;
         SpMat mat_K;
         SpMat mat_D;
-        Eigen::VectorXf vec_Fn = Eigen::VectorXf::Zero(mesh.n_dofs);
-        Eigen::VectorXf vec_Fs = Eigen::VectorXf::Zero(mesh.n_dofs);
-        Eigen::VectorXf vec_Fv = Eigen::VectorXf::Zero(mesh.n_dofs);
+        Eigen::VectorXf vec_Fn;
+        Eigen::VectorXf vec_Fs;
+        Eigen::VectorXf vec_Fv;
         Eigen::VectorXf vec_F;
 
         std::vector<int> free_dofs;

@@ -35,6 +35,10 @@ Model::Model(Mesh msh,
     tuples_volume_forces = vol_forces;
     alpha_M = a_M;
     alpha_K = a_K;
+
+    vec_Fn = Eigen::VectorXf::Zero(mesh.n_dofs);
+    vec_Fs = Eigen::VectorXf::Zero(mesh.n_dofs);
+    vec_Fv = Eigen::VectorXf::Zero(mesh.n_dofs);
 }
 
 void Model::create_dof_lists()
