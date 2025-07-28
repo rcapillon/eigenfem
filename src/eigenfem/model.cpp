@@ -41,7 +41,6 @@ void Model::create_dof_lists()
     {
         auto it = std::find(mesh.tris_tags.begin(), mesh.tris_tags.end(), dirichlet_tags[i]);
         int idx_tables_tris = int(it - mesh.tris_tags.begin());
-
         for (size_t j = 0; j < mesh.tables_tris[idx_tables_tris].rows(); j++)
         {
             for (size_t k = 0; k < mesh.tables_tris[idx_tables_tris].cols(); k++)
