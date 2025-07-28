@@ -40,7 +40,7 @@ void ModalSolver::solve(int n_modes)
         Spectra::SparseSymMatProd<float>, 
         Spectra::SparseCholesky<float>, 
         Spectra::GEigsMode::Cholesky> geigs(Aop, Bop, n_modes, ncv);
-    
+
     geigs.init();
     int nconv = geigs.compute(Spectra::SortRule::SmallestMagn);
 
