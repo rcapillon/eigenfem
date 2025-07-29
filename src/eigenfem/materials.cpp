@@ -2,6 +2,10 @@
 // materials.cpp
 //
 
+// This code is subject to the terms of the MIT License.
+// If a copy of the MIT License was not distributed with this file, 
+// you can obtain one at https://www.mit.edu/~amini/LICENSE.md.
+
 #include "materials.h"
 
 
