@@ -65,6 +65,7 @@ std::vector<int> read_nodes_groups_line(std::string line)
     }
     if (prev < line.length())
         node_num_and_tag.push_back(std::stoi(line.substr(prev, std::string::npos)));
+	node_num_and_tag[0] -= 1;
 
 	return node_num_and_tag;
 }
