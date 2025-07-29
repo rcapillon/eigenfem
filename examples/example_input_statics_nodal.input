@@ -1,0 +1,40 @@
+# MESH
+## PATH
+../examples/data/plate_nodal.mesh
+# END MESH
+
+# MATERIAL
+## MASS DENSITY
+7800
+## YOUNG MODULUS
+2.1e11
+## POISSON RATIO
+0.3
+# END MATERIAL
+
+# DIRICHLET
+## TAGS
+2
+# END DIRICHLET
+
+# FORCES
+## NODAL FORCE
+3
+0, 0, 2e9
+## NODAL FORCE
+4
+0, 0, 1e9
+# END FORCES
+
+# SOLVER
+STATICS
+# END SOLVER
+
+# OUTPUT
+## STUDY NAME
+example_eigenfem_statics_nodal
+## PATH
+../examples/results/example_eigenfem/
+# END OUTPUT
+
+# END FILE
