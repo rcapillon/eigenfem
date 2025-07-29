@@ -25,6 +25,7 @@ set(SOURCE_FILES
 add_executable(eigenfem ${PROJECT_SOURCE_DIR}/src/eigenfem/main.cpp ${SOURCE_FILES})
 add_executable(example_modal ${PROJECT_SOURCE_DIR}/examples/example_modal.cpp ${SOURCE_FILES})
 add_executable(example_statics ${PROJECT_SOURCE_DIR}/examples/example_statics.cpp ${SOURCE_FILES})
+add_executable(example_statics_nodal ${PROJECT_SOURCE_DIR}/examples/example_statics_nodal.cpp ${SOURCE_FILES})
 add_executable(example_frequency_coarse ${PROJECT_SOURCE_DIR}/examples/example_frequency_coarse.cpp ${SOURCE_FILES})
 add_executable(example_frequency_fine ${PROJECT_SOURCE_DIR}/examples/example_frequency_fine.cpp ${SOURCE_FILES})
 
@@ -47,6 +48,10 @@ target_link_libraries(example_modal PRIVATE spectra)
 target_link_libraries(example_statics PRIVATE eigen)
 target_link_libraries(example_statics PRIVATE eigen2)
 target_link_libraries(example_statics PRIVATE spectra)
+
+target_link_libraries(example_statics_nodal PRIVATE eigen)
+target_link_libraries(example_statics_nodal PRIVATE eigen2)
+target_link_libraries(example_statics_nodal PRIVATE spectra)
 
 target_link_libraries(example_frequency_coarse PRIVATE eigen)
 target_link_libraries(example_frequency_coarse PRIVATE eigen2)
