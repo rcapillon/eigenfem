@@ -5,9 +5,6 @@ Eigen is used for linear algebra and Spectra is used to solve sparse generalized
 **IMPORTANT NOTE**: 
 The code has not been validated on test cases. Demonstration cases can be run and custom simulations can be performed, but usage documentation will be added soon to the repository's wiki.
 
-**Recent update**:
-Nodal forces have been implemented properly, but lack demonstration examples yet.
-
 ## Dependencies
 - Eigen v3.4.0: https://eigen.tuxfamily.org/
     - Licensed under MPL2
@@ -36,9 +33,9 @@ cmake --build .
 ```
 
 ## Running example scripts
-The installation produces 5 executables in the build folder:
+The installation produces 6 executables in the build folder:
 - eigenfem: requires custom input files to run a simulation
-- example_modal, example_statics, example_frequency_coarse, example_frequency_fine: examples showcasing the code's features and the 3 available solvers.
+- example_modal, example_statics, example_statics_nodal, example_frequency_coarse, example_frequency_fine: examples showcasing the code's features and the 3 available solvers.
 
 You can run one of the examples from the build folder with, for instance:
 ```
@@ -49,13 +46,18 @@ Results (VTK files of deformed meshes) will be created in subfolders of the /exa
 The recommended software to visualize output VTK files is Paraview: https://www.paraview.org/
 
 ## Running custom simulations
-Running a custom simulation requires using the eigenfem executable in the build folder and passing it a text input file as argument. 4 example input files are given in the /examples/ folder (.input files), performing simulations very close to the example scripts described in the previous section.
+Running a custom simulation requires using the eigenfem executable in the build folder and passing it a text input file as argument. 5 example input files are given in the /examples/ folder (.input files), performing simulations very close to the example scripts described in the previous section.
 
 Documentation on how to write a custom input file will be added shortly to the repository's wiki. Users can read the sample input files for inspiration to create their own for now.
 
 In order to run a custom simulation, assuming the eigenfem executable is in the /build/ folder and the input file is located in the examples folder and named 'custom.input' (the file's extension is irrelevant), run the following command inside the /build/ folder:
 ```
 ./eigenfem ../examples/custom.input
+```
+
+To run a simulation with one of the pre-made input files, go inside the /build/ folder and for instance use:
+```
+./eigenfem ../examples/example_input_modal.input
 ```
 
 The input file specifies a directory to store VTK output files. In the provided examples, this folder is set as '/examples/results/example_eigenfem/'.
