@@ -2,6 +2,8 @@
 // model.cpp
 //
 
+#include <iostream>
+
 #include "model.h"
 
 
