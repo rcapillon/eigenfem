@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
                 vec_nodal_force(1) = ip.inputs.nodal_forces[i][1];
                 vec_nodal_force(2) = ip.inputs.nodal_forces[i][2];
                 std::tuple<int, Eigen::VectorXf> tuple_nodal_force = std::make_tuple(nodal_force_tag, vec_nodal_force);
-                surf_forces.push_back(tuple_nodal_force);
+                nod_forces.push_back(tuple_nodal_force);
             }
         }
         else
@@ -159,6 +159,15 @@ int main(int argc, char *argv[])
             LinearStaticsSolver solver(model);
             std::cout << "Solving linear problem..." << std::endl;
             solver.solve();
+
+            // for (size_t i = 27; i < 39; i++)
+            // {
+            //     if (std::find(solver.model.free_dofs.begin(), solver.model.free_dofs.end(), i) != solver.model.free_dofs.end())
+            // {
+            //     std::cout << "dof " << i << " in free dofs" << std::endl;
+            // }
+            // }
+            // std::cout << solver.model.vec_Ff.transpose() << std::endl;
 
             if (ip.inputs.has_output)
             {
