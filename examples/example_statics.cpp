@@ -34,17 +34,7 @@ int main()
     std::vector<std::tuple<int, Eigen::VectorXf>> surf_forces;
     surf_forces.push_back(tuple_surface_force);
 
-    int volume_force_tag = 1; // Specifies 3D physical group tag where a volume force is applied (can only be 1 for the moment)
-
-    // Defines the volume force vector
-    Eigen::VectorXf vec_volume_force = Eigen::VectorXf::Zero(3);
-    // vec_volume_force(2) = 9.81 * 1e6;
-
-    std::tuple<int, Eigen::VectorXf> tuple_volume_force = std::make_tuple(volume_force_tag, vec_volume_force);
-    std::vector<std::tuple<int, Eigen::VectorXf>> vol_forces;
-    vol_forces.push_back(tuple_volume_force);
-
-    Model model(mesh, dirichlet_tags, {}, surf_forces, vol_forces);
+    Model model(mesh, dirichlet_tags, {}, surf_forces, {});
     
     // LinearStaticsSolver can be used to solve a linear statics problem involving surface and volume forces
     LinearStaticsSolver solver(model);
