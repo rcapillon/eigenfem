@@ -48,7 +48,7 @@ The recommended software to visualize output VTK files is Paraview: https://www.
 ## Running custom simulations
 Running a custom simulation requires using the eigenfem executable in the build folder and passing it a text input file as argument. 5 example input files are given in the /examples/ folder (.input files), performing simulations very close to the example scripts described in the previous section.
 
-Documentation on how to write a custom input file will be added shortly to the repository's wiki. Users can read the sample input files for inspiration to create their own for now.
+Documentation on how to write a custom input file can be found on the repository's [wiki](https://github.com/rcapillon/eigenfem/wiki/Custom-simulation). Users can also read the sample input files to understand how to create their own.
 
 In order to run a custom simulation, assuming the eigenfem executable is in the /build/ folder and the input file is located in the examples folder and named 'custom.input' (the file's extension is irrelevant), run the following command inside the /build/ folder:
 ```
