@@ -23,6 +23,8 @@ First, clone the repository in the folder of your choice with:
 ```
 git clone git@github.com:rcapillon/eigenfem.git
 ```
+Alternatively, you can download and extract the source code from the latest release.
+
 Then, use the following commands:
 ```
 cd eigenfem/
