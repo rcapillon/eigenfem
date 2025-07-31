@@ -25,9 +25,8 @@ git clone git@github.com:rcapillon/eigenfem.git
 ```
 Alternatively, you can download and extract the source code from the latest release.
 
-Then, use the following commands:
+Then, go inside the source code's folder and use the following commands:
 ```
-cd eigenfem/
 mkdir build
 cd build/
 cmake ..
